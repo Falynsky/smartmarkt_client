@@ -17,5 +17,35 @@ class MainMenuState extends RouteState {
 class ItemsState extends RouteState {
   @override
   List<Object> get props => [];
+}
 
+class ScannerState extends RouteState {
+  @override
+  List<Object> get props => [];
+}
+
+class SalesState extends RouteState {
+  @override
+  List<Object> get props => [];
+}
+
+class BasketState extends RouteState {
+  @override
+  List<Object> get props => [];
+}
+
+class ProfileState extends RouteState {
+  @override
+  List<Object> get props => [];
+}
+
+
+class SettingsState extends RouteState {
+  @override
+  List<Object> get props => [];
+}
+
+class LoginPageState extends RouteState {
+  @override
+  List<Object> get props => [];
 }

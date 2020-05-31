@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 
-class MainPage extends StatefulWidget {
+class BasketPageButton extends StatefulWidget {
+  BasketPageButton();
+
   @override
-  _MainPageState createState() => _MainPageState();
+  _BasketPageButtonState createState() => _BasketPageButtonState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _BasketPageButtonState extends State<BasketPageButton> {
   RouteBloc _routeBloc;
 
   @override
@@ -18,55 +20,29 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text("DASHBOARD"),
-        ),
-        elevation: .1,
-        backgroundColor: Colors.black45,
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
-        child: GridView.count(
-          crossAxisCount: 2,
-          padding: EdgeInsets.all(3),
-          children: <Widget>[
-            makeDashboardItem("Items", Icons.fastfood),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Card makeDashboardItem(String title, IconData icon) {
     return Card(
         elevation: 1.0,
         margin: new EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
           child: new InkWell(
-            onTap: onTap,
+            onTap: () => setState(() {
+              _routeBloc.add(BasketEvent());
+            }),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 verticalDirection: VerticalDirection.down,
                 children: <Widget>[
-                  _icon(icon),
+                  _icon(Icons.shopping_basket),
                   SizedBox(height: 20.0),
-                  _label(title)
+                  _label("Basket")
                 ],
               ),
             ),
           ),
         ));
-  }
-
-  void onTap() {
-    setState(() {
-      _routeBloc.add(ItemsEvent());
-    });
   }
 
   Center _icon(IconData icon) {
