@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/utilities/constants.dart';
 
@@ -13,6 +16,9 @@ class _LoginPageState extends State<LoginPage> {
   bool _rememberMe = false;
 
   RouteBloc _routeBloc;
+  final login = TextEditingController();
+  final password = TextEditingController();
+
   @override
   void initState() {
     _routeBloc = BlocProvider.of<RouteBloc>(context);
@@ -100,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: login,
             keyboardType: TextInputType.text,
             style: TextStyle(
               color: Colors.white,
@@ -135,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: password,
             obscureText: true,
             style: TextStyle(
               color: Colors.white,
@@ -153,20 +161,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildForgotPasswordBtn() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
-        padding: EdgeInsets.only(right: 0.0),
-        child: Text(
-          'Forgot Password?',
-          style: kLabelStyle,
-        ),
-      ),
     );
   }
 
@@ -203,9 +197,32 @@ class _LoginPageState extends State<LoginPage> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => setState(() {
-          _routeBloc.add(MainMenuEvent());
-        }),
+        onPressed: () async {
+          String _login = login.text.toString();
+          String _password = password.text.toString();
+          Map<String, dynamic> body = {
+            'username': _login,
+            'password': _password,
+          };
+
+          Map<String, String> headers = {"Content-Type": "application/json"};
+          final msg = jsonEncode(body);
+          var response = await http.post(
+            'http://192.168.0.160:8080/auth/login',
+            headers: headers,
+            body: msg,
+          );
+          var data = json.decode(response.body);
+          print(data);
+          if (response.statusCode == 200) {
+            setState(() {
+              _routeBloc.add(MainMenuEvent());
+            });
+          } else {
+            print(data);
+            print(response.statusCode);
+          }
+        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -241,81 +258,6 @@ class _LoginPageState extends State<LoginPage> {
           style: kLabelStyle,
         ),
       ],
-    );
-  }
-
-  Widget _buildSocialBtn(Function onTap, AssetImage logo) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 60.0,
-        width: 60.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(0, 2),
-              blurRadius: 6.0,
-            ),
-          ],
-          image: DecorationImage(
-            image: logo,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialBtnRow() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildSocialBtn(
-            () => print('Login with Facebook'),
-            AssetImage(
-              'assets/logos/facebook.jpg',
-            ),
-          ),
-          _buildSocialBtn(
-            () => print('Login with Google'),
-            AssetImage(
-              'assets/logos/google.jpg',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSignupBtn() {
-    return GestureDetector(
-      onTap: () => print('Sign Up Button Pressed'),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Don\'t have an Account? ',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            TextSpan(
-              text: 'Sign Up',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

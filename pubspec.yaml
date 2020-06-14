@@ -14,6 +14,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   equatable: ^1.2.0
   http: 0.12.1
+  convert: ^2.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -22,3 +23,5 @@ flutter:
 
   uses-material-design: true
   assets:
+    - assets/keystore.p12
+    - assets/keystore2.p12
