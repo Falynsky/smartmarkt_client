@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/views/pages/product_types_page.dart';
 import 'package:smartmarktclient/views/pages/login_page.dart';
 
 import 'views/pages/basket_page.dart';
-import 'views/pages/items_page.dart';
 import 'views/pages/main_page.dart';
 import 'views/pages/profile_page.dart';
 import 'views/pages/sales_page.dart';
@@ -22,8 +22,8 @@ class RouteWidget extends StatelessWidget {
             return LoginPage();
           } else if (state is MainMenuState) {
             return MainPage();
-          } else if (state is ItemsState) {
-            return ItemsPage();
+          } else if (state is ProductTypesState) {
+            return ProductTypesPage();
           } else if (state is ScannerState) {
             return ScannerPage();
           } else if (state is SalesState) {

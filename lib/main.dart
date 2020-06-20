@@ -16,8 +16,6 @@ Future<bool> addSelfSignedCertificate() async {
 }
 
 void main() {
-//  WidgetsFlutterBinding.ensureInitialized();
-//  await addSelfSignedCertificate();
   runApp(new MyApp());
 }
 
@@ -26,7 +24,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Flutter Demo',
-//      debugShowCheckedModeBanner: false,
       theme: new ThemeData(
         primarySwatch: Colors.amber,
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartmarktclient/buttons/basket_page_button.dart';
-import 'package:smartmarktclient/buttons/items_page_button.dart';
+import 'package:smartmarktclient/buttons/product_types_page_button.dart';
 import 'package:smartmarktclient/buttons/profile_page_button.dart';
 import 'package:smartmarktclient/buttons/sales_page_button.dart';
 import 'package:smartmarktclient/buttons/scanner_page_button.dart';
@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
           crossAxisCount: 2,
           padding: EdgeInsets.all(3),
           children: <Widget>[
-            ItemsPageButton(),
+            ProductTypesPageButton(),
             ScannerPageButton(),
             SalesPageButton(),
             BasketPageButton(),

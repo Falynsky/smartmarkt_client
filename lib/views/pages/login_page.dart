@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/utilities/constants.dart';
 
 class LoginPage extends StatefulWidget {
@@ -205,22 +203,18 @@ class _LoginPageState extends State<LoginPage> {
             'password': _password,
           };
 
-          Map<String, String> headers = {"Content-Type": "application/json"};
-          final msg = jsonEncode(body);
-          var response = await http.post(
-            'http://192.168.0.160:8080/auth/login',
-            headers: headers,
-            body: msg,
+          HttpService httpService = HttpService();
+          var response = await httpService.post(
+            url: '/auth/login',
+            body: body,
           );
-          var data = json.decode(response.body);
-          print(data);
-          if (response.statusCode == 200) {
+
+          if (response['success']) {
             setState(() {
               _routeBloc.add(MainMenuEvent());
             });
           } else {
-            print(data);
-            print(response.statusCode);
+            _showMyDialog('Login error', 'Incorrect login or password.');
           }
         },
         padding: EdgeInsets.all(15.0),
@@ -239,6 +233,44 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showMyDialog(String title, String body) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          child: AlertDialog(
+            title: Text(title),
+            titleTextStyle: TextStyle(
+              color: Colors.red,
+              fontSize: 22,
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Flexible(child: Text(body)),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Approve'),
+                textColor: Colors.red,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

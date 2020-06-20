@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 
-class ItemsPageButton extends StatefulWidget {
-  ItemsPageButton();
+class ProductTypesPageButton extends StatefulWidget {
+  ProductTypesPageButton();
 
   @override
-  _ItemsPageButtonState createState() => _ItemsPageButtonState();
+  _ProductTypesPageButtonState createState() => _ProductTypesPageButtonState();
 }
 
-class _ItemsPageButtonState extends State<ItemsPageButton> {
+class _ProductTypesPageButtonState extends State<ProductTypesPageButton> {
   RouteBloc _routeBloc;
 
   @override
@@ -27,7 +27,7 @@ class _ItemsPageButtonState extends State<ItemsPageButton> {
           decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
           child: new InkWell(
             onTap: () => setState(() {
-              _routeBloc.add(ItemsEvent());
+              _routeBloc.add(ProductTypes());
             }),
             child: Center(
               child: Column(
@@ -37,7 +37,7 @@ class _ItemsPageButtonState extends State<ItemsPageButton> {
                 children: <Widget>[
                   _icon(Icons.fastfood),
                   SizedBox(height: 20.0),
-                  _label("Items")
+                  _label("Products")
                 ],
               ),
             ),

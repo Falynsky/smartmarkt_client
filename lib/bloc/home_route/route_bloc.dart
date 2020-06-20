@@ -14,8 +14,8 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
   ) async* {
     if (event is MainMenuEvent) {
       yield MainMenuState();
-    } else if (event is ItemsEvent) {
-      yield ItemsState();
+    } else if (event is ProductTypes) {
+      yield ProductTypesState();
     } else if (event is ScannerEvent) {
       yield ScannerState();
     } else if (event is SalesEvent) {
