@@ -14,7 +14,7 @@ class MainMenuState extends RouteState {
   List<Object> get props => [];
 }
 
-class ItemsState extends RouteState {
+class ProductTypesState extends RouteState {
   @override
   List<Object> get props => [];
 }
