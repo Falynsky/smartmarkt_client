@@ -1,28 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smartmarktclient/bloc/home_route/route_event.dart';
-import 'package:smartmarktclient/bloc/home_route/route_bloc.dart';
+import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
-class ProductTypesPage extends StatefulWidget {
+class ProductPageWidget extends StatefulWidget {
+  final Map productType;
+
+  ProductPageWidget({
+    this.productType,
+  });
+
   @override
-  _ProductTypesPageState createState() => _ProductTypesPageState();
+  _ProductPageWidgetState createState() => _ProductPageWidgetState();
 }
 
-class _ProductTypesPageState extends State<ProductTypesPage> {
-  List<dynamic> productTypes;
-
-  RouteBloc _routeBloc;
+class _ProductPageWidgetState extends State<ProductPageWidget> {
+  List<dynamic> products;
+  ProductsBloc _productsBloc;
   HttpService _httpService;
-  final String url = "/productType/all";
+  final String url = "/products/typeId";
   List data;
 
   @override
   void initState() {
     _httpService = HttpService();
+    _productsBloc = BlocProvider.of<ProductsBloc>(context);
     getProductTypes();
-    _routeBloc = BlocProvider.of<RouteBloc>(context);
     super.initState();
   }
 
@@ -37,12 +41,12 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
                   setState(() {
-                    _routeBloc.add(MainMenuEvent());
+                    _productsBloc.add(ProductTypesEvent());
                   });
                 },
               ),
               SizedBox(width: 20),
-              Text("Items"),
+              Text(widget.productType['name']),
             ],
           ),
         ),
@@ -55,7 +59,7 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
 
   ListView productList() {
     return ListView.builder(
-      itemCount: productTypes != null ? productTypes.length : 0,
+      itemCount: products != null ? products.length : 0,
       itemBuilder: (context, index) {
         return Container(
           child: Center(
@@ -64,14 +68,17 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
               children: <Widget>[
                 InkWell(
                   onTap: () {
-                    print('tapped : ' + productTypes[index]['name']);
-                    //todo: add going into page with productItem from selected Type
+                    var productType = products[index];
+                    print('tapped : ' + productType['name']);
                   },
                   child: Card(
                     child: Container(
                       child: Row(
                         children: <Widget>[
-                          Text(productTypes[index]['name']),
+                          Text(products[index]['name']),
+                          Spacer(),
+                          Text('quantity: ' +
+                              products[index]['quantity'].toString()),
                         ],
                       ),
                       padding: EdgeInsets.all(20),
@@ -87,10 +94,12 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
   }
 
   void getProductTypes() async {
-    final response = await _httpService.get(url: url);
+    Map<String, dynamic> body = {
+      "id": widget.productType['id'],
+    };
+    final response = await _httpService.post(url: url, body: body);
     setState(() {
-      productTypes = response['data'];
+      products = response['data'];
     });
   }
-
 }

@@ -23,12 +23,11 @@ class HttpService {
   }) async {
     final msg = jsonEncode(body);
     var response = await http.post(
-        hostUrl + url,
-        headers: headers,
-        body: msg,
-      );
+      hostUrl + url,
+      headers: headers,
+      body: msg,
+    );
     var data = json.decode(response.body);
-    print(data);
     var statusCode = response.statusCode;
     if (statusCode == 200) {
       if (url == '/auth/login') {
@@ -36,6 +35,7 @@ class HttpService {
       }
       return {
         "success": true,
+        "data": data,
       };
     } else {
       return {
@@ -47,7 +47,6 @@ class HttpService {
 
   Future<Map<String, dynamic>> get({
     @required String url,
-    Map<String, dynamic> body,
   }) async {
     var response = await http.get(
       hostUrl + url,

@@ -15,7 +15,7 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
     if (event is MainMenuEvent) {
       yield MainMenuState();
     } else if (event is ProductTypes) {
-      yield ProductTypesState();
+      yield ProductsPanelState();
     } else if (event is ScannerEvent) {
       yield ScannerState();
     } else if (event is SalesEvent) {
