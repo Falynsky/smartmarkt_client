@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  final String hostUrl = "http://192.168.0.161:8080";
+  final String hostUrl = "http://192.168.0.160:8080";
 
   static final Map<String, String> headers = {
     'Content-type': 'application/json; charset=UTF-8',

@@ -255,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Flexible(child: Text(body)),
+                  Text(body),
                 ],
               ),
             ),

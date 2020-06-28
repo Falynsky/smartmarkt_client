@@ -17,10 +17,12 @@ class ProductPageWidget extends StatefulWidget {
 
 class _ProductPageWidgetState extends State<ProductPageWidget> {
   List<dynamic> products;
+  List<dynamic> selectedProducts = [];
   ProductsBloc _productsBloc;
   HttpService _httpService;
   final String url = "/products/typeId";
   List data;
+  bool rememberMe = false;
 
   @override
   void initState() {
@@ -61,34 +63,40 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     return ListView.builder(
       itemCount: products != null ? products.length : 0,
       itemBuilder: (context, index) {
-        return Container(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                InkWell(
-                  onTap: () {
-                    var productType = products[index];
-                    print('tapped : ' + productType['name']);
-                  },
-                  child: Card(
-                    child: Container(
-                      child: Row(
-                        children: <Widget>[
-                          Text(products[index]['name']),
-                          Spacer(),
-                          Text('quantity: ' +
-                              products[index]['quantity'].toString()),
-                        ],
-                      ),
-                      padding: EdgeInsets.all(20),
-                    ),
-                  ),
-                )
-              ],
-            ),
+        return listCard(index);
+      },
+    );
+  }
+
+  Widget listCard(int index) {
+    return Card(
+      child: InkWell(
+        onTap: () {
+          var productType = products[index];
+          print('tapped : ' + productType['name']);
+        },
+        child: Container(
+          padding: EdgeInsets.only(right: 10),
+          child: Row(
+            children: <Widget>[
+              _checkBox(index),
+              Text(products[index]['name']),
+              Spacer(),
+              Text('quantity: ' + products[index]['quantity'].toString()),
+            ],
           ),
-        );
+        ),
+      ),
+    );
+  }
+
+  Checkbox _checkBox(int index) {
+    return Checkbox(
+      value: selectedProducts[index],
+      onChanged: (bool newValue) {
+        setState(() {
+          selectedProducts[index] = newValue;
+        });
       },
     );
   }
@@ -100,6 +108,9 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     final response = await _httpService.post(url: url, body: body);
     setState(() {
       products = response['data'];
+      products.forEach((element) {
+        selectedProducts.add(false);
+      });
     });
   }
 }

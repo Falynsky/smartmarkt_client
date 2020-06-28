@@ -28,6 +28,7 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Colors.black45,
       ),
       body: Container(
+        color: Color(0xFF40c5ba),
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
         child: GridView.count(
           crossAxisCount: 2,
