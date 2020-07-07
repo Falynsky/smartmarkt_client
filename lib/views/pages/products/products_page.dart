@@ -86,9 +86,8 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           ),
         ),
         onTap: () {
-          var selectedProduct = products[index];
-          _selectedPositionDialog(selectedProduct);
-          print('tapped : ' + selectedProduct['name']);
+          _selectedPositionDialog(products[index]);
+          print('tapped : ' + products[index]['name']);
         },
       ),
     );
@@ -125,7 +124,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     );
   }
 
-  void _selectedPositionDialog(selectedProduct) {
+  void _selectedPositionDialog(dynamic selectedProduct) {
     TextEditingController _controller = TextEditingController();
     _controller.text = "0";
     showDialog(
@@ -146,8 +145,8 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             _closeButton(context),
-            _getCodeButton(_controller, context),
-            _addToCardButton(_controller, context),
+            _getCodeButton(_controller, context, selectedProduct),
+            _addToCardButton(_controller, context, selectedProduct),
           ],
         );
       },
@@ -164,13 +163,29 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
   }
 
   FlatButton _addToCardButton(
-      TextEditingController _controller, BuildContext context) {
+    TextEditingController _controller,
+    BuildContext context,
+    dynamic selectedProduct,
+  ) {
     return FlatButton(
       child: new Text("Add to cart"),
-      onPressed: () {
-        int currentValue = int.parse(_controller.text);
-        if (currentValue > 0) {
-          print("Add to card selected position");
+      onPressed: () async {
+        int selectedValue = int.parse(_controller.text);
+        if (selectedValue > 0) {
+          int productId = selectedProduct['id'];
+          Map<String, dynamic> body = {
+            "productId": productId,
+            "quantity": selectedValue,
+            "basketId": 1
+          };
+          String basketUrl = "/baskets_products/add";
+          final response = await _httpService.post(url: basketUrl, body: body);
+
+          if (response['data']['success'] == true) {
+            print("Added to cart selected position");
+          } else {
+            print("Error while adding to cart selected position");
+          }
         }
         Navigator.of(context).pop();
       },
@@ -178,7 +193,10 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
   }
 
   FlatButton _getCodeButton(
-      TextEditingController _controller, BuildContext context) {
+    TextEditingController _controller,
+    BuildContext context,
+    dynamic selectedProduct,
+  ) {
     return FlatButton(
       child: new Text("Get Code"),
       onPressed: () {

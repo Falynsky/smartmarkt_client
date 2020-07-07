@@ -104,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            textInputAction: TextInputAction.next,
             controller: login,
             keyboardType: TextInputType.text,
             style: TextStyle(
