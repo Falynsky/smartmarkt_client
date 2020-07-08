@@ -104,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            textInputAction: TextInputAction.next,
             controller: login,
             keyboardType: TextInputType.text,
             style: TextStyle(
@@ -255,7 +256,7 @@ class _LoginPageState extends State<LoginPage> {
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Flexible(child: Text(body)),
+                  Text(body),
                 ],
               ),
             ),

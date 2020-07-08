@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smartmarktclient/bloc/home_route/route_event.dart';
+import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/bloc/home_route/route_bloc.dart';
+import 'package:smartmarktclient/bloc/home_route/route_event.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
 class ProductTypesPage extends StatefulWidget {
@@ -13,6 +14,7 @@ class ProductTypesPage extends StatefulWidget {
 class _ProductTypesPageState extends State<ProductTypesPage> {
   List<dynamic> productTypes;
 
+  ProductsBloc _productsBloc;
   RouteBloc _routeBloc;
   HttpService _httpService;
   final String url = "/productType/all";
@@ -22,6 +24,7 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
   void initState() {
     _httpService = HttpService();
     getProductTypes();
+    _productsBloc = BlocProvider.of<ProductsBloc>(context);
     _routeBloc = BlocProvider.of<RouteBloc>(context);
     super.initState();
   }
@@ -64,8 +67,13 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
               children: <Widget>[
                 InkWell(
                   onTap: () {
-                    print('tapped : ' + productTypes[index]['name']);
-                    //todo: add going into page with productItem from selected Type
+                    var productType = productTypes[index];
+                    print('tapped : ' + productType['name']);
+                    _productsBloc.add(
+                      SelectedTypeProductsEvent(
+                        productType: productType,
+                      ),
+                    );
                   },
                   child: Card(
                     child: Container(
@@ -92,5 +100,4 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
       productTypes = response['data'];
     });
   }
-
 }
