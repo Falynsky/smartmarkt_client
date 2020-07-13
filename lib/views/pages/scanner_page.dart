@@ -1,3 +1,4 @@
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
@@ -41,6 +42,23 @@ class _ScannerPageState extends State<ScannerPage> {
       ),
       body: Container(
         color: Colors.deepPurple,
+        child: Center(
+          child: InkWell(
+            child: Icon(
+              Icons.camera,
+              size: 90,
+            ),
+            onTap: () async {
+              var result = await BarcodeScanner.scan();
+
+              print(result.type); // The result type
+              // (barcode, cancelled, failed)
+              print(result.rawContent); // The barcode content
+              print(result.format); // The barcode format (as enum)
+              print(result.formatNote);
+            },
+          ),
+        ),
       ),
     );
   }

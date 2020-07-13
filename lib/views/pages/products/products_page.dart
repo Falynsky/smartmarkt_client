@@ -28,8 +28,8 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
   @override
   void initState() {
     _httpService = HttpService();
+    _getProductTypes();
     _productsBloc = BlocProvider.of<ProductsBloc>(context);
-    getProductTypes();
     super.initState();
   }
 
@@ -70,6 +70,8 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
   }
 
   Widget listCard(int index) {
+    String price =
+        products[index]['price'].toString() + " " + products[index]['currency'];
     return Card(
       child: InkWell(
         child: Container(
@@ -77,9 +79,10 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           child: Row(
             children: <Widget>[
               Icon(Icons.image),
-              Spacer(),
+              SizedBox(width: 10),
               Text(products[index]['name']),
               Spacer(),
+              Text(price),
               SizedBox(width: 10),
               _productInfoButton(index),
             ],
@@ -109,10 +112,10 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text("About" + selectedProduct['name']),
+          title: Text("About " + selectedProduct['name']),
           content: Row(
             children: <Widget>[
-              Text("This is a great product!"),
+              Flexible(child: Text(selectedProduct['productInfo'])),
             ],
           ),
           actions: <Widget>[
@@ -175,16 +178,16 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           int productId = selectedProduct['id'];
           Map<String, dynamic> body = {
             "productId": productId,
-            "quantity": selectedValue,
-            "basketId": 1
+            "quantity": selectedValue
           };
           String basketUrl = "/baskets_products/add";
           final response = await _httpService.post(url: basketUrl, body: body);
 
-          if (response['data']['success'] == true) {
-            print("Added to cart selected position");
+          if (response['success'] == true) {
+            print(response['data']['msg']);
           } else {
-            print("Error while adding to cart selected position");
+            print(response['statusCode']);
+            print(response['data']['msg']);
           }
         }
         Navigator.of(context).pop();
@@ -268,7 +271,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     );
   }
 
-  void getProductTypes() async {
+  void _getProductTypes() async {
     Map<String, dynamic> body = {
       "id": widget.productType['id'],
     };

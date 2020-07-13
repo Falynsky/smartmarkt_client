@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  final String hostUrl = "http://192.168.0.160:8080";
+  final String hostUrl = "http://192.168.0.161:8080";
 
   static final Map<String, String> headers = {
     'Content-type': 'application/json; charset=UTF-8',
@@ -29,20 +29,26 @@ class HttpService {
     );
     var data = json.decode(response.body);
     var statusCode = response.statusCode;
-    if (statusCode == 200) {
-      if (url == '/auth/login') {
+
+    if (statusCode >= 200 && statusCode <= 299) {
+      if (statusCode == 200 && url == '/auth/login') {
         headers['Auth'] = 'Wave ' + data['token'];
       }
-      return {
-        "success": true,
-        "data": data,
-      };
+      return collectResponseData(true, statusCode, data);
+    } else if (statusCode >= 400) {
+      return collectResponseData(false, statusCode, data);
     } else {
-      return {
-        "success": false,
-        "statusCode": statusCode,
-      };
+      return collectResponseData(true, statusCode, data);
     }
+  }
+
+  Map<String, Object> collectResponseData(bool success, int statusCode, data) {
+    Map<String, Object> responseData = {
+      "success": success,
+      "statusCode": statusCode,
+      "data": data,
+    };
+    return responseData;
   }
 
   Future<Map<String, dynamic>> get({
