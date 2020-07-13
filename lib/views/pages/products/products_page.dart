@@ -115,7 +115,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           title: Text("About " + selectedProduct['name']),
           content: Row(
             children: <Widget>[
-              Text(selectedProduct['productInfo']),
+              Flexible(child: Text(selectedProduct['productInfo'])),
             ],
           ),
           actions: <Widget>[
@@ -178,16 +178,16 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           int productId = selectedProduct['id'];
           Map<String, dynamic> body = {
             "productId": productId,
-            "quantity": selectedValue,
-            "basketId": 1
+            "quantity": selectedValue
           };
           String basketUrl = "/baskets_products/add";
           final response = await _httpService.post(url: basketUrl, body: body);
 
           if (response['success'] == true) {
-            print("Added to cart selected position");
+            print(response['data']['msg']);
           } else {
-            print("Error while adding to cart selected position");
+            print(response['statusCode']);
+            print(response['data']['msg']);
           }
         }
         Navigator.of(context).pop();
