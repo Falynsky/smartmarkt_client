@@ -14,7 +14,7 @@ class MainMenuEvent extends RouteEvent {
   List<Object> get props => [];
 }
 
-class ItemsEvent extends RouteEvent {
+class ProductTypes extends RouteEvent {
   @override
   List<Object> get props => [];
 }

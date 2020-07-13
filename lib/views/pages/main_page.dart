@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartmarktclient/buttons/basket_page_button.dart';
-import 'package:smartmarktclient/buttons/items_page_button.dart';
+import 'package:smartmarktclient/buttons/product_types_page_button.dart';
 import 'package:smartmarktclient/buttons/profile_page_button.dart';
 import 'package:smartmarktclient/buttons/sales_page_button.dart';
 import 'package:smartmarktclient/buttons/scanner_page_button.dart';
@@ -25,15 +25,16 @@ class _MainPageState extends State<MainPage> {
           child: Text("Smart Markt"),
         ),
         elevation: .1,
-        backgroundColor: Colors.black45,
+        backgroundColor: Colors.teal,
       ),
       body: Container(
+        color: Color(0xFF40c5ba),
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
         child: GridView.count(
           crossAxisCount: 2,
           padding: EdgeInsets.all(3),
           children: <Widget>[
-            ItemsPageButton(),
+            ProductTypesPageButton(),
             ScannerPageButton(),
             SalesPageButton(),
             BasketPageButton(),

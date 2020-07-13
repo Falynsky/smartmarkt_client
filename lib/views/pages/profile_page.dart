@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/http/http_service.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -65,6 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
           iconSize: 60,
           icon: Icon(Icons.exit_to_app),
           onPressed: () {
+            HttpService.clearAuthHeader();
             setState(() {
               _routeBloc.add(LoginPageEvent());
             });

@@ -21,10 +21,10 @@ class _BasketPageButtonState extends State<BasketPageButton> {
   @override
   Widget build(BuildContext context) {
     return Card(
+        color: Color(0xAF24756f),
         elevation: 1.0,
         margin: new EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
           child: new InkWell(
             onTap: () => setState(() {
               _routeBloc.add(BasketEvent());
