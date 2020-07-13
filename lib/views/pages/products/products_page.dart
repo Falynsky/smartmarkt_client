@@ -185,6 +185,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
 
           if (response['success'] == true) {
             print(response['data']['msg']);
+
           } else {
             print(response['statusCode']);
             print(response['data']['msg']);
