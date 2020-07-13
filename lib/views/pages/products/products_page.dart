@@ -174,12 +174,15 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
       child: new Text("Add to cart"),
       onPressed: () async {
         int selectedValue = int.parse(_controller.text);
+
         if (selectedValue > 0) {
           int productId = selectedProduct['id'];
+
           Map<String, dynamic> body = {
             "productId": productId,
             "quantity": selectedValue
           };
+
           String basketUrl = "/baskets_products/add";
           final response = await _httpService.post(url: basketUrl, body: body);
 
