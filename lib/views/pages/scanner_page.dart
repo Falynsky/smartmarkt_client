@@ -26,14 +26,10 @@ class _ScannerPageState extends State<ScannerPage> {
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  setState(() {
-                    _routeBloc.add(MainMenuEvent());
-                  });
-                },
+                onPressed: () => _routeBloc.add(LoadMainMenuEvent()),
               ),
               SizedBox(width: 20),
-              Text("Scanner"),
+              Text("Skaner"),
             ],
           ),
         ),
@@ -50,21 +46,10 @@ class _ScannerPageState extends State<ScannerPage> {
             ),
             onTap: () async {
               var result = await BarcodeScanner.scan();
-
-              print(result.type); // The result type
-              // (barcode, cancelled, failed)
-              print(result.rawContent); // The barcode content
-              print(result.format); // The barcode format (as enum)
-              print(result.formatNote);
             },
           ),
         ),
       ),
     );
   }
-
-/*  setState(() {
-  RouteBloc routeBloc = BlocProvider.of<RouteBloc>(context);
-  routeBloc.add(MainMenuEvent());
-  });*/
 }

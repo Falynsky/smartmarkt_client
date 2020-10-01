@@ -5,29 +5,18 @@ import 'package:bloc/bloc.dart';
 import '../bloc.dart';
 
 class RouteBloc extends Bloc<RouteEvent, RouteState> {
-  @override
-  RouteState get initialState => InitialRouteState();
+  RouteBloc() : super(LoadLoginPageState());
 
   @override
   Stream<RouteState> mapEventToState(
     RouteEvent event,
   ) async* {
-    if (event is MainMenuEvent) {
-      yield MainMenuState();
-    } else if (event is ProductTypes) {
-      yield ProductsPanelState();
-    } else if (event is ScannerEvent) {
-      yield ScannerState();
-    } else if (event is SalesEvent) {
-      yield SalesState();
-    } else if (event is BasketEvent) {
-      yield BasketState();
-    } else if (event is ProfileEvent) {
-      yield ProfileState();
-    } else if (event is SettingsEvent) {
-      yield SettingsState();
-    } else if ( event is LoginPageEvent) {
-      yield LoginPageState();
+    if (event is LoadMainMenuEvent) {
+      yield LoadMainMenuState();
+    } else if (event is LoadLoginPageEvent) {
+      yield LoadLoginPageState();
+    } else if (event is LoadDashboardPageEvent) {
+      yield LoadDashboardPageState(pageIdn: event.pageIdn);
     }
   }
 }

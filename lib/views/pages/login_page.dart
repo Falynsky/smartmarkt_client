@@ -26,46 +26,42 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              buildBackground(),
-              Center(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      _buildSignInTitle(),
-                      SizedBox(height: 30),
-                      _buildLoginTF(),
-                      SizedBox(height: 30),
-                      _buildPasswordTF(),
-                      SizedBox(height: 30),
-                      _buildRememberMeCheckbox(),
-                      _buildLoginBtn(),
-                    ],
-                  ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
+          children: <Widget>[
+            buildBackground(),
+            Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _buildSignInTitle(),
+                    _buildLoginTF(),
+                    _buildPasswordTF(),
+                    _buildLoginBtn(),
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
-  Text _buildSignInTitle() {
-    return Text(
-      'Sign In',
-      style: TextStyle(
-        color: Colors.white,
-        fontFamily: 'OpenSans',
-        fontSize: 30.0,
-        fontWeight: FontWeight.bold,
+  Widget _buildSignInTitle() {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Text(
+        'Sign In',
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: 'OpenSans',
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -91,75 +87,81 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLoginTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Login',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextField(
-            textInputAction: TextInputAction.next,
-            controller: login,
-            keyboardType: TextInputType.text,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.person,
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Login',
+            style: kLabelStyle,
+          ),
+          SizedBox(height: 10.0),
+          Container(
+            alignment: Alignment.centerLeft,
+            decoration: kBoxDecorationStyle,
+            height: 60.0,
+            child: TextField(
+              textInputAction: TextInputAction.next,
+              controller: login,
+              keyboardType: TextInputType.text,
+              style: TextStyle(
                 color: Colors.white,
+                fontFamily: 'OpenSans',
               ),
-              hintText: 'Enter your Login',
-              hintStyle: kHintTextStyle,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+                hintText: 'Enter your Login',
+                hintStyle: kHintTextStyle,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildPasswordTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Password',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextField(
-            controller: password,
-            obscureText: true,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.lock,
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Password',
+            style: kLabelStyle,
+          ),
+          SizedBox(height: 10.0),
+          Container(
+            alignment: Alignment.centerLeft,
+            decoration: kBoxDecorationStyle,
+            height: 60.0,
+            child: TextField(
+              controller: password,
+              obscureText: true,
+              style: TextStyle(
                 color: Colors.white,
+                fontFamily: 'OpenSans',
               ),
-              hintText: 'Enter your Password',
-              hintStyle: kHintTextStyle,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                ),
+                hintText: 'Enter your Password',
+                hintStyle: kHintTextStyle,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -212,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
 
           if (response['success']) {
             setState(() {
-              _routeBloc.add(MainMenuEvent());
+              _routeBloc.add(LoadMainMenuEvent());
             });
           } else {
             _showMyDialog('Login error', 'Incorrect login or password.');
@@ -272,25 +274,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildSignInWithText() {
-    return Column(
-      children: <Widget>[
-        Text(
-          '- OR -',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        SizedBox(height: 20.0),
-        Text(
-          'Sign in with',
-          style: kLabelStyle,
-        ),
-      ],
     );
   }
 }

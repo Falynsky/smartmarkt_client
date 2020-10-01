@@ -26,13 +26,11 @@ class _SettingsPageState extends State<SettingsPage> {
               IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  setState(() {
-                    _routeBloc.add(MainMenuEvent());
-                  });
+                  _routeBloc.add(LoadMainMenuEvent());
                 },
               ),
               SizedBox(width: 20),
-              Text("Settings"),
+              Text("Ustawienia"),
             ],
           ),
         ),

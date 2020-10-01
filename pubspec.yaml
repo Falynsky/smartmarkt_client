@@ -4,18 +4,17 @@ description: Engineer&#x27;s Thesis - Client
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^4.0.0
-  flutter_bloc: ^4.0.0
-  cupertino_icons: ^0.1.2
-  equatable: ^1.2.0
+  bloc: ^6.0.3
+  flutter_bloc: ^6.0.5
+  equatable: ^1.2.5
   http: 0.12.1
   convert: ^2.1.1
-  barcode_scan: any
+  barcode_scan: 3.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -23,4 +22,3 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
-#  assets:

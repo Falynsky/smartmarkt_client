@@ -27,13 +27,11 @@ class _ProfilePageState extends State<ProfilePage> {
               IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  setState(() {
-                    _routeBloc.add(MainMenuEvent());
-                  });
+                  _routeBloc.add(LoadMainMenuEvent());
                 },
               ),
               SizedBox(width: 20),
-              Text("Profile"),
+              Text("Profil"),
             ],
           ),
         ),
@@ -67,13 +65,11 @@ class _ProfilePageState extends State<ProfilePage> {
           icon: Icon(Icons.exit_to_app),
           onPressed: () {
             HttpService.clearAuthHeader();
-            setState(() {
-              _routeBloc.add(LoginPageEvent());
-            });
+            _routeBloc.add(LoadLoginPageEvent());
           },
         ),
         Text(
-          "Log Out",
+          "Wyloguj",
           style: TextStyle(fontSize: 20),
         )
       ],
@@ -91,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
         Text(
-          "My Points",
+          "Moje punkty",
           style: TextStyle(fontSize: 20),
         )
       ],

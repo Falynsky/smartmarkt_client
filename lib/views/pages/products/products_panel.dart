@@ -5,7 +5,6 @@ import 'package:smartmarktclient/views/pages/products/product_types_page.dart';
 import 'package:smartmarktclient/views/pages/products/products_page.dart';
 
 class ProductsPanel extends StatefulWidget {
-
   ProductsPanel();
 
   @override
@@ -24,6 +23,12 @@ class _ProductsPanelState extends State<ProductsPanel> {
   }
 
   @override
+  void dispose() {
+    _productsBloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: BlocProvider(
@@ -31,7 +36,7 @@ class _ProductsPanelState extends State<ProductsPanel> {
         child: BlocListener<ProductsBloc, ProductsState>(
           listener: (context, state) {},
           child: BlocBuilder(
-            bloc: _productsBloc,
+            cubit: _productsBloc,
             builder: (context, state) {
               if (state is ProductTypesState) {
                 return ProductTypesPage();
@@ -58,9 +63,7 @@ class _ProductsPanelState extends State<ProductsPanel> {
               IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  setState(() {
-                    _routeBloc.add(MainMenuEvent());
-                  });
+                  _routeBloc.add(LoadMainMenuEvent());
                 },
               ),
               SizedBox(width: 20),

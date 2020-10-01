@@ -7,14 +7,13 @@ import 'package:smartmarktclient/bloc/products/products_state.dart';
 import '../bloc.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  @override
-  ProductsState get initialState => ProductTypesState();
+  ProductsBloc() : super(ProductTypesState());
 
   @override
   Stream<ProductsState> mapEventToState(
     ProductsEvent event,
   ) async* {
-    if (event is ProductTypesEvent) {
+    if (event is LoadedProductTypesEvent) {
       yield ProductTypesState();
     } else if (event is SelectedTypeProductsEvent) {
       yield SelectedTypeProductsState(

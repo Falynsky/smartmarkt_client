@@ -26,13 +26,11 @@ class _SalesPageState extends State<SalesPage> {
               IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  setState(() {
-                    _routeBloc.add(MainMenuEvent());
-                  });
+                  _routeBloc.add(LoadMainMenuEvent());
                 },
               ),
               SizedBox(width: 20),
-              Text("Sales"),
+              Text("Promocje"),
             ],
           ),
         ),

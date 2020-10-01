@@ -39,13 +39,11 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
               IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  setState(() {
-                    _routeBloc.add(MainMenuEvent());
-                  });
+                  _routeBloc.add(LoadMainMenuEvent());
                 },
               ),
               SizedBox(width: 20),
-              Text("Items"),
+              Text("Kategorie"),
             ],
           ),
         ),

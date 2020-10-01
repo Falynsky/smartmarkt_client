@@ -4,42 +4,25 @@ abstract class RouteEvent extends Equatable {
   const RouteEvent();
 }
 
-class LoginPageEvent extends RouteEvent {
+class LoadLoginPageEvent extends RouteEvent {
   @override
   List<Object> get props => [];
 }
 
-class MainMenuEvent extends RouteEvent {
+class LoadMainMenuEvent extends RouteEvent {
   @override
   List<Object> get props => [];
 }
 
-class ProductTypes extends RouteEvent {
-  @override
-  List<Object> get props => [];
-}
+class LoadDashboardPageEvent extends RouteEvent {
+  final String pageIdn;
 
-class ScannerEvent extends RouteEvent {
-  @override
-  List<Object> get props => [];
-}
+  LoadDashboardPageEvent({
+    this.pageIdn,
+  });
 
-class SalesEvent extends RouteEvent {
   @override
-  List<Object> get props => [];
-}
-
-class BasketEvent extends RouteEvent {
-  @override
-  List<Object> get props => [];
-}
-
-class ProfileEvent extends RouteEvent {
-  @override
-  List<Object> get props => [];
-}
-
-class SettingsEvent extends RouteEvent {
-  @override
-  List<Object> get props => [];
+  List<Object> get props => [
+        pageIdn,
+      ];
 }

@@ -43,9 +43,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
               IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  setState(() {
-                    _productsBloc.add(ProductTypesEvent());
-                  });
+                  _productsBloc.add(LoadedProductTypesEvent());
                 },
               ),
               SizedBox(width: 20),
@@ -56,29 +54,35 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
         elevation: .1,
         backgroundColor: Colors.black45,
       ),
-      body: productList(),
+      body: productList(context),
     );
   }
 
-  ListView productList() {
+  ListView productList(BuildContext context) {
     return ListView.builder(
       itemCount: products != null ? products.length : 0,
       itemBuilder: (context, index) {
-        return listCard(index);
+        return listCard(index, context);
       },
     );
   }
 
-  Widget listCard(int index) {
+  Widget listCard(
+    int index,
+    BuildContext context,
+  ) {
     String price =
         products[index]['price'].toString() + " " + products[index]['currency'];
     return Card(
       child: InkWell(
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          padding: EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 15,
+          ),
           child: Row(
             children: <Widget>[
-              Icon(Icons.image),
+              _imageButton(index),
               SizedBox(width: 10),
               Text(products[index]['name']),
               Spacer(),
@@ -88,11 +92,33 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
             ],
           ),
         ),
-        onTap: () {
-          _selectedPositionDialog(products[index]);
-          print('tapped : ' + products[index]['name']);
-        },
+        onTap: () => _selectedPositionDialog(products[index], context),
       ),
+    );
+  }
+
+  InkWell _imageButton(int index) {
+    return InkWell(
+      child: Icon(Icons.image),
+      onTap: () {
+        var selectedProduct = products[index];
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(selectedProduct['name']),
+                content: Row(
+                  children: [
+                    Flexible(child: Text('image')),
+                  ],
+                ),
+                actions: <Widget>[
+                  // usually buttons at the bottom of the dialog
+                  _closeButton(context),
+                ],
+              );
+            });
+      },
     );
   }
 
@@ -110,16 +136,12 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
+        String dialogTitle = "About " + selectedProduct['name'];
+        String productInfo = selectedProduct['productInfo'];
         return AlertDialog(
-          title: Text("About " + selectedProduct['name']),
-          content: Row(
-            children: <Widget>[
-              Flexible(child: Text(selectedProduct['productInfo'])),
-            ],
-          ),
+          title: Text(dialogTitle),
+          content: Text(productInfo),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
             _closeButton(context),
           ],
         );
@@ -127,7 +149,10 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     );
   }
 
-  void _selectedPositionDialog(dynamic selectedProduct) {
+  void _selectedPositionDialog(
+    dynamic selectedProduct,
+    BuildContext context,
+  ) {
     TextEditingController _controller = TextEditingController();
     _controller.text = "0";
     showDialog(
@@ -158,7 +183,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
 
   FlatButton _closeButton(BuildContext context) {
     return FlatButton(
-      child: new Text("Close"),
+      child: Text("Close"),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -171,7 +196,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     dynamic selectedProduct,
   ) {
     return FlatButton(
-      child: new Text("Add to cart"),
+      child: Text("Add to cart"),
       onPressed: () async {
         int selectedValue = int.parse(_controller.text);
 
@@ -204,7 +229,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     dynamic selectedProduct,
   ) {
     return FlatButton(
-      child: new Text("Get Code"),
+      child: Text("Get Code"),
       onPressed: () {
         int currentValue = int.parse(_controller.text);
         if (currentValue > 0) {
@@ -267,9 +292,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           ),
         ),
         keyboardType: TextInputType.number,
-        inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly
-        ],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       ),
     );
   }

@@ -3,8 +3,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/route_widget.dart';
 
 Future<bool> addSelfSignedCertificate() async {
@@ -22,15 +20,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(
+    return MaterialApp(
+      title: 'SmartMarkt',
+      theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: BlocProvider(
-        create: (_) => RouteBloc(),
-        child: RouteWidget(),
-      ),
+      home: RouteWidget(),
     );
   }
 }

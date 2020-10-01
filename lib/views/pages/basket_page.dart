@@ -30,7 +30,7 @@ class _BasketPageState extends State<BasketPage> {
             children: <Widget>[
               _arrowBackButton(),
               SizedBox(width: 20),
-              Text("Basket"),
+              Text("Koszyk"),
             ],
           ),
         ),
@@ -46,9 +46,7 @@ class _BasketPageState extends State<BasketPage> {
     return IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () {
-        setState(() {
-          _routeBloc.add(MainMenuEvent());
-        });
+        _routeBloc.add(LoadMainMenuEvent());
       },
     );
   }
