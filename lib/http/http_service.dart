@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class HttpService {
 //  final String hostUrl = "https://smartmarkt-server.herokuapp.com";
-  final String hostUrl = "http://192.168.0.160:8080";
+  final String hostUrl = "http://192.168.21.4:8080";
   static final Map<String, String> headers = {
     'Content-type': 'application/json; charset=UTF-8',
     'Accept-Encoding': 'gzip, deflate, br',
@@ -40,6 +40,7 @@ class HttpService {
       }
       return collectResponseData(true, statusCode, data);
     }
+    return collectResponseData(false, statusCode, data);
   }
 
   Map<String, Object> collectResponseData(bool success, int statusCode, data) {

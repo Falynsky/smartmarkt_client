@@ -5,15 +5,18 @@ import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/utilities/constants.dart';
 
-class LoginPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   RouteBloc _routeBloc;
   final login = TextEditingController();
   final password = TextEditingController();
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final licenceKey = TextEditingController();
 
   @override
   void initState() {
@@ -35,11 +38,22 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    _buildSignInTitle(),
-                    _buildLoginTF(),
-                    _buildPasswordTF(),
-                    _buildLoginBtn(),
-                    _buildSignUpBtn(),
+                    _buildSignUpTitle(),
+                    Row(
+                      children: [
+                        Flexible(child: _buildLoginTF()),
+                        Flexible(child: _buildPasswordTF()),
+                      ],
+                    ),
+                    _builFirstNameTF(),
+                    _buildLastNameTF(),
+                    _buildLicenceKeyTF(),
+                    Row(
+                      children: [
+                        Flexible(child: _buildBackBtn()),
+                        Flexible(child: _buildSignUpBtn()),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -50,11 +64,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildSignInTitle() {
+  Widget _buildSignUpTitle() {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
-        'SmartMarkt',
+        'REJESTRACJA',
         style: TextStyle(
           color: Colors.white,
           fontFamily: 'OpenSans',
@@ -89,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildLoginTF() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -97,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
             'Login',
             style: kLabelStyle,
           ),
-          SizedBox(height: 10.0),
+          SizedBox(height: 5.0),
           Container(
             alignment: Alignment.centerLeft,
             decoration: kBoxDecorationStyle,
@@ -117,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                   Icons.person,
                   color: Colors.white,
                 ),
-                hintText: 'Wprowadź login',
+                hintText: 'Login',
                 hintStyle: kHintTextStyle,
               ),
             ),
@@ -129,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildPasswordTF() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -137,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
             'Hasło',
             style: kLabelStyle,
           ),
-          SizedBox(height: 10.0),
+          SizedBox(height: 5.0),
           Container(
             alignment: Alignment.centerLeft,
             decoration: kBoxDecorationStyle,
@@ -156,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                   Icons.lock,
                   color: Colors.white,
                 ),
-                hintText: 'Wprowadź hasło',
+                hintText: 'Hasło',
                 hintStyle: kHintTextStyle,
               ),
             ),
@@ -166,20 +180,140 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginBtn() {
+  Widget _builFirstNameTF() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Imie',
+            style: kLabelStyle,
+          ),
+          SizedBox(height: 5.0),
+          Container(
+            alignment: Alignment.centerLeft,
+            decoration: kBoxDecorationStyle,
+            height: 60.0,
+            child: TextField(
+              textInputAction: TextInputAction.next,
+              controller: firstName,
+              keyboardType: TextInputType.text,
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'OpenSans',
+              ),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+                hintText: 'Wprowadź imie',
+                hintStyle: kHintTextStyle,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLastNameTF() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Nazwisko',
+            style: kLabelStyle,
+          ),
+          SizedBox(height: 5.0),
+          Container(
+            alignment: Alignment.centerLeft,
+            decoration: kBoxDecorationStyle,
+            height: 60.0,
+            child: TextField(
+              textInputAction: TextInputAction.next,
+              controller: lastName,
+              keyboardType: TextInputType.text,
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'OpenSans',
+              ),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+                hintText: 'Wprowadź nazwisko',
+                hintStyle: kHintTextStyle,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLicenceKeyTF() {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Kod licencji',
+            style: kLabelStyle,
+          ),
+          SizedBox(height: 5.0),
+          Container(
+            alignment: Alignment.centerLeft,
+            decoration: kBoxDecorationStyle,
+            height: 60.0,
+            child: TextField(
+              textInputAction: TextInputAction.next,
+              controller: licenceKey,
+              keyboardType: TextInputType.text,
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'OpenSans',
+              ),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(
+                  Icons.vpn_key,
+                  color: Colors.white,
+                ),
+                hintText: 'Dla konta klienta brak kodu',
+                hintStyle: kHintTextStyle,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSignUpBtn() {
     return Container(
-      padding: EdgeInsets.only(top: 25, bottom: 10),
+      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: _loginButton,
+        onPressed: _signUpButton,
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
         color: Colors.white,
         child: Text(
-          'ZALOGUJ',
+          'ZAPISZ',
           style: TextStyle(
             color: Color(0xFF24756f),
             letterSpacing: 1.5,
@@ -192,43 +326,50 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _loginButton() async {
+  void _signUpButton() async {
     String _login = login.text.toString();
     String _password = password.text.toString();
+    String _firstName = firstName.text.toString();
+    String _lastName = lastName.text.toString();
+    String _licenceKey = licenceKey.text.toString();
     Map<String, dynamic> body = {
-      'username': _login,
-      'password': _password,
+      "username": _login,
+      "password": _password,
+      "firstName": _firstName,
+      "lastName": _lastName,
+      "licenceKey": _licenceKey
     };
 
     HttpService httpService = HttpService();
     var response = await httpService.post(
-      url: '/auth/login',
+      url: '/signUp/register',
       body: body,
     );
 
     if (response['success']) {
       setState(() {
-        _routeBloc.add(LoadMainMenuEvent());
+        _routeBloc.add(LoadLoginPageEvent());
       });
     } else {
-      _showMyDialog('Błąd logowania', 'Niepoprawne dane.');
+      _showMyDialog('Błąd rejestracji',
+          'Wystąpił problem w trakcie rejestracji, sprawdź wprowadzone wartości i spróbuj ponownie');
     }
   }
 
-  Widget _buildSignUpBtn() {
+  Widget _buildBackBtn() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: emitSignUpEvent,
+        onPressed: () => _routeBloc.add(LoadLoginPageEvent()),
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
         color: Colors.white,
         child: Text(
-          'NOWE KONTO',
+          'POWRÓT',
           style: TextStyle(
             color: Color(0xFF24756f),
             letterSpacing: 1.5,
@@ -239,10 +380,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  void emitSignUpEvent() async {
-    _routeBloc.add(SignUpPageEvent());
   }
 
   Future<void> _showMyDialog(String title, String body) async {

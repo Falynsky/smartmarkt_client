@@ -14,6 +14,11 @@ class LoadLoginPageState extends RouteState {
   List<Object> get props => [];
 }
 
+class SignUpPageState extends RouteState {
+  @override
+  List<Object> get props => [];
+}
+
 class LoadDashboardPageState extends RouteState {
   final String pageIdn;
 

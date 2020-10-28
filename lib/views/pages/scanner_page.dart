@@ -46,6 +46,8 @@ class _ScannerPageState extends State<ScannerPage> {
             ),
             onTap: () async {
               var result = await BarcodeScanner.scan();
+              var formatNote = result.formatNote;
+              print(formatNote);
             },
           ),
         ),

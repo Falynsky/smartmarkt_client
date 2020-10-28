@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/views/pages/basket_page.dart';
 import 'package:smartmarktclient/views/pages/login_page.dart';
+import 'package:smartmarktclient/views/pages/main_page.dart';
 import 'package:smartmarktclient/views/pages/products/products_panel.dart';
-
-import 'views/pages/basket_page.dart';
-import 'views/pages/main_page.dart';
-import 'views/pages/profile_page.dart';
-import 'views/pages/sales_page.dart';
-import 'views/pages/scanner_page.dart';
-import 'views/pages/settings_page.dart';
+import 'package:smartmarktclient/views/pages/profile_page.dart';
+import 'package:smartmarktclient/views/pages/register/register_page.dart';
+import 'package:smartmarktclient/views/pages/sales_page.dart';
+import 'package:smartmarktclient/views/pages/scanner_page.dart';
+import 'package:smartmarktclient/views/pages/settings_page.dart';
 
 class RouteWidget extends StatelessWidget {
   @override
@@ -22,6 +22,8 @@ class RouteWidget extends StatelessWidget {
           builder: (context, state) {
             if (state is LoadLoginPageState) {
               return LoginPage();
+            } else if (state is SignUpPageState) {
+              return SignUpPage();
             } else if (state is LoadMainMenuState) {
               return MainPage();
             } else if (state is LoadDashboardPageState) {

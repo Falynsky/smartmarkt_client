@@ -9,6 +9,11 @@ class LoadLoginPageEvent extends RouteEvent {
   List<Object> get props => [];
 }
 
+class SignUpPageEvent extends RouteEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class LoadMainMenuEvent extends RouteEvent {
   @override
   List<Object> get props => [];
