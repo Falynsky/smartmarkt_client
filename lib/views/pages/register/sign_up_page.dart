@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/components/text_field_component.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/utilities/constants.dart';
 
@@ -16,7 +17,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final password = TextEditingController();
   final firstName = TextEditingController();
   final lastName = TextEditingController();
-  final licenceKey = TextEditingController();
 
   @override
   void initState() {
@@ -39,15 +39,30 @@ class _SignUpPageState extends State<SignUpPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     _buildSignUpTitle(),
-                    Row(
-                      children: [
-                        Flexible(child: _buildLoginTF()),
-                        Flexible(child: _buildPasswordTF()),
-                      ],
+                    TextFieldComponent(
+                      controller: login,
+                      label: 'Login',
+                      placeHolder: 'Login',
+                      icon: Icons.person,
                     ),
-                    _builFirstNameTF(),
-                    _buildLastNameTF(),
-                    _buildLicenceKeyTF(),
+                    TextFieldComponent(
+                      controller: password,
+                      label: 'Hasło',
+                      placeHolder: 'Hasło',
+                      icon: Icons.lock,
+                    ),
+                    TextFieldComponent(
+                      controller: firstName,
+                      label: 'Imię',
+                      placeHolder: 'Imię',
+                      icon: Icons.person,
+                    ),
+                    TextFieldComponent(
+                      controller: lastName,
+                      label: 'Nazwisko',
+                      placeHolder: 'Nazwisko',
+                      icon: Icons.person,
+                    ),
                     Row(
                       children: [
                         Flexible(child: _buildBackBtn()),
@@ -66,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildSignUpTitle() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(vertical: 25.0),
       child: Text(
         'REJESTRACJA',
         style: TextStyle(
@@ -260,46 +275,6 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildLicenceKeyTF() {
-    return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Kod licencji',
-            style: kLabelStyle,
-          ),
-          SizedBox(height: 5.0),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              controller: licenceKey,
-              keyboardType: TextInputType.text,
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'OpenSans',
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.vpn_key,
-                  color: Colors.white,
-                ),
-                hintText: 'Dla konta klienta brak kodu',
-                hintStyle: kHintTextStyle,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildSignUpBtn() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
@@ -331,13 +306,12 @@ class _SignUpPageState extends State<SignUpPage> {
     String _password = password.text.toString();
     String _firstName = firstName.text.toString();
     String _lastName = lastName.text.toString();
-    String _licenceKey = licenceKey.text.toString();
     Map<String, dynamic> body = {
       "username": _login,
       "password": _password,
       "firstName": _firstName,
       "lastName": _lastName,
-      "licenceKey": _licenceKey
+      "licenceKey": "__________"
     };
 
     HttpService httpService = HttpService();
