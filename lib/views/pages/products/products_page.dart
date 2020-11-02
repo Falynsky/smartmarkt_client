@@ -136,7 +136,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String dialogTitle = "About " + selectedProduct['name'];
+        String dialogTitle = selectedProduct['name'];
         String productInfo = selectedProduct['productInfo'];
         return AlertDialog(
           title: Text(dialogTitle),
@@ -163,7 +163,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           title: Text(selectedProduct['name']),
           content: Row(
             children: <Widget>[
-              Text("Amount: "),
+              Text("Ilość: "),
               Spacer(),
               _minusButton(_controller),
               _numericField(_controller),
@@ -183,7 +183,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
 
   FlatButton _closeButton(BuildContext context) {
     return FlatButton(
-      child: Text("Close"),
+      child: Text("Zamknij"),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -196,7 +196,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     dynamic selectedProduct,
   ) {
     return FlatButton(
-      child: Text("Add to cart"),
+      child: Text("Dodaj do koszyka"),
       onPressed: () async {
         int selectedValue = int.parse(_controller.text);
 
@@ -229,7 +229,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     dynamic selectedProduct,
   ) {
     return FlatButton(
-      child: Text("Get Code"),
+      child: Text("Kod kreskowy"),
       onPressed: () {
         int currentValue = int.parse(_controller.text);
         if (currentValue > 0) {
