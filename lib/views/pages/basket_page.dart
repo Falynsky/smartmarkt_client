@@ -54,7 +54,9 @@ class _BasketPageState extends State<BasketPage> {
   Widget productList() {
     return basketProducts == null
         ? Container()
-        : basketProducts.isEmpty ? _emptyBasketInfo() : _basketProductsList();
+        : basketProducts.isEmpty
+            ? _emptyBasketInfo()
+            : _basketProductsList();
   }
 
   Container _emptyBasketInfo() {
@@ -92,7 +94,7 @@ class _BasketPageState extends State<BasketPage> {
               Spacer(),
               Text(basketProducts[index]['name']),
               Spacer(),
-              Text('quantity: ' + basketProducts[index]['quantity'].toString()),
+              Text('ilość: ' + basketProducts[index]['quantity'].toString()),
               SizedBox(width: 10),
               InkWell(
                 child: Icon(Icons.close),

@@ -6,7 +6,7 @@ import 'package:smartmarktclient/views/pages/login_page.dart';
 import 'package:smartmarktclient/views/pages/main_page.dart';
 import 'package:smartmarktclient/views/pages/products/products_panel.dart';
 import 'package:smartmarktclient/views/pages/profile_page.dart';
-import 'package:smartmarktclient/views/pages/register/register_page.dart';
+import 'package:smartmarktclient/views/pages/register/sign_up_page.dart';
 import 'package:smartmarktclient/views/pages/sales_page.dart';
 import 'package:smartmarktclient/views/pages/scanner_page.dart';
 import 'package:smartmarktclient/views/pages/settings_page.dart';

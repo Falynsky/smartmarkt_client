@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/components/text_field_component.dart';
 import 'package:smartmarktclient/http/http_service.dart';
-import 'package:smartmarktclient/utilities/constants.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,6 +13,7 @@ class _LoginPageState extends State<LoginPage> {
   RouteBloc _routeBloc;
   final login = TextEditingController();
   final password = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -29,18 +29,33 @@ class _LoginPageState extends State<LoginPage> {
         child: Stack(
           children: <Widget>[
             buildBackground(),
-            Center(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _buildSignInTitle(),
-                    _buildLoginTF(),
-                    _buildPasswordTF(),
-                    _buildLoginBtn(),
-                    _buildSignUpBtn(),
-                  ],
+            Form(
+              key: _formKey,
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      _buildSignInTitle(),
+                      TextFieldComponent(
+                        controller: login,
+                        label: 'Login',
+                        placeHolder: 'Wprowadź login',
+                        icon: Icons.person,
+                        isRequired: true,
+                      ),
+                      TextFieldComponent(
+                        controller: password,
+                        label: 'Hasło',
+                        placeHolder: 'Wprowadź hasło',
+                        icon: Icons.lock,
+                        isRequired: true,
+                      ),
+                      _buildLoginBtn(),
+                      _buildSignUpBtn(),
+                    ],
+                  ),
                 ),
               ),
             )
@@ -87,88 +102,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginTF() {
-    return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Login',
-            style: kLabelStyle,
-          ),
-          SizedBox(height: 10.0),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              controller: login,
-              keyboardType: TextInputType.text,
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'OpenSans',
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                hintText: 'Wprowadź login',
-                hintStyle: kHintTextStyle,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPasswordTF() {
-    return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Hasło',
-            style: kLabelStyle,
-          ),
-          SizedBox(height: 10.0),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
-            child: TextField(
-              controller: password,
-              obscureText: true,
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'OpenSans',
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Colors.white,
-                ),
-                hintText: 'Wprowadź hasło',
-                hintStyle: kHintTextStyle,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildLoginBtn() {
     return Container(
-      padding: EdgeInsets.only(top: 25, bottom: 10),
+      padding: EdgeInsets.only(top: 25, left: 15, right: 15),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
@@ -193,31 +129,34 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginButton() async {
-    String _login = login.text.toString();
-    String _password = password.text.toString();
-    Map<String, dynamic> body = {
-      'username': _login,
-      'password': _password,
-    };
+    var validate = _formKey.currentState.validate();
+    if (validate) {
+      String _login = login.text.toString();
+      String _password = password.text.toString();
+      Map<String, dynamic> body = {
+        'username': _login,
+        'password': _password,
+      };
 
-    HttpService httpService = HttpService();
-    var response = await httpService.post(
-      url: '/auth/login',
-      body: body,
-    );
+      HttpService httpService = HttpService();
+      var response = await httpService.post(
+        url: '/auth/login',
+        body: body,
+      );
 
-    if (response['success']) {
-      setState(() {
-        _routeBloc.add(LoadMainMenuEvent());
-      });
-    } else {
-      _showMyDialog('Błąd logowania', 'Niepoprawne dane.');
+      if (response['success']) {
+        setState(() {
+          _routeBloc.add(LoadMainMenuEvent());
+        });
+      } else {
+        _showMyDialog('Błąd logowania', 'Niepoprawne dane.');
+      }
     }
   }
 
   Widget _buildSignUpBtn() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.only(top: 25, left: 15, right: 15),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
