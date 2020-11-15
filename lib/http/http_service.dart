@@ -59,12 +59,18 @@ class HttpService {
       hostUrl + url,
       headers: headers,
     );
-    var data = json.decode(response.body);
+    var data = response.body;
+    var decodedBody;
+    if (data.isNotEmpty) {
+      decodedBody = json.decode(response.body);
+    } else {
+      decodedBody = data;
+    }
     var statusCode = response.statusCode;
     if (statusCode == 200) {
       return {
         "success": true,
-        "data": data,
+        "data": decodedBody,
       };
     } else {
       return {
