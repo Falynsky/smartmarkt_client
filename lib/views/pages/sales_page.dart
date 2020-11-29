@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 
 class SalesPage extends StatefulWidget {
@@ -9,14 +7,6 @@ class SalesPage extends StatefulWidget {
 }
 
 class _SalesPageState extends State<SalesPage> {
-  RouteBloc _routeBloc;
-
-  @override
-  void initState() {
-    _routeBloc = BlocProvider.of<RouteBloc>(context);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +19,4 @@ class _SalesPageState extends State<SalesPage> {
       ),
     );
   }
-
-/*  setState(() {
-  RouteBloc routeBloc = BlocProvider.of<RouteBloc>(context);
-  routeBloc.add(MainMenuEvent());
-  });*/
 }

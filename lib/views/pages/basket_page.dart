@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
@@ -10,7 +8,6 @@ class BasketPage extends StatefulWidget {
 }
 
 class _BasketPageState extends State<BasketPage> {
-  RouteBloc _routeBloc;
   HttpService _httpService;
   List<dynamic> basketProducts;
 
@@ -18,7 +15,6 @@ class _BasketPageState extends State<BasketPage> {
   void initState() {
     _httpService = HttpService();
     _getBasketProducts();
-    _routeBloc = BlocProvider.of<RouteBloc>(context);
     super.initState();
   }
 
@@ -31,15 +27,6 @@ class _BasketPageState extends State<BasketPage> {
       ),
       body: productList(),
       floatingActionButton: _buyFabButton(),
-    );
-  }
-
-  IconButton _arrowBackButton() {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        _routeBloc.add(LoadMainMenuEvent());
-      },
     );
   }
 

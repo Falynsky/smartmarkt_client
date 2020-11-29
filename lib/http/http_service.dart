@@ -17,7 +17,7 @@ class HttpService {
     headers.remove('Auth');
   }
 
-  //add interceptors
+  //todo: add interceptors
 
   Future<Map<String, dynamic>> post({
     @required String url,
@@ -29,7 +29,7 @@ class HttpService {
       headers: headers,
       body: msg,
     );
-    var data = json.decode(response.body);
+    var data = json.decode(utf8.decode(response.bodyBytes));
     var statusCode = response.statusCode;
 
     if (statusCode >= 400) {
@@ -62,7 +62,7 @@ class HttpService {
     var data = response.body;
     var decodedBody;
     if (data.isNotEmpty) {
-      decodedBody = json.decode(response.body);
+      decodedBody = json.decode(utf8.decode(response.bodyBytes));
     } else {
       decodedBody = data;
     }

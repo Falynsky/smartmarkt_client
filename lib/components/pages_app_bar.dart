@@ -45,6 +45,6 @@ class _PagesAppBarState extends State<PagesAppBar> {
 
   void _backToMainPage() {
     final LoadMainMenuEvent loadMainMenuEvent = LoadMainMenuEvent();
-    _routeBloc.add(LoadMainMenuEvent());
+    _routeBloc.add(loadMainMenuEvent);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 abstract class ScannerState extends Equatable {
   const ScannerState();
@@ -15,20 +16,23 @@ class ErrorScanState extends ScannerState {
 }
 
 class CorrectScanState extends ScannerState {
-  final String name;
-  final String price;
-  final String currency;
+  final Map<String, dynamic> productData;
 
-  CorrectScanState({
-    this.name,
-    this.price,
-    this.currency,
-  });
+  CorrectScanState({this.productData});
+
+  @override
+  List<Object> get props => [productData];
+}
+
+class AddToBasketState extends ScannerState {
+  final String message;
+  final Key key;
+
+  AddToBasketState({@required this.message, @required this.key});
 
   @override
   List<Object> get props => [
-        name,
-        price,
-        currency,
+        message,
+        key,
       ];
 }

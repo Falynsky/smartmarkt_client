@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
-import 'package:smartmarktclient/bloc/home_route/route_bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
@@ -13,9 +12,8 @@ class ProductTypesPage extends StatefulWidget {
 
 class _ProductTypesPageState extends State<ProductTypesPage> {
   List<dynamic> productTypes;
-
   ProductsBloc _productsBloc;
-  RouteBloc _routeBloc;
+
   HttpService _httpService;
   final String url = "/productType/all";
   List data;
@@ -25,7 +23,6 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
     _httpService = HttpService();
     getProductTypes();
     _productsBloc = BlocProvider.of<ProductsBloc>(context);
-    _routeBloc = BlocProvider.of<RouteBloc>(context);
     super.initState();
   }
 

@@ -22,4 +22,13 @@ class ScannerRepository {
 
     return productInfo;
   }
+
+  Future<Map<String, dynamic>> addProductToBasket({
+    int productCode,
+  }) async {
+    Map<String, dynamic> productInfo =
+        await _scannerProvider.getProductInfo(productCode: productCode);
+
+    return productInfo;
+  }
 }
