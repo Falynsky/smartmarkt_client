@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
 class BasketPage extends StatefulWidget {
@@ -24,18 +25,9 @@ class _BasketPageState extends State<BasketPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Row(
-            children: <Widget>[
-              _arrowBackButton(),
-              SizedBox(width: 20),
-              Text("Koszyk"),
-            ],
-          ),
-        ),
-        elevation: .1,
-        backgroundColor: Colors.black45,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55),
+        child: PagesAppBar(title: "Koszyk"),
       ),
       body: productList(),
       floatingActionButton: _buyFabButton(),
