@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 abstract class RouteState extends Equatable {
   const RouteState();
@@ -23,7 +24,7 @@ class LoadDashboardPageState extends RouteState {
   final String pageIdn;
 
   LoadDashboardPageState({
-    this.pageIdn,
+    @required this.pageIdn,
   });
 
   @override

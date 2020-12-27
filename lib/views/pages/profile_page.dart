@@ -20,25 +20,31 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: PagesAppBar(title: "Profil"),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 60, right: 60, top: 50),
-              child: Row(
-                children: <Widget>[
-                  _logoutButton(),
-                  Spacer(),
-                  _pointsButton(),
-                ],
+    return WillPopScope(
+      onWillPop: () async {
+        _routeBloc.add(LoadMainMenuEvent());
+        return false;
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(55),
+          child: PagesAppBar(title: "Profil"),
+        ),
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 60, right: 60, top: 50),
+                child: Row(
+                  children: <Widget>[
+                    _logoutButton(),
+                    Spacer(),
+                    _pointsButton(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -55,10 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
             _routeBloc.add(LoadLoginPageEvent());
           },
         ),
-        Text(
-          "Wyloguj",
-          style: TextStyle(fontSize: 20),
-        )
+        Text("Wyloguj", style: TextStyle(fontSize: 20))
       ],
     );
   }
@@ -73,10 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
             print("pressed points button");
           },
         ),
-        Text(
-          "Moje punkty",
-          style: TextStyle(fontSize: 20),
-        )
+        Text("Moje punkty", style: TextStyle(fontSize: 20))
       ],
     );
   }

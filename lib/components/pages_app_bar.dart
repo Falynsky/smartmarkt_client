@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smartmarktclient/bloc/home_route/route_bloc.dart';
-import 'package:smartmarktclient/bloc/home_route/route_event.dart';
+import 'package:smartmarktclient/bloc/bloc.dart';
 
 class PagesAppBar extends StatefulWidget {
   final String title;

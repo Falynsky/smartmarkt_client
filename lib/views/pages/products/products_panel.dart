@@ -30,24 +30,30 @@ class _ProductsPanelState extends State<ProductsPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: BlocProvider(
-        create: (_) => _productsBloc,
-        child: BlocListener<ProductsBloc, ProductsState>(
-          listener: (context, state) {},
-          child: BlocBuilder(
-            cubit: _productsBloc,
-            builder: (context, state) {
-              if (state is ProductTypesState) {
-                return ProductTypesPage();
-              } else if (state is SelectedTypeProductsState) {
-                return ProductPageWidget(
-                  productType: state.productType,
-                );
-              } else {
-                return Container(color: Colors.red);
-              }
-            },
+    return WillPopScope(
+      onWillPop: () async {
+        _routeBloc.add(LoadMainMenuEvent());
+        return false;
+      },
+      child: Center(
+        child: BlocProvider(
+          create: (_) => _productsBloc,
+          child: BlocListener<ProductsBloc, ProductsState>(
+            listener: (context, state) {},
+            child: BlocBuilder(
+              cubit: _productsBloc,
+              builder: (context, state) {
+                if (state is ProductTypesState) {
+                  return ProductTypesPage();
+                } else if (state is SelectedTypeProductsState) {
+                  return ProductPageWidget(
+                    productType: state.productType,
+                  );
+                } else {
+                  return Container(color: Colors.red);
+                }
+              },
+            ),
           ),
         ),
       ),

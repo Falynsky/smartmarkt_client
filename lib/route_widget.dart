@@ -27,17 +27,18 @@ class RouteWidget extends StatelessWidget {
             } else if (state is LoadMainMenuState) {
               return MainPage();
             } else if (state is LoadDashboardPageState) {
-              if (state.pageIdn == 'products') {
+              String pageIdn = state.pageIdn;
+              if (pageIdn == 'products') {
                 return ProductsPanel();
-              } else if (state.pageIdn == 'scanner') {
+              } else if (pageIdn == 'scanner') {
                 return ScannerPage();
-              } else if (state.pageIdn == 'sales') {
+              } else if (pageIdn == 'sales') {
                 return SalesPage();
-              } else if (state.pageIdn == 'basket') {
+              } else if (pageIdn == 'basket') {
                 return BasketPage();
-              } else if (state.pageIdn == 'profile') {
+              } else if (pageIdn == 'profile') {
                 return ProfilePage();
-              } else if (state.pageIdn == 'settings') {
+              } else if (pageIdn == 'settings') {
                 return SettingsPage();
               } else {
                 return Container(color: Colors.red);

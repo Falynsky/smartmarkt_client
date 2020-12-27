@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 abstract class RouteEvent extends Equatable {
   const RouteEvent();
@@ -23,7 +24,7 @@ class LoadDashboardPageEvent extends RouteEvent {
   final String pageIdn;
 
   LoadDashboardPageEvent({
-    this.pageIdn,
+    @required this.pageIdn,
   });
 
   @override

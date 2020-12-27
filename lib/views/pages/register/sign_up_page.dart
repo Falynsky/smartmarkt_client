@@ -24,59 +24,69 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(
-          children: <Widget>[
-            buildBackground(),
-            Center(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _buildSignUpTitle(),
-                    TextFieldComponent(
-                      controller: login,
-                      label: 'Login',
-                      placeHolder: 'Login',
-                      icon: Icons.person,
-                      isRequired: false,
-                    ),
-                    TextFieldComponent(
-                      controller: password,
-                      label: 'Hasło',
-                      placeHolder: 'Hasło',
-                      icon: Icons.lock,
-                      isRequired: false,
-                    ),
-                    TextFieldComponent(
-                      controller: firstName,
-                      label: 'Imię',
-                      placeHolder: 'Imię',
-                      icon: Icons.person,
-                      isRequired: false,
-                    ),
-                    TextFieldComponent(
-                      controller: lastName,
-                      label: 'Nazwisko',
-                      placeHolder: 'Nazwisko',
-                      icon: Icons.person,
-                      isRequired: false,
-                    ),
-                    Row(
-                      children: [
-                        Flexible(child: _buildBackBtn()),
-                        Flexible(child: _buildSignUpBtn()),
-                      ],
-                    ),
-                  ],
-                ),
+    return WillPopScope(
+      onWillPop: () async {
+        _routeBloc.add(LoadLoginPageEvent());
+        return false;
+      },
+      child: Scaffold(
+        body: _buildGestureDetector(context),
+      ),
+    );
+  }
+
+  GestureDetector _buildGestureDetector(BuildContext context) {
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Stack(
+        children: <Widget>[
+          buildBackground(),
+          Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _buildSignUpTitle(),
+                  TextFieldComponent(
+                    controller: login,
+                    label: 'Login',
+                    placeHolder: 'Login',
+                    icon: Icons.person,
+                    isRequired: false,
+                  ),
+                  TextFieldComponent(
+                    controller: password,
+                    label: 'Hasło',
+                    placeHolder: 'Hasło',
+                    icon: Icons.lock,
+                    isRequired: false,
+                  ),
+                  TextFieldComponent(
+                    controller: firstName,
+                    label: 'Imię',
+                    placeHolder: 'Imię',
+                    icon: Icons.person,
+                    isRequired: false,
+                  ),
+                  TextFieldComponent(
+                    controller: lastName,
+                    label: 'Nazwisko',
+                    placeHolder: 'Nazwisko',
+                    icon: Icons.person,
+                    isRequired: false,
+                  ),
+                  Row(
+                    children: [
+                      Flexible(child: _buildBackBtn()),
+                      Flexible(child: _buildSignUpBtn()),
+                    ],
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

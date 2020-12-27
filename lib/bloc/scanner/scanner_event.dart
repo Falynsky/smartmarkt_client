@@ -18,7 +18,9 @@ class GetProductInfoEvent extends ScannerEvent {
 class AddProductToBasketEvent extends ScannerEvent {
   final int productId;
 
-  AddProductToBasketEvent({@required this.productId});
+  AddProductToBasketEvent({
+    @required this.productId,
+  });
 
   @override
   List<Object> get props => [

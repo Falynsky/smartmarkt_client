@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
-import 'package:smartmarktclient/bloc/products/products_event.dart';
-import 'package:smartmarktclient/bloc/products/products_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc.dart';
 

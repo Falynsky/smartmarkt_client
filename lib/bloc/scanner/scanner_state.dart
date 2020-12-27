@@ -18,7 +18,9 @@ class ErrorScanState extends ScannerState {
 class CorrectScanState extends ScannerState {
   final Map<String, dynamic> productData;
 
-  CorrectScanState({this.productData});
+  CorrectScanState({
+    @required this.productData,
+  });
 
   @override
   List<Object> get props => [productData];
@@ -28,7 +30,10 @@ class AddToBasketState extends ScannerState {
   final String message;
   final Key key;
 
-  AddToBasketState({@required this.message, @required this.key});
+  AddToBasketState({
+    @required this.message,
+    @required this.key,
+  });
 
   @override
   List<Object> get props => [

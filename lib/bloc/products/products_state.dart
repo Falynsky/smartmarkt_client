@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 abstract class ProductsState extends Equatable {
   const ProductsState();
@@ -13,7 +14,7 @@ class SelectedTypeProductsState extends ProductsState {
   final Map productType;
 
   SelectedTypeProductsState({
-    this.productType,
+    @required this.productType,
   });
 
   @override

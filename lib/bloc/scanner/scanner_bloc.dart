@@ -25,7 +25,7 @@ class ScannerBloc extends Bloc<ScannerEvent, ScannerState> {
       if (productCode != null) {
         Map<String, dynamic> response =
             await _scannerRepository.getProductInfo(productCode: productCode);
-        var isSuccess = response['success'];
+        bool isSuccess = response['success'];
         if (isSuccess) {
           Map<String, dynamic> productData = response['data'];
           if (productData.isNotEmpty) {
@@ -36,8 +36,10 @@ class ScannerBloc extends Bloc<ScannerEvent, ScannerState> {
         }
       }
     } else if (event is AddProductToBasketEvent) {
-      Map<String, dynamic> response = await _productRepository
-          .addProductToBasket(productId: event.productId);
+      Map<String, dynamic> response =
+          await _productRepository.addProductToBasket(
+        productId: event.productId,
+      );
 
       String message = response['data']['msg'];
       yield AddToBasketState(

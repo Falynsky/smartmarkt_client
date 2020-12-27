@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/bloc/scanner/scanner_bloc.dart';
 import 'package:smartmarktclient/bloc/scanner/scanner_event.dart';
 import 'package:smartmarktclient/bloc/scanner/scanner_state.dart';
@@ -13,40 +14,48 @@ class ScannerPage extends StatefulWidget {
 
 class _ScannerPageState extends State<ScannerPage> {
   ScannerBloc _scannerBloc;
+  RouteBloc _routeBloc;
 
   @override
   void initState() {
     super.initState();
+    _routeBloc = BlocProvider.of<RouteBloc>(context);
     _scannerBloc = ScannerBloc();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: PagesAppBar(title: "Skaner"),
-      ),
-      body: BlocProvider(
-        create: (_) => _scannerBloc,
-        child: BlocListener<ScannerBloc, ScannerState>(
-          listener: (context, state) {
-            if (state is AddToBasketState) {
-              final snackBar = SnackBar(
-                content: Text(state.message),
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: Colors.amber,
-                action: SnackBarAction(
-                  label: "OK",
-                  onPressed: () => {},
-                  textColor: Colors.black54,
-                ),
-              );
-              Scaffold.of(context).showSnackBar(snackBar);
-            }
-            setState(() {});
-          },
-          child: _scannerPage(context),
+    return WillPopScope(
+      onWillPop: () async {
+        _routeBloc.add(LoadMainMenuEvent());
+        return false;
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(55),
+          child: PagesAppBar(title: "Skaner"),
+        ),
+        body: BlocProvider(
+          create: (_) => _scannerBloc,
+          child: BlocListener<ScannerBloc, ScannerState>(
+            listener: (context, state) {
+              if (state is AddToBasketState) {
+                final snackBar = SnackBar(
+                  content: Text(state.message),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.amber,
+                  action: SnackBarAction(
+                    label: "OK",
+                    onPressed: () => {},
+                    textColor: Colors.black54,
+                  ),
+                );
+                Scaffold.of(context).showSnackBar(snackBar);
+              }
+              setState(() {});
+            },
+            child: _scannerPage(context),
+          ),
         ),
       ),
     );

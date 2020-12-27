@@ -1,4 +1,5 @@
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:smartmarktclient/providers/scanner_provider.dart';
 
 class ScannerRepository {
@@ -15,7 +16,7 @@ class ScannerRepository {
   }
 
   Future<Map<String, dynamic>> getProductInfo({
-    int productCode,
+    @required int productCode,
   }) async {
     Map<String, dynamic> productInfo =
         await _scannerProvider.getProductInfo(productCode: productCode);
@@ -24,7 +25,7 @@ class ScannerRepository {
   }
 
   Future<Map<String, dynamic>> addProductToBasket({
-    int productCode,
+    @required int productCode,
   }) async {
     Map<String, dynamic> productInfo =
         await _scannerProvider.getProductInfo(productCode: productCode);
