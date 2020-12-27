@@ -10,10 +10,12 @@ class SalesPage extends StatefulWidget {
 
 class _SalesPageState extends State<SalesPage> {
   RouteBloc _routeBloc;
+  SalesBloc _salesBloc;
 
   @override
   void initState() {
     _routeBloc = BlocProvider.of<RouteBloc>(context);
+    _salesBloc = SalesBloc();
     super.initState();
   }
 
@@ -29,10 +31,27 @@ class _SalesPageState extends State<SalesPage> {
           preferredSize: const Size.fromHeight(55),
           child: PagesAppBar(title: "Promocje"),
         ),
-        body: Container(
-          color: Colors.green,
+        body: BlocProvider(
+          create: (_) => _salesBloc,
+          child: BlocListener<SalesBloc, SalesState>(
+            listener: (context, state) {
+              if (state is LoadedSalesState) {}
+              setState(() {});
+            },
+            child: _salesPage(context),
+          ),
         ),
       ),
     );
+  }
+
+  Widget _salesPage(BuildContext context) {
+    return Container(color: Colors.black12);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _salesBloc.close();
   }
 }
