@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/text_field_component.dart';
 import 'package:smartmarktclient/http/http_service.dart';
-import 'package:smartmarktclient/utilities/constants.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -44,24 +42,28 @@ class _SignUpPageState extends State<SignUpPage> {
                       label: 'Login',
                       placeHolder: 'Login',
                       icon: Icons.person,
+                      isRequired: false,
                     ),
                     TextFieldComponent(
                       controller: password,
                       label: 'Hasło',
                       placeHolder: 'Hasło',
                       icon: Icons.lock,
+                      isRequired: false,
                     ),
                     TextFieldComponent(
                       controller: firstName,
                       label: 'Imię',
                       placeHolder: 'Imię',
                       icon: Icons.person,
+                      isRequired: false,
                     ),
                     TextFieldComponent(
                       controller: lastName,
                       label: 'Nazwisko',
                       placeHolder: 'Nazwisko',
                       icon: Icons.person,
+                      isRequired: false,
                     ),
                     Row(
                       children: [
@@ -112,165 +114,6 @@ class _SignUpPageState extends State<SignUpPage> {
           colors: gradientColors,
           stops: gradientColorsStops,
         ),
-      ),
-    );
-  }
-
-  Widget _buildLoginTF() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Login',
-            style: kLabelStyle,
-          ),
-          SizedBox(height: 5.0),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              controller: login,
-              keyboardType: TextInputType.text,
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'OpenSans',
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                hintText: 'Login',
-                hintStyle: kHintTextStyle,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPasswordTF() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Hasło',
-            style: kLabelStyle,
-          ),
-          SizedBox(height: 5.0),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
-            child: TextField(
-              controller: password,
-              obscureText: true,
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'OpenSans',
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Colors.white,
-                ),
-                hintText: 'Hasło',
-                hintStyle: kHintTextStyle,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _builFirstNameTF() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Imie',
-            style: kLabelStyle,
-          ),
-          SizedBox(height: 5.0),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              controller: firstName,
-              keyboardType: TextInputType.text,
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'OpenSans',
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                hintText: 'Wprowadź imie',
-                hintStyle: kHintTextStyle,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLastNameTF() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Nazwisko',
-            style: kLabelStyle,
-          ),
-          SizedBox(height: 5.0),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              controller: lastName,
-              keyboardType: TextInputType.text,
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'OpenSans',
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                hintText: 'Wprowadź nazwisko',
-                hintStyle: kHintTextStyle,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

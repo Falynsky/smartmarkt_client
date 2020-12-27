@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
-import 'package:smartmarktclient/bloc/home_route/route_bloc.dart';
-import 'package:smartmarktclient/bloc/home_route/route_event.dart';
+import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
 class ProductTypesPage extends StatefulWidget {
@@ -13,9 +12,8 @@ class ProductTypesPage extends StatefulWidget {
 
 class _ProductTypesPageState extends State<ProductTypesPage> {
   List<dynamic> productTypes;
-
   ProductsBloc _productsBloc;
-  RouteBloc _routeBloc;
+
   HttpService _httpService;
   final String url = "/productType/all";
   List data;
@@ -25,30 +23,15 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
     _httpService = HttpService();
     getProductTypes();
     _productsBloc = BlocProvider.of<ProductsBloc>(context);
-    _routeBloc = BlocProvider.of<RouteBloc>(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Row(
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  _routeBloc.add(LoadMainMenuEvent());
-                },
-              ),
-              SizedBox(width: 20),
-              Text("Kategorie"),
-            ],
-          ),
-        ),
-        elevation: .1,
-        backgroundColor: Colors.black45,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55),
+        child: PagesAppBar(title: "Kategorie"),
       ),
       body: productList(),
     );
