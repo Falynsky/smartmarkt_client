@@ -10,8 +10,13 @@ class InitialSalesState extends SalesState {
   List<Object> get props => [];
 }
 
+class SalesLoadingState extends SalesState {
+  @override
+  List<Object> get props => [];
+}
+
 class LoadedSalesState extends SalesState {
-  final Map<String, dynamic> sales;
+  final List<Map<String, dynamic>> sales;
 
   LoadedSalesState({@required this.sales});
 

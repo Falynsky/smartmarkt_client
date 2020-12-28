@@ -11,12 +11,15 @@ class SalesPage extends StatefulWidget {
 class _SalesPageState extends State<SalesPage> {
   RouteBloc _routeBloc;
   SalesBloc _salesBloc;
+  bool _isLoaded;
 
   @override
   void initState() {
+    super.initState();
     _routeBloc = BlocProvider.of<RouteBloc>(context);
     _salesBloc = SalesBloc();
-    super.initState();
+    _salesBloc.add(SalesLoadingEvent());
+    _isLoaded = false;
   }
 
   @override
@@ -35,7 +38,11 @@ class _SalesPageState extends State<SalesPage> {
           create: (_) => _salesBloc,
           child: BlocListener<SalesBloc, SalesState>(
             listener: (context, state) {
-              if (state is LoadedSalesState) {}
+              if (state is SalesLoadingState) {
+                _isLoaded = false;
+              } else if (state is LoadedSalesState) {
+                _isLoaded = true;
+              }
               setState(() {});
             },
             child: _salesPage(context),
@@ -46,7 +53,36 @@ class _SalesPageState extends State<SalesPage> {
   }
 
   Widget _salesPage(BuildContext context) {
-    return Container(color: Colors.black12);
+    if (!_isLoaded) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(15.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator(
+                backgroundColor: Colors.teal,
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Column(
+          children: [
+            Text(
+              "Tu będą promocje",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              textAlign: TextAlign.center,
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override

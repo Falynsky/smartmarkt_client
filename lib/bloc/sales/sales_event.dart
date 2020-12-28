@@ -1,17 +1,17 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 abstract class SalesEvent extends Equatable {
   const SalesEvent();
 }
 
-class LoadedSalesEvent extends SalesEvent {
-  final Map<String, dynamic> sales;
+class SalesLoadingEvent extends SalesEvent {
+  @override
+  List<Object> get props => [];
+}
 
-  LoadedSalesEvent({@required this.sales});
+class LoadedSalesEvent extends SalesEvent {
+  LoadedSalesEvent();
 
   @override
-  List<Object> get props => [
-        sales,
-      ];
+  List<Object> get props => [];
 }
