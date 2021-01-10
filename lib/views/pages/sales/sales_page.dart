@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
+import 'package:smartmarktclient/utilities/circular_idicator.dart';
 
 class SalesPage extends StatefulWidget {
   @override
@@ -54,20 +55,7 @@ class _SalesPageState extends State<SalesPage> {
 
   Widget _salesPage(BuildContext context) {
     if (!_isLoaded) {
-      return Center(
-        child: Padding(
-          padding: EdgeInsets.all(15.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CircularProgressIndicator(
-                backgroundColor: Colors.teal,
-                valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
-              ),
-            ],
-          ),
-        ),
-      );
+      return CircularIndicator();
     }
     return Center(
       child: Padding(
