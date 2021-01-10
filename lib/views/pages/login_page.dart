@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/text_field_component.dart';
-import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/utilities/circular_idicator.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,56 +11,88 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   RouteBloc _routeBloc;
-  final login = TextEditingController();
-  final password = TextEditingController();
+  LoginBloc _loginBloc;
+  final _loginController = TextEditingController();
+  final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading;
 
   @override
   void initState() {
-    _routeBloc = BlocProvider.of<RouteBloc>(context);
     super.initState();
+    _routeBloc = BlocProvider.of<RouteBloc>(context);
+    _loginBloc = LoginBloc();
+    _loginBloc.add(LoginLoadingEvent());
+    _isLoading = true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(
-          children: <Widget>[
-            buildBackground(),
-            Form(
-              key: _formKey,
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      _buildSignInTitle(),
-                      TextFieldComponent(
-                        controller: login,
-                        label: 'Login',
-                        placeHolder: 'Wprowadź login',
-                        icon: Icons.person,
-                        isRequired: true,
-                      ),
-                      TextFieldComponent(
-                        controller: password,
-                        label: 'Hasło',
-                        placeHolder: 'Wprowadź hasło',
-                        icon: Icons.lock,
-                        isRequired: true,
-                      ),
-                      _buildLoginBtn(),
-                      _buildSignUpBtn(),
-                    ],
-                  ),
+      body: BlocProvider(
+        create: (_) => _loginBloc,
+        child: BlocListener<LoginBloc, LoginState>(
+            listener: (context, state) {
+              if (state is LoginLoadingState) {
+                _isLoading = true;
+              } else if (state is LoadedLoginState) {
+                _isLoading = false;
+              } else if (state is LoginErrorOccurredState) {
+                _showMyDialog(state.title, state.msg);
+              } else if (state is CorrectLoginState) {
+                _routeBloc.add(LoadMainMenuEvent());
+              }
+              setState(() {});
+            },
+            child: _loginPage(context)),
+      ),
+    );
+  }
+
+  Widget _loginPage(BuildContext context) {
+    if (_isLoading) {
+      return CircularIndicator();
+    }
+    return _loginForm(context);
+  }
+
+  GestureDetector _loginForm(BuildContext context) {
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Stack(
+        children: <Widget>[
+          buildBackground(),
+          Form(
+            key: _formKey,
+            child: Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _buildSignInTitle(),
+                    TextFieldComponent(
+                      controller: _loginController,
+                      label: 'Login',
+                      placeHolder: 'Wprowadź login',
+                      icon: Icons.person,
+                      isRequired: true,
+                    ),
+                    TextFieldComponent(
+                      controller: _passwordController,
+                      label: 'Hasło',
+                      placeHolder: 'Wprowadź hasło',
+                      icon: Icons.lock,
+                      isRequired: true,
+                    ),
+                    _buildLoginBtn(),
+                    _buildSignUpBtn(),
+                  ],
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -131,36 +163,26 @@ class _LoginPageState extends State<LoginPage> {
   void _loginButton() async {
     var validate = _formKey.currentState.validate();
     if (validate) {
-      String _login = login.text.toString();
-      String _password = password.text.toString();
-      Map<String, dynamic> body = {
-        'username': _login,
-        'password': _password,
-      };
+      String _login = _loginController.text.toString();
+      String _password = _passwordController.text.toString();
 
-      HttpService httpService = HttpService();
-      var response = await httpService.post(
-        url: '/auth/login',
-        body: body,
+      final loginAccountEvent = LoginAccountEvent(
+        login: _login,
+        password: _password,
       );
 
-      if (response['success']) {
-        setState(() {
-          _routeBloc.add(LoadMainMenuEvent());
-        });
-      } else {
-        _showMyDialog('Błąd logowania', 'Niepoprawne dane.');
-      }
+      _loginBloc.add(loginAccountEvent);
     }
   }
 
+  //todo: do ogarnięcia klasa pozwalajaca na tworzenie dialogu poprzez jej wywołanie a nie powtarzanie kodu
   Widget _buildSignUpBtn() {
     return Container(
       padding: EdgeInsets.only(top: 25, left: 15, right: 15),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: emitSignUpEvent,
+        onPressed: () => {_routeBloc.add(SignUpPageEvent())},
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -178,10 +200,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  void emitSignUpEvent() async {
-    _routeBloc.add(SignUpPageEvent());
   }
 
   Future<void> _showMyDialog(String title, String body) async {

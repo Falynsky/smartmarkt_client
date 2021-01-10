@@ -1,31 +1,31 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-abstract class SignUpState extends Equatable {
-  const SignUpState();
+abstract class LoginState extends Equatable {
+  const LoginState();
 }
 
-class SignUpLoadingState extends SignUpState {
+class LoginLoadingState extends LoginState {
   @override
   List<Object> get props => [];
 }
 
-class LoadedSignUpState extends SignUpState {
+class LoadedLoginState extends LoginState {
   @override
   List<Object> get props => [];
 }
 
-class CorrectRegisterState extends SignUpState {
+class CorrectLoginState extends LoginState {
   @override
   List<Object> get props => [];
 }
 
-class RegisterErrorOccurredState extends SignUpState {
+class LoginErrorOccurredState extends LoginState {
   final String title;
   final String msg;
   final Key key;
 
-  RegisterErrorOccurredState({
+  LoginErrorOccurredState({
     @required this.title,
     @required this.msg,
     @required this.key,

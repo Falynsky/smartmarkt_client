@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/repositories/sign_up_repository.dart';
@@ -36,9 +37,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
             data['msg'] ?? 'Sprawdź wprowadzone wartości i spróbuj ponownie';
 
         yield RegisterErrorOccurredState(
-          title: title,
-          msg: msg,
-        );
+            title: title, msg: msg, key: GlobalKey());
       }
     }
   }

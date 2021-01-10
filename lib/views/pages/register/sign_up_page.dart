@@ -253,7 +253,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Future<void> _showMyDialog(String title, String body) async {
+  void _showMyDialog(String title, String body) async {
     return showDialog<void>(
       context: context,
       barrierColor: Colors.black54,
