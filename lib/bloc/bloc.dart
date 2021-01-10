@@ -7,3 +7,6 @@ export 'products/products_state.dart';
 export 'scanner/scanner_bloc.dart';
 export 'scanner/scanner_event.dart';
 export 'scanner/scanner_state.dart';
+export 'sign_up/sign_up_bloc.dart';
+export 'sign_up/sign_up_event.dart';
+export 'sign_up/sign_up_state.dart';

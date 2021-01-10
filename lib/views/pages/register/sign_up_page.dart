@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/text_field_component.dart';
-import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/utilities/circular_idicator.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -11,14 +11,21 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   RouteBloc _routeBloc;
+  SignUpBloc _signUpBloc;
+  bool _isLoading;
+
   final login = TextEditingController();
   final password = TextEditingController();
   final firstName = TextEditingController();
   final lastName = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     _routeBloc = BlocProvider.of<RouteBloc>(context);
+    _signUpBloc = SignUpBloc();
+    _signUpBloc.add(SignUpLoadingEvent());
+    _isLoading = true;
     super.initState();
   }
 
@@ -30,59 +37,57 @@ class _SignUpPageState extends State<SignUpPage> {
         return false;
       },
       child: Scaffold(
-        body: _buildGestureDetector(context),
+        body: BlocProvider(
+          create: (_) => _signUpBloc,
+          child: BlocListener<SignUpBloc, SignUpState>(
+              listener: (context, state) {
+                if (state is SignUpLoadingState) {
+                  _isLoading = true;
+                } else if (state is LoadedSignUpState) {
+                  _isLoading = false;
+                } else if (state is RegisterErrorOccurredState) {
+                  _showMyDialog(state.title, state.msg);
+                } else if (state is CorrectRegisterState) {
+                  _routeBloc.add(LoadLoginPageEvent());
+                }
+                setState(() {});
+              },
+              child: _signUpPage(context)),
+        ),
       ),
     );
   }
 
-  GestureDetector _buildGestureDetector(BuildContext context) {
+  Widget _signUpPage(BuildContext context) {
+    if (_isLoading) {
+      return CircularIndicator();
+    }
+
+    return _registerForm(context);
+  }
+
+  Widget _registerForm(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Stack(
         children: <Widget>[
           buildBackground(),
-          Center(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _buildSignUpTitle(),
-                  TextFieldComponent(
-                    controller: login,
-                    label: 'Login',
-                    placeHolder: 'Login',
-                    icon: Icons.person,
-                    isRequired: false,
-                  ),
-                  TextFieldComponent(
-                    controller: password,
-                    label: 'Hasło',
-                    placeHolder: 'Hasło',
-                    icon: Icons.lock,
-                    isRequired: false,
-                  ),
-                  TextFieldComponent(
-                    controller: firstName,
-                    label: 'Imię',
-                    placeHolder: 'Imię',
-                    icon: Icons.person,
-                    isRequired: false,
-                  ),
-                  TextFieldComponent(
-                    controller: lastName,
-                    label: 'Nazwisko',
-                    placeHolder: 'Nazwisko',
-                    icon: Icons.person,
-                    isRequired: false,
-                  ),
-                  Row(
-                    children: [
-                      Flexible(child: _buildBackBtn()),
-                      Flexible(child: _buildSignUpBtn()),
-                    ],
-                  ),
-                ],
+          Form(
+            key: _formKey,
+            child: Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _signUpTitle(),
+                    _loginField(),
+                    _passwordField(),
+                    _firstNameField(),
+                    _lastNameField(),
+                    _buttons(),
+                  ],
+                ),
               ),
             ),
           )
@@ -91,7 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildSignUpTitle() {
+  Widget _signUpTitle() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       child: Text(
@@ -103,6 +108,55 @@ class _SignUpPageState extends State<SignUpPage> {
           fontWeight: FontWeight.bold,
         ),
       ),
+    );
+  }
+
+  Widget _loginField() {
+    return TextFieldComponent(
+      controller: login,
+      label: 'Login',
+      placeHolder: 'Login',
+      icon: Icons.person,
+      isRequired: true,
+    );
+  }
+
+  Widget _passwordField() {
+    return TextFieldComponent(
+      controller: password,
+      label: 'Hasło',
+      placeHolder: 'Hasło',
+      icon: Icons.lock,
+      isRequired: true,
+    );
+  }
+
+  Widget _firstNameField() {
+    return TextFieldComponent(
+      controller: firstName,
+      label: 'Imię',
+      placeHolder: 'Imię',
+      icon: Icons.person,
+      isRequired: true,
+    );
+  }
+
+  Widget _lastNameField() {
+    return TextFieldComponent(
+      controller: lastName,
+      label: 'Nazwisko',
+      placeHolder: 'Nazwisko',
+      icon: Icons.person,
+      isRequired: true,
+    );
+  }
+
+  Widget _buttons() {
+    return Row(
+      children: [
+        Flexible(child: _buildBackButton()),
+        Flexible(child: _buildSignUpButton()),
+      ],
     );
   }
 
@@ -128,7 +182,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildSignUpBtn() {
+  Widget _buildSignUpButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
       width: double.infinity,
@@ -155,35 +209,25 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUpButton() async {
-    String _login = login.text.toString();
-    String _password = password.text.toString();
-    String _firstName = firstName.text.toString();
-    String _lastName = lastName.text.toString();
-    Map<String, dynamic> body = {
-      "username": _login,
-      "password": _password,
-      "firstName": _firstName,
-      "lastName": _lastName,
-      "licenceKey": "__________"
-    };
+    var validate = _formKey.currentState.validate();
+    if (validate) {
+      String _login = login.text.toString();
+      String _password = password.text.toString();
+      String _firstName = firstName.text.toString();
+      String _lastName = lastName.text.toString();
 
-    HttpService httpService = HttpService();
-    var response = await httpService.post(
-      url: '/signUp/register',
-      body: body,
-    );
+      final registerAccountEvent = RegisterAccountEvent(
+        login: _login,
+        password: _password,
+        firstName: _firstName,
+        lastName: _lastName,
+      );
 
-    if (response['success']) {
-      setState(() {
-        _routeBloc.add(LoadLoginPageEvent());
-      });
-    } else {
-      _showMyDialog('Błąd rejestracji',
-          'Wystąpił problem w trakcie rejestracji, sprawdź wprowadzone wartości i spróbuj ponownie');
+      _signUpBloc.add(registerAccountEvent);
     }
   }
 
-  Widget _buildBackBtn() {
+  Widget _buildBackButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
       width: double.infinity,
@@ -245,5 +289,11 @@ class _SignUpPageState extends State<SignUpPage> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _signUpBloc.close();
   }
 }

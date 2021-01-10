@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
       Color(0xFF40c5ba),
       Color(0xFF31b9ae),
     ];
-    var gradientColorsStops = [0.1, 0.4, 0.7, 0.9];
+    final gradientColorsStops = [0.1, 0.4, 0.7, 0.9];
     return Container(
       height: double.infinity,
       width: double.infinity,

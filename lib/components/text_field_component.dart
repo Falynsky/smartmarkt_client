@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartmarktclient/utilities/constants.dart';
+import 'package:smartmarktclient/utilities/constant_styles.dart';
 
 class TextFieldComponent extends StatefulWidget {
   final TextEditingController controller;
@@ -44,22 +44,13 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            _label,
-            style: kLabelStyle,
-          ),
+          Text(_label, style: labelStyle),
           SizedBox(height: 10.0),
           Container(
             alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
             child: TextFormField(
-              validator: (String value) {
-                if (value.isEmpty && _isRequired) {
-                  return 'To pole jest wymagane';
-                }
-                return null;
-              },
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: _validateField,
               textInputAction: TextInputAction.next,
               controller: _controller,
               keyboardType: TextInputType.text,
@@ -67,20 +58,33 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
                 color: Colors.white,
                 fontFamily: 'OpenSans',
               ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  _icon,
-                  color: Colors.white,
-                ),
-                hintText: _placeHolder,
-                hintStyle: kHintTextStyle,
-              ),
+              decoration: _textFieldInputDecoration(),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  String _validateField(String value) {
+    if (value.isEmpty && _isRequired) {
+      return 'Proszę wprowadzić wartość.';
+    }
+    return null;
+  }
+
+  InputDecoration _textFieldInputDecoration() {
+    return InputDecoration(
+      filled: true,
+      fillColor: Color(0xFF309c93),
+      focusedBorder: focusedBorderStyle,
+      enabledBorder: enabledBorderStyle,
+      contentPadding: EdgeInsets.only(top: 14.0),
+      prefixIcon: Icon(_icon, color: Colors.white),
+      hintText: _placeHolder,
+      hintStyle: hintTextStyle,
+      errorStyle: errorMessageStyle,
+      errorBorder: inputErrorBorderStyle,
     );
   }
 }
