@@ -161,13 +161,13 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Container buildBackground() {
-    var gradientColors = [
+    List<Color> gradientColors = [
       Color(0xFF8eebe4),
       Color(0xFF48dbcf),
       Color(0xFF40c5ba),
       Color(0xFF31b9ae),
     ];
-    var gradientColorsStops = [0.1, 0.4, 0.7, 0.9];
+    List<double> gradientColorsStops = [0.1, 0.4, 0.7, 0.9];
     return Container(
       height: double.infinity,
       width: double.infinity,
@@ -209,7 +209,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUpButton() async {
-    var validate = _formKey.currentState.validate();
+    bool validate = _formKey.currentState.validate();
     if (validate) {
       String _login = login.text.toString();
       String _password = password.text.toString();

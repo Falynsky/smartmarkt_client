@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
@@ -13,13 +14,14 @@ class _SalesPageState extends State<SalesPage> {
   RouteBloc _routeBloc;
   SalesBloc _salesBloc;
   bool _isLoaded;
+  List<Map<String, dynamic>> _sales;
 
   @override
   void initState() {
     super.initState();
     _routeBloc = BlocProvider.of<RouteBloc>(context);
     _salesBloc = SalesBloc();
-    _salesBloc.add(SalesLoadingEvent());
+
     _isLoaded = false;
   }
 
@@ -36,13 +38,14 @@ class _SalesPageState extends State<SalesPage> {
           child: PagesAppBar(title: "Promocje"),
         ),
         body: BlocProvider(
-          create: (_) => _salesBloc,
+          create: (_) => _salesBloc..add(SalesLoadingEvent()),
           child: BlocListener<SalesBloc, SalesState>(
             listener: (context, state) {
               if (state is SalesLoadingState) {
                 _isLoaded = false;
               } else if (state is LoadedSalesState) {
                 _isLoaded = true;
+                _sales = state.sales;
               }
               setState(() {});
             },
@@ -57,17 +60,33 @@ class _SalesPageState extends State<SalesPage> {
     if (!_isLoaded) {
       return CircularIndicator();
     }
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: Column(
-          children: [
-            Text(
-              "Tu będą promocje",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-              textAlign: TextAlign.center,
-            )
-          ],
+    return Container(
+      color: Color(0xFF40c5ba),
+      child: ListView.builder(
+        itemCount: _sales != null ? _sales.length : 0,
+        itemBuilder: (context, index) {
+          return _salesTypeCard(index);
+        },
+      ),
+    );
+  }
+
+  Widget _salesTypeCard(int index) {
+    return Container(
+      child: InkWell(
+        onTap: () {},
+        child: Card(
+          color: Color(0xFFDDDDDD),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("${_sales[index]['title']}"),
+                Text("${_sales[index]['description']}"),
+              ],
+            ),
+            padding: EdgeInsets.all(20),
+          ),
         ),
       ),
     );

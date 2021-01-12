@@ -17,34 +17,53 @@ class HttpService {
     headers.remove('Auth');
   }
 
-  //todo: add interceptors
-
   Future<Map<String, dynamic>> post({
     @required String url,
-    Map<String, dynamic> body,
+    Map<String, dynamic> postBody,
   }) async {
-    final msg = jsonEncode(body);
-    var response = await http.post(
+    final encodedBody = jsonEncode(postBody);
+    http.Response response = await http.post(
       hostUrl + url,
       headers: headers,
-      body: msg,
+      body: encodedBody,
     );
-    var data = json.decode(utf8.decode(response.bodyBytes));
-    var statusCode = response.statusCode;
 
+    String body = response.body;
+    Map<String, Object> decodedBody = {};
+
+    if (body.isNotEmpty) {
+      String decode = utf8.decode(response.bodyBytes);
+      decodedBody = json.decode(decode);
+    } else {
+      decodedBody = {};
+    }
+
+    int statusCode = response.statusCode;
+    dynamic data = _getDataFromDataBody(decodedBody);
     if (statusCode >= 400) {
-      return collectResponseData(false, statusCode, data);
+      return _collectResponseData(false, statusCode, data);
     } else if (statusCode >= 200 && statusCode <= 299) {
       if (statusCode == 200 && url == '/auth/login') {
         headers['Auth'] = 'Wave ' + data['token'];
       }
-      return collectResponseData(true, statusCode, data);
+      return _collectResponseData(true, statusCode, data);
     }
-    return collectResponseData(false, statusCode, data);
+    return _collectResponseData(false, statusCode, data);
   }
 
-  Map<String, Object> collectResponseData(bool success, int statusCode, data) {
-    Map<String, Object> responseData = {
+  dynamic _getDataFromDataBody(Map<String, dynamic> dataBody) {
+    if (dataBody.containsKey('data')) {
+      return dataBody['data'];
+    }
+    return dataBody;
+  }
+
+  Map<String, dynamic> _collectResponseData(
+    bool success,
+    int statusCode,
+    dynamic data,
+  ) {
+    Map<String, dynamic> responseData = {
       "success": success,
       "statusCode": statusCode,
       "data": data,
@@ -55,23 +74,21 @@ class HttpService {
   Future<Map<String, dynamic>> get({
     @required String url,
   }) async {
-    var response = await http.get(
+    http.Response response = await http.get(
       hostUrl + url,
       headers: headers,
     );
-    var data = response.body;
-    var decodedBody;
+    String data = response.body;
+    Map<String, Object> decodedBody = {};
     if (data.isNotEmpty) {
-      decodedBody = json.decode(utf8.decode(response.bodyBytes));
+      String decode = utf8.decode(response.bodyBytes);
+      decodedBody = json.decode(decode);
     } else {
-      decodedBody = data;
+      decodedBody = {};
     }
-    var statusCode = response.statusCode;
+    int statusCode = response.statusCode;
     if (statusCode == 200) {
-      return {
-        "success": true,
-        "data": decodedBody,
-      };
+      return decodedBody;
     } else {
       return {
         "success": false,

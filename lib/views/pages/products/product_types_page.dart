@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
@@ -20,10 +19,17 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
 
   @override
   void initState() {
-    _httpService = HttpService();
-    getProductTypes();
-    _productsBloc = BlocProvider.of<ProductsBloc>(context);
     super.initState();
+    _productsBloc = BlocProvider.of<ProductsBloc>(context);
+    _httpService = HttpService();
+    _getProductTypes();
+  }
+
+  void _getProductTypes() async {
+    final response = await _httpService.get(url: url);
+    setState(() {
+      productTypes = response['data'];
+    });
   }
 
   @override
@@ -37,48 +43,39 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
     );
   }
 
-  ListView productList() {
-    return ListView.builder(
-      itemCount: productTypes != null ? productTypes.length : 0,
-      itemBuilder: (context, index) {
-        return Container(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                InkWell(
-                  onTap: () {
-                    var productType = productTypes[index];
-                    print('tapped : ' + productType['name']);
-                    _productsBloc.add(
-                      SelectedTypeProductsEvent(
-                        productType: productType,
-                      ),
-                    );
-                  },
-                  child: Card(
-                    child: Container(
-                      child: Row(
-                        children: <Widget>[
-                          Text(productTypes[index]['name']),
-                        ],
-                      ),
-                      padding: EdgeInsets.all(20),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
-      },
+  Widget productList() {
+    return Container(
+      color: Color(0xFF40c5ba),
+      child: ListView.builder(
+        itemCount: productTypes != null ? productTypes.length : 0,
+        itemBuilder: (context, index) {
+          return _productTypeCard(index);
+        },
+      ),
     );
   }
 
-  void getProductTypes() async {
-    final response = await _httpService.get(url: url);
-    setState(() {
-      productTypes = response['data'];
-    });
+  Widget _productTypeCard(int index) {
+    return Container(
+      child: InkWell(
+        onTap: () {
+          _goToProductsList(index);
+        },
+        child: Card(
+          color: Color(0xFFDDDDDD),
+          child: Container(
+            child: Text(productTypes[index]['name']),
+            padding: EdgeInsets.all(20),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _goToProductsList(int index) {
+    Map<String, dynamic> productType = productTypes[index];
+    final emitSelectedTypeProductsEvent =
+        SelectedTypeProductsEvent(productType: productType);
+    _productsBloc.add(emitSelectedTypeProductsEvent);
   }
 }

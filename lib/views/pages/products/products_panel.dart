@@ -46,7 +46,7 @@ class _ProductsPanelState extends State<ProductsPanel> {
                 if (state is ProductTypesState) {
                   return ProductTypesPage();
                 } else if (state is SelectedTypeProductsState) {
-                  return ProductPageWidget(
+                  return ProductsPage(
                     productType: state.productType,
                   );
                 } else {

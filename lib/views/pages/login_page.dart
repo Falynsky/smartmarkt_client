@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Container buildBackground() {
-    var gradientColors = [
+    List<Color> gradientColors = [
       Color(0xFF8eebe4),
       Color(0xFF48dbcf),
       Color(0xFF40c5ba),
@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginButton() async {
-    var validate = _formKey.currentState.validate();
+    bool validate = _formKey.currentState.validate();
     if (validate) {
       String _login = _loginController.text.toString();
       String _password = _passwordController.text.toString();

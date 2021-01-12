@@ -70,6 +70,12 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
     if (value.isEmpty && _isRequired) {
       return 'Proszę wprowadzić wartość.';
     }
+
+    RegExp regExp = new RegExp(r'(\s)');
+    if (regExp.hasMatch(value)) {
+      return 'Puste znaki niedozwolone.';
+    }
+
     return null;
   }
 

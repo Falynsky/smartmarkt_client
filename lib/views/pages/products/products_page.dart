@@ -5,32 +5,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
-class ProductPageWidget extends StatefulWidget {
+class ProductsPage extends StatefulWidget {
   final Map productType;
 
-  ProductPageWidget({
+  ProductsPage({
     this.productType,
   });
 
   @override
-  _ProductPageWidgetState createState() => _ProductPageWidgetState();
+  _ProductsPageState createState() => _ProductsPageState();
 }
 
-class _ProductPageWidgetState extends State<ProductPageWidget> {
-  List<dynamic> products;
+class _ProductsPageState extends State<ProductsPage> {
+  List<Map<String, dynamic>> _products;
   List<dynamic> selectedProducts = [];
   ProductsBloc _productsBloc;
   HttpService _httpService;
   final String url = "/products/typeId";
   List data;
   bool rememberMe = false;
+  TextEditingController _controller;
 
   @override
   void initState() {
+    super.initState();
     _httpService = HttpService();
     _getProductTypes();
     _productsBloc = BlocProvider.of<ProductsBloc>(context);
-    super.initState();
+    _controller = TextEditingController();
   }
 
   @override
@@ -52,28 +54,29 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           ),
         ),
         elevation: .1,
-        backgroundColor: Colors.black45,
+        backgroundColor: Colors.teal,
       ),
       body: productList(context),
     );
   }
 
-  ListView productList(BuildContext context) {
-    return ListView.builder(
-      itemCount: products != null ? products.length : 0,
-      itemBuilder: (context, index) {
-        return listCard(index, context);
-      },
+  Widget productList(BuildContext context) {
+    return Container(
+      color: Color(0xFF40c5ba),
+      child: ListView.builder(
+        itemCount: _products != null ? _products.length : 0,
+        itemBuilder: (context, index) {
+          return listCard(index, context);
+        },
+      ),
     );
   }
 
-  Widget listCard(
-    int index,
-    BuildContext context,
-  ) {
-    String price =
-        products[index]['price'].toString() + " " + products[index]['currency'];
+  Widget listCard(int index, BuildContext context) {
+    Map<String, dynamic> product = _products[index];
+    String price = product['price'].toString() + " " + product['currency'];
     return Card(
+      color: Color(0xFFDDDDDD),
       child: InkWell(
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -84,7 +87,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
             children: <Widget>[
               _imageButton(index),
               SizedBox(width: 10),
-              Text(products[index]['name']),
+              Text(product['name']),
               Spacer(),
               Text(price),
               SizedBox(width: 10),
@@ -92,7 +95,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
             ],
           ),
         ),
-        onTap: () => _selectedPositionDialog(products[index], context),
+        onTap: () => _selectedPositionDialog(product, context),
       ),
     );
   }
@@ -101,7 +104,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     return InkWell(
       child: Icon(Icons.image),
       onTap: () {
-        var selectedProduct = products[index];
+        Map<String, dynamic> selectedProduct = _products[index];
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -126,7 +129,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     return InkWell(
       child: Icon(Icons.help_outline),
       onTap: () {
-        var selectedProduct = products[index];
+        Map<String, dynamic> selectedProduct = _products[index];
         _productInfoDialog(selectedProduct);
       },
     );
@@ -153,37 +156,67 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     dynamic selectedProduct,
     BuildContext context,
   ) {
-    TextEditingController _controller = TextEditingController();
     _controller.text = "0";
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
+          backgroundColor: Colors.black26,
           title: Text(selectedProduct['name']),
-          content: Row(
-            children: <Widget>[
-              Text("Ilość: "),
-              Spacer(),
-              _minusButton(_controller),
-              _numericField(_controller),
-              _plusButton(_controller),
+          titleTextStyle: TextStyle(color: Colors.amber, fontSize: 20),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _availabilityInfoRow(selectedProduct),
+              SizedBox(height: 15),
+              _quantityRow(),
             ],
           ),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             _closeButton(context),
-            _getCodeButton(_controller, context, selectedProduct),
-            _addToCardButton(_controller, context, selectedProduct),
+            _getCodeButton(context, selectedProduct),
+            _addToCardButton(context, selectedProduct),
           ],
         );
       },
     );
   }
 
+  Row _quantityRow() {
+    return Row(
+      children: <Widget>[
+        Text(
+          "Ilość: ",
+          style: TextStyle(color: Colors.white70),
+        ),
+        Spacer(),
+        _minusButton(_controller),
+        _numericField(_controller),
+        _plusButton(_controller),
+      ],
+    );
+  }
+
+  Row _availabilityInfoRow(Map<String, dynamic> selectedProduct) {
+    return Row(children: <Widget>[
+      Text(
+        "Dostępne: ",
+        style: TextStyle(color: Colors.white70),
+      ),
+      Spacer(),
+      Text(
+        "${selectedProduct['quantity']} szt.",
+        style: TextStyle(color: Colors.white70),
+      ),
+    ]);
+  }
+
   FlatButton _closeButton(BuildContext context) {
     return FlatButton(
       child: Text("Zamknij"),
+      textColor: Colors.amber,
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -191,12 +224,12 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
   }
 
   FlatButton _addToCardButton(
-    TextEditingController _controller,
     BuildContext context,
-    dynamic selectedProduct,
+    Map<String, dynamic> selectedProduct,
   ) {
     return FlatButton(
       child: Text("Dodaj do koszyka"),
+      textColor: Colors.amber,
       onPressed: () async {
         int selectedValue = int.parse(_controller.text);
 
@@ -209,7 +242,8 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           };
 
           String basketUrl = "/baskets_products/add";
-          final response = await _httpService.post(url: basketUrl, body: body);
+          final response =
+              await _httpService.post(url: basketUrl, postBody: body);
 
           if (response['success'] == true) {
             print(response['data']['msg']);
@@ -224,12 +258,12 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
   }
 
   FlatButton _getCodeButton(
-    TextEditingController _controller,
     BuildContext context,
-    dynamic selectedProduct,
+    Map<String, dynamic> selectedProduct,
   ) {
     return FlatButton(
       child: Text("Kod kreskowy"),
+      textColor: Colors.amber,
       onPressed: () {
         int currentValue = int.parse(_controller.text);
         if (currentValue > 0) {
@@ -240,48 +274,10 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     );
   }
 
-  Container _plusButton(TextEditingController _controller) {
-    return Container(
-      child: InkWell(
-        child: Icon(
-          Icons.add,
-          size: 30.0,
-        ),
-        onTap: () {
-          int currentValue = int.parse(_controller.text);
-          setState(() {
-            currentValue++;
-            _controller.text = (currentValue).toString(); // incrementing value
-          });
-        },
-      ),
-    );
-  }
-
-  Container _minusButton(TextEditingController _controller) {
-    return Container(
-      child: InkWell(
-        child: Icon(
-          Icons.remove,
-          size: 30.0,
-        ),
-        onTap: () {
-          int currentValue = int.parse(_controller.text);
-          if (currentValue > 0) {
-            setState(() {
-              currentValue--;
-              _controller.text =
-                  (currentValue).toString(); // incrementing value
-            });
-          }
-        },
-      ),
-    );
-  }
-
   Widget _numericField(TextEditingController _controller) {
     return Expanded(
       child: TextFormField(
+        style: TextStyle(color: Colors.white70),
         readOnly: true,
         controller: _controller,
         textAlign: TextAlign.center,
@@ -297,14 +293,56 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     );
   }
 
+  Container _minusButton(TextEditingController _controller) {
+    return Container(
+      child: InkWell(
+        child: Icon(
+          Icons.remove,
+          size: 30.0,
+          color: Colors.white70,
+        ),
+        onTap: () {
+          int currentValue = int.parse(_controller.text);
+          if (currentValue > 0) {
+            setState(() {
+              currentValue--;
+              _controller.text =
+                  (currentValue).toString(); // incrementing value
+            });
+          }
+        },
+      ),
+    );
+  }
+
+  Container _plusButton(TextEditingController _controller) {
+    return Container(
+      child: InkWell(
+        child: Icon(
+          Icons.add,
+          size: 30.0,
+          color: Colors.white70,
+        ),
+        onTap: () {
+          int currentValue = int.parse(_controller.text);
+          setState(() {
+            currentValue++;
+            _controller.text = (currentValue).toString(); // incrementing value
+          });
+        },
+      ),
+    );
+  }
+
   void _getProductTypes() async {
     Map<String, dynamic> body = {
       "id": widget.productType['id'],
     };
-    final response = await _httpService.post(url: url, body: body);
+    Map<String, dynamic> response =
+        await _httpService.post(url: url, postBody: body);
     setState(() {
-      products = response['data'];
-      products.forEach((element) {
+      _products = new List<Map<String, dynamic>>.from(response['data']);
+      _products.forEach((element) {
         selectedProducts.add(false);
       });
     });

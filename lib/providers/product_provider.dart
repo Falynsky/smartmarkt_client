@@ -20,7 +20,7 @@ class ProductProvider {
 
     final response = await _httpService.post(
       url: _addToBasketEndPoint,
-      body: body,
+      postBody: body,
     );
 
     return response;

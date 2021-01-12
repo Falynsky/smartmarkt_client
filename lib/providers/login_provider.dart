@@ -19,7 +19,7 @@ class LoginProvider {
     };
     return await _httpService.post(
       url: '$_endPoint/login',
-      body: body,
+      postBody: body,
     );
   }
 }

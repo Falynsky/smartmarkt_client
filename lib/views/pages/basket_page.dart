@@ -103,7 +103,7 @@ class _BasketPageState extends State<BasketPage> {
       "productId": basketProducts[index]['productId'],
     };
     String removeUrl = "/baskets_products/remove";
-    final response = await _httpService.post(url: removeUrl, body: body);
+    final response = await _httpService.post(url: removeUrl, postBody: body);
     if (response['success'] == true) {
       setState(() {
         basketProducts.removeAt(index);
@@ -125,7 +125,7 @@ class _BasketPageState extends State<BasketPage> {
     final response = await _httpService.get(url: basketUrl);
     if (response['success'] == true) {
       setState(() {
-        basketProducts = response['data']['data'];
+        basketProducts = response['data'];
       });
     }
   }

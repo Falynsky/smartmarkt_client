@@ -9,7 +9,7 @@ class SalesBloc extends Bloc<SalesEvent, SalesState> {
   SalesRepository _salesRepository;
   List<Map<String, dynamic>> _sales;
 
-  SalesBloc() : super(InitialSalesState()) {
+  SalesBloc() : super(SalesLoadingState()) {
     _salesRepository = SalesRepository();
   }
 

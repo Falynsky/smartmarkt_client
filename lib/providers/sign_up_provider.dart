@@ -24,7 +24,7 @@ class SignUpProvider {
     };
     return await _httpService.post(
       url: '$_endPoint/register',
-      body: body,
+      postBody: body,
     );
   }
 }
