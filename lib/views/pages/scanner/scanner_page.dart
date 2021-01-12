@@ -61,7 +61,7 @@ class _ScannerPageState extends State<ScannerPage> {
     );
   }
 
-  Center _scannerPage(BuildContext context) {
+  Widget _scannerPage(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 20),
