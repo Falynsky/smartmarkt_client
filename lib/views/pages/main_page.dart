@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartmarktclient/card/dashboard_card.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -11,15 +12,16 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shadowColor: Colors.black87,
         title: Center(
           child: Text("Smart Markt"),
         ),
-        elevation: .1,
-        backgroundColor: Colors.teal,
+        elevation: 6,
+        backgroundColor: analogThree,
       ),
       body: Container(
-        color: Color(0xFF40c5ba),
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
+        color: primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         child: GridView.builder(
             itemCount: gridViewData.length,
             gridDelegate:

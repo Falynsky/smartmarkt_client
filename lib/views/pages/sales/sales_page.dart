@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 
 class SalesPage extends StatefulWidget {
   @override
@@ -21,7 +22,6 @@ class _SalesPageState extends State<SalesPage> {
     super.initState();
     _routeBloc = BlocProvider.of<RouteBloc>(context);
     _salesBloc = SalesBloc();
-
     _isLoaded = false;
   }
 
@@ -61,7 +61,7 @@ class _SalesPageState extends State<SalesPage> {
       return CircularIndicator();
     }
     return Container(
-      color: Color(0xFF40c5ba),
+      color: primaryColor,
       child: ListView.builder(
         itemCount: _sales != null ? _sales.length : 0,
         itemBuilder: (context, index) {
@@ -72,17 +72,30 @@ class _SalesPageState extends State<SalesPage> {
   }
 
   Widget _salesTypeCard(int index) {
+    Map<String, dynamic> _sale = _sales[index];
     return Container(
       child: InkWell(
         onTap: () {},
         child: Card(
-          color: Color(0xFFDDDDDD),
+          color: Colors.white,
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${_sales[index]['title']}"),
-                Text("${_sales[index]['description']}"),
+                Text(
+                  "${_sale['title']}",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text("${_sale['description']}",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    )),
+                SizedBox(height: 10),
+                if (_sale['discount'] != null) _salePricesRow(_sale, index),
               ],
             ),
             padding: EdgeInsets.all(20),
@@ -90,6 +103,34 @@ class _SalesPageState extends State<SalesPage> {
         ),
       ),
     );
+  }
+
+  Widget _salePricesRow(Map<String, dynamic> _sale, int index) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Rabat: ${_sale['discount'] * 100}%"),
+        Row(
+          children: <Widget>[
+            Text("Cena: "),
+            Text(
+              "${_sale['originalPrice']} zł",
+              style: TextStyle(
+                decoration: TextDecoration.lineThrough,
+                decorationColor: Colors.red,
+                decorationThickness: 2,
+              ),
+            ),
+            SizedBox(width: 10),
+            Text("${_afterDiscountRounded(_sale, index)} zł"),
+          ],
+        ),
+      ],
+    );
+  }
+
+  String _afterDiscountRounded(Map<String, dynamic> sale, int index) {
+    return (sale['originalPrice'] * (1 - sale['discount'])).toStringAsFixed(2);
   }
 
   @override

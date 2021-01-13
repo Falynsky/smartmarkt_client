@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 
 class ProductsPage extends StatefulWidget {
   final Map productType;
@@ -18,6 +19,7 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> {
   List<Map<String, dynamic>> _products;
+  List<Map<String, dynamic>> _newProducts;
   List<dynamic> selectedProducts = [];
   ProductsBloc _productsBloc;
   HttpService _httpService;
@@ -30,7 +32,7 @@ class _ProductsPageState extends State<ProductsPage> {
   void initState() {
     super.initState();
     _httpService = HttpService();
-    _getProductTypes();
+    _getProducts();
     _productsBloc = BlocProvider.of<ProductsBloc>(context);
     _controller = TextEditingController();
   }
@@ -54,29 +56,70 @@ class _ProductsPageState extends State<ProductsPage> {
           ),
         ),
         elevation: .1,
-        backgroundColor: Colors.teal,
+        backgroundColor: analogThree,
       ),
       body: productList(context),
     );
   }
 
-  Widget productList(BuildContext context) {
+  onItemChanged(String value) {
+    setState(() {
+      _newProducts = _products
+          .where((productType) =>
+              productType['name'].toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+  }
+
+  Widget _searchBar() {
+    TextEditingController _textEditingController;
     return Container(
-      color: Color(0xFF40c5ba),
-      child: ListView.builder(
-        itemCount: _products != null ? _products.length : 0,
-        itemBuilder: (context, index) {
-          return listCard(index, context);
-        },
+      color: primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: TextField(
+          controller: _textEditingController,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.search_rounded),
+            border: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(5.0),
+              ),
+            ),
+            hintText: 'Wyszukaj...',
+            filled: true,
+            fillColor: Colors.white,
+          ),
+          onChanged: onItemChanged,
+        ),
       ),
     );
   }
 
+  Widget productList(BuildContext context) {
+    return Column(
+      children: [
+        _searchBar(),
+        Expanded(
+          child: Container(
+            color: primaryColor,
+            child: ListView.builder(
+              itemCount: _newProducts != null ? _newProducts.length : 0,
+              itemBuilder: (context, index) {
+                return listCard(index, context);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget listCard(int index, BuildContext context) {
-    Map<String, dynamic> product = _products[index];
+    Map<String, dynamic> product = _newProducts[index];
     String price = product['price'].toString() + " " + product['currency'];
     return Card(
-      color: Color(0xFFDDDDDD),
+      color: Colors.white,
       child: InkWell(
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -162,7 +205,7 @@ class _ProductsPageState extends State<ProductsPage> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          backgroundColor: Colors.black26,
+          backgroundColor: Color(0xFF222222),
           title: Text(selectedProduct['name']),
           titleTextStyle: TextStyle(color: Colors.amber, fontSize: 20),
           content: Column(
@@ -334,7 +377,7 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  void _getProductTypes() async {
+  void _getProducts() async {
     Map<String, dynamic> body = {
       "id": widget.productType['id'],
     };
@@ -342,6 +385,7 @@ class _ProductsPageState extends State<ProductsPage> {
         await _httpService.post(url: url, postBody: body);
     setState(() {
       _products = new List<Map<String, dynamic>>.from(response['data']);
+      _newProducts = _products;
       _products.forEach((element) {
         selectedProducts.add(false);
       });

@@ -6,7 +6,8 @@ final hintTextStyle = TextStyle(
 );
 
 final labelStyle = TextStyle(
-  color: Colors.white,
+  color: Color(0xFF84B389),
+  fontSize: 15,
   fontWeight: FontWeight.bold,
   fontFamily: 'OpenSans',
 );
@@ -14,15 +15,16 @@ final labelStyle = TextStyle(
 final focusedBorderStyle = OutlineInputBorder(
   borderRadius: BorderRadius.circular(5.0),
   borderSide: BorderSide(
-    color: Colors.white54,
+    color: Color(0xFF306c63),
+    width: 2.0,
   ),
 );
 
 final enabledBorderStyle = OutlineInputBorder(
   borderRadius: BorderRadius.circular(5.0),
   borderSide: BorderSide(
-    color: Color(0xFF306c63),
-    width: 2.0,
+    color: Colors.white54,
+    width: 1.0,
   ),
 );
 

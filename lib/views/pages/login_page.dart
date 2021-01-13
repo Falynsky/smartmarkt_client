@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/text_field_component.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
+import 'package:smartmarktclient/utilities/gradient.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -61,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Stack(
         children: <Widget>[
-          buildBackground(),
+          gradientBackground(),
           Form(
             key: _formKey,
             child: Center(
@@ -70,23 +72,11 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    _buildSignInTitle(),
-                    TextFieldComponent(
-                      controller: _loginController,
-                      label: 'Login',
-                      placeHolder: 'Wprowadź login',
-                      icon: Icons.person,
-                      isRequired: true,
-                    ),
-                    TextFieldComponent(
-                      controller: _passwordController,
-                      label: 'Hasło',
-                      placeHolder: 'Wprowadź hasło',
-                      icon: Icons.lock,
-                      isRequired: true,
-                    ),
-                    _buildLoginBtn(),
-                    _buildSignUpBtn(),
+                    _appNameTitle(),
+                    _loginField(),
+                    _passwordField(),
+                    _loginButon(),
+                    _signUpButton(),
                   ],
                 ),
               ),
@@ -97,44 +87,49 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildSignInTitle() {
+  Widget _appNameTitle() {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
         'SmartMarkt',
         style: TextStyle(
-          color: Colors.white,
+          shadows: <Shadow>[
+            Shadow(
+              offset: Offset(5, 5),
+              blurRadius: 8.0,
+              color: Colors.black12,
+            ),
+          ],
+          color: complementaryOne,
           fontFamily: 'OpenSans',
-          fontSize: 30.0,
+          fontSize: 45,
           fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 
-  Container buildBackground() {
-    List<Color> gradientColors = [
-      Color(0xFF8eebe4),
-      Color(0xFF48dbcf),
-      Color(0xFF40c5ba),
-      Color(0xFF31b9ae),
-    ];
-    final gradientColorsStops = [0.1, 0.4, 0.7, 0.9];
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: gradientColors,
-          stops: gradientColorsStops,
-        ),
-      ),
+  Widget _loginField() {
+    return TextFieldComponent(
+      controller: _loginController,
+      label: 'Login',
+      placeHolder: 'Wprowadź login',
+      icon: Icons.person,
+      isRequired: true,
     );
   }
 
-  Widget _buildLoginBtn() {
+  Widget _passwordField() {
+    return TextFieldComponent(
+      controller: _passwordController,
+      label: 'Hasło',
+      placeHolder: 'Wprowadź hasło',
+      icon: Icons.lock,
+      isRequired: true,
+    );
+  }
+
+  Widget _loginButon() {
     return Container(
       padding: EdgeInsets.only(top: 25, left: 15, right: 15),
       width: double.infinity,
@@ -149,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Text(
           'ZALOGUJ',
           style: TextStyle(
-            color: Color(0xFF24756f),
+            color: secondaryColor,
             letterSpacing: 1.5,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
@@ -176,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //todo: do ogarnięcia klasa pozwalajaca na tworzenie dialogu poprzez jej wywołanie a nie powtarzanie kodu
-  Widget _buildSignUpBtn() {
+  Widget _signUpButton() {
     return Container(
       padding: EdgeInsets.only(top: 25, left: 15, right: 15),
       width: double.infinity,
@@ -191,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Text(
           'NOWE KONTO',
           style: TextStyle(
-            color: Color(0xFF24756f),
+            color: secondaryColor,
             letterSpacing: 1.5,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,

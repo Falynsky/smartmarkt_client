@@ -59,30 +59,4 @@ class _ProductsPanelState extends State<ProductsPanel> {
       ),
     );
   }
-
-  Scaffold buildScaffold() {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Row(
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  _routeBloc.add(LoadMainMenuEvent());
-                },
-              ),
-              SizedBox(width: 20),
-              Text("Product Types"),
-            ],
-          ),
-        ),
-        elevation: .1,
-        backgroundColor: Colors.black45,
-      ),
-      body: Container(
-        color: Colors.green,
-      ),
-    );
-  }
 }

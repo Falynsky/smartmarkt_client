@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 
 class ProductTypesPage extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class ProductTypesPage extends StatefulWidget {
 
 class _ProductTypesPageState extends State<ProductTypesPage> {
   List<dynamic> productTypes;
+  List<dynamic> newProductTypes;
   ProductsBloc _productsBloc;
 
   HttpService _httpService;
@@ -29,6 +31,7 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
     final response = await _httpService.get(url: url);
     setState(() {
       productTypes = response['data'];
+      newProductTypes = productTypes;
     });
   }
 
@@ -43,14 +46,55 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
     );
   }
 
+  onItemChanged(String value) {
+    setState(() {
+      newProductTypes = productTypes
+          .where((productType) =>
+              productType['name'].toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+  }
+
   Widget productList() {
+    return Column(
+      children: [
+        _searchBar(),
+        Expanded(
+          child: Container(
+            color: primaryColor,
+            child: ListView.builder(
+              itemCount: newProductTypes != null ? newProductTypes.length : 0,
+              itemBuilder: (context, index) {
+                return _productTypeCard(index);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _searchBar() {
+    TextEditingController _textEditingController;
     return Container(
-      color: Color(0xFF40c5ba),
-      child: ListView.builder(
-        itemCount: productTypes != null ? productTypes.length : 0,
-        itemBuilder: (context, index) {
-          return _productTypeCard(index);
-        },
+      color: primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: TextField(
+          controller: _textEditingController,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.search_rounded),
+            border: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(5.0),
+              ),
+            ),
+            hintText: 'Wyszukaj...',
+            filled: true,
+            fillColor: Colors.white,
+          ),
+          onChanged: onItemChanged,
+        ),
       ),
     );
   }
@@ -62,9 +106,9 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
           _goToProductsList(index);
         },
         child: Card(
-          color: Color(0xFFDDDDDD),
+          color: Colors.white,
           child: Container(
-            child: Text(productTypes[index]['name']),
+            child: Text(newProductTypes[index]['name']),
             padding: EdgeInsets.all(20),
           ),
         ),
@@ -73,7 +117,7 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
   }
 
   void _goToProductsList(int index) {
-    Map<String, dynamic> productType = productTypes[index];
+    Map<String, dynamic> productType = newProductTypes[index];
     final emitSelectedTypeProductsEvent =
         SelectedTypeProductsEvent(productType: productType);
     _productsBloc.add(emitSelectedTypeProductsEvent);

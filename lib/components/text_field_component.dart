@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 import 'package:smartmarktclient/utilities/constant_styles.dart';
 
 class TextFieldComponent extends StatefulWidget {
@@ -44,7 +45,10 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(_label, style: labelStyle),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(_label, style: labelStyle),
+          ),
           SizedBox(height: 10.0),
           Container(
             alignment: Alignment.centerLeft,
@@ -82,7 +86,7 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
   InputDecoration _textFieldInputDecoration() {
     return InputDecoration(
       filled: true,
-      fillColor: Color(0xFF309c93),
+      fillColor: complementaryOne,
       focusedBorder: focusedBorderStyle,
       enabledBorder: enabledBorderStyle,
       contentPadding: EdgeInsets.only(top: 14.0),

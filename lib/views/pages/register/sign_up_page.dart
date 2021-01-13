@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/text_field_component.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
+import 'package:smartmarktclient/utilities/gradient.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -71,7 +73,7 @@ class _SignUpPageState extends State<SignUpPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Stack(
         children: <Widget>[
-          buildBackground(),
+          gradientBackground(),
           Form(
             key: _formKey,
             child: Center(
@@ -102,9 +104,16 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Text(
         'REJESTRACJA',
         style: TextStyle(
-          color: Colors.white,
+          shadows: <Shadow>[
+            Shadow(
+              offset: Offset(5, 5),
+              blurRadius: 8.0,
+              color: Colors.black12,
+            ),
+          ],
+          color: complementaryOne,
           fontFamily: 'OpenSans',
-          fontSize: 30.0,
+          fontSize: 35,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -160,28 +169,6 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Container buildBackground() {
-    List<Color> gradientColors = [
-      Color(0xFF8eebe4),
-      Color(0xFF48dbcf),
-      Color(0xFF40c5ba),
-      Color(0xFF31b9ae),
-    ];
-    List<double> gradientColorsStops = [0.1, 0.4, 0.7, 0.9];
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: gradientColors,
-          stops: gradientColorsStops,
-        ),
-      ),
-    );
-  }
-
   Widget _buildSignUpButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
@@ -197,7 +184,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Text(
           'ZAPISZ',
           style: TextStyle(
-            color: Color(0xFF24756f),
+            color: secondaryColor,
             letterSpacing: 1.5,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
@@ -242,7 +229,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Text(
           'POWRÓT',
           style: TextStyle(
-            color: Color(0xFF24756f),
+            color: secondaryColor,
             letterSpacing: 1.5,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,

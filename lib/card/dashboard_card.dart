@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 
 class DashboardCard extends StatefulWidget {
   final String label;
@@ -35,7 +36,7 @@ class _DashboardCardState extends State<DashboardCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: Color(0xAF24756f),
+        color: analogThree,
         elevation: 1.0,
         margin: EdgeInsets.all(8.0),
         child: Container(

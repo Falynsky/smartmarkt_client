@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 
 class PagesAppBar extends StatefulWidget {
   final String title;
@@ -37,8 +38,9 @@ class _PagesAppBarState extends State<PagesAppBar> {
           ],
         ),
       ),
-      elevation: .1,
-      backgroundColor: Colors.teal,
+      shadowColor: Colors.black87,
+      elevation: 6,
+      backgroundColor: analogThree,
     );
   }
 

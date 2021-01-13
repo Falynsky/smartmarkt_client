@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -31,6 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: PagesAppBar(title: "Profil"),
         ),
         body: Container(
+          color: primaryColor,
           child: Column(
             children: <Widget>[
               Container(
