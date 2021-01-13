@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 
 class ScanResultComponent extends StatefulWidget {
   ScanResultComponent();
@@ -11,7 +12,7 @@ class ScanResultComponent extends StatefulWidget {
 }
 
 class ScanResultComponentState extends State<ScanResultComponent> {
-  Map<String, dynamic> _scannedProductInfo;
+  Map<String, dynamic> _scannedInfo;
   ScannerBloc _scannerBloc;
   bool _hasError;
 
@@ -28,43 +29,74 @@ class ScanResultComponentState extends State<ScanResultComponent> {
       listener: (context, state) {
         if (state is CorrectScanState) {
           _hasError = false;
-          _scannedProductInfo = state.productData;
+          _scannedInfo = state.productData;
         } else if (state is ErrorScanState) {
-          _scannedProductInfo = null;
+          _scannedInfo = null;
           _hasError = true;
         }
         setState(() {});
       },
-      child: Expanded(
-        child: Container(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (_hasError != null && _hasError) _productNotFoundScreen(),
-            if (_scannedProductInfo != null) productFoundScreen(context),
-            SizedBox(height: 55),
-          ],
-        )),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          if (_hasError != null && _hasError) _productNotFoundScreen(),
+          if (_scannedInfo != null) productFoundScreen(context),
+        ],
       ),
     );
   }
 
   Widget _productNotFoundScreen() {
-    return Container(
-      width: 190,
-      child: Column(
-        children: [
-          Icon(
-            Icons.search_off,
-            size: 90,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.search_off,
+          size: 90,
+          color: Colors.redAccent,
+        ),
+        Text(
+          "Nie znaleziono \nproduktu w bazie",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
             color: Colors.redAccent,
           ),
-          Text(
-            "Nie znaleziono produktu w bazie",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.redAccent,
+        ),
+      ],
+    );
+  }
+
+  Widget productFoundScreen(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            child: Image.network(
+                "https://ocdn.eu/pulscms-transforms/1/iW-k9kpTURBXy9mOTk1NzZhNTY3YjhlYjljZWQ3MDcxMGJjNWEzZTZhNy5qcGeTlQMAFs0C1M0Bl5MFzQMUzQG8kwmmNTk2MTk0BoGhMAE/gettyimages-954867550.jpg"),
+          ),
+          Icon(Icons.image_not_supported, size: 300),
+          Divider(thickness: 1.5),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      _productName(),
+                      SizedBox(height: 15),
+                      _productInfoRow(
+                          "Kategoria:", _scannedInfo['productType']),
+                      SizedBox(height: 5),
+                      _productInfoRow("Cena:", "${_scannedInfo['price']}zł"),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 20),
+                _addProductToBasketButton(context),
+              ],
             ),
           ),
         ],
@@ -72,29 +104,9 @@ class ScanResultComponentState extends State<ScanResultComponent> {
     );
   }
 
-  Widget productFoundScreen(BuildContext context) {
-    String productPrice = _scannedProductInfo['price'].toString() +
-        " " +
-        _scannedProductInfo['currency'];
-    return Container(
-      width: 190,
-      child: Column(
-        children: [
-          _productName(),
-          SizedBox(height: 15),
-          _productInfoRow("Kategoria:", _scannedProductInfo['productType']),
-          SizedBox(height: 5),
-          _productInfoRow("Cena:", productPrice),
-          SizedBox(height: 45),
-          _addProductToBasketButton(context),
-        ],
-      ),
-    );
-  }
-
   Widget _productName() {
     return Text(
-      _scannedProductInfo['name'],
+      _scannedInfo['name'],
       style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
     );
   }
@@ -118,9 +130,10 @@ class ScanResultComponentState extends State<ScanResultComponent> {
   Widget _addProductToBasketButton(BuildContext context) {
     return Container(
       width: 90,
+      height: 90,
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       decoration: BoxDecoration(
-        color: Colors.greenAccent,
+        color: secondaryColor,
         border: Border.all(
           color: Colors.black,
           width: 1.5,
@@ -144,7 +157,7 @@ class ScanResultComponentState extends State<ScanResultComponent> {
         ),
         onTap: () {
           final addProductToBasketEvent =
-              AddProductToBasketEvent(productId: _scannedProductInfo['id']);
+              AddProductToBasketEvent(productId: _scannedInfo['id']);
           return _scannerBloc.add(addProductToBasketEvent);
         },
       ),

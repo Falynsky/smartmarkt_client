@@ -5,6 +5,7 @@ import 'package:smartmarktclient/bloc/scanner/scanner_bloc.dart';
 import 'package:smartmarktclient/bloc/scanner/scanner_event.dart';
 import 'package:smartmarktclient/bloc/scanner/scanner_state.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 import 'package:smartmarktclient/views/pages/scanner/scan_result_component.dart';
 
 //todo: dodać usuwanie pozycji z koszyka poprzez zeskanowanie produktu
@@ -73,7 +74,7 @@ class _ScannerPageState extends State<ScannerPage> {
             SizedBox(height: 10),
             _scanProductButton(context),
             SizedBox(height: 30),
-            Container(color: Colors.black12, height: 1.5),
+            Divider(thickness: 1.5),
             ScanResultComponent()
           ],
         ),
@@ -92,7 +93,7 @@ class _ScannerPageState extends State<ScannerPage> {
   Widget _scanProductButton(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.greenAccent,
+        color: secondaryColor,
         border: Border.all(
           color: Colors.black,
           width: 1.5,
