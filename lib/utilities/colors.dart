@@ -27,3 +27,8 @@ final backgroundGradient = [
   primaryColor,
   analogThree,
 ];
+
+//EXTRA COLORS
+
+final darkPrimaryColor = Color(0xFF222222);
+final darkSecondaryColor = Colors.amber;

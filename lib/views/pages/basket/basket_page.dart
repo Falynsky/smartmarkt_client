@@ -1,3 +1,4 @@
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
@@ -62,34 +63,52 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget _summary() {
-    return Container(
-      child: Column(
+    return Padding(
+      padding: const EdgeInsets.only(top: 15, bottom: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 15, bottom: 8),
-            child: Text(
-              "Wartość koszyka: ${basketSummary}zł",
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 15,
-              ),
+          Text(
+            "Wartość koszyka: ${basketSummary}zł",
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 15,
             ),
           ),
+          SizedBox(width: 20),
+          InkWell(
+            borderRadius: BorderRadius.circular(25.0),
+            splashFactory: InkRipple.splashFactory,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.remove_shopping_cart_rounded),
+            ),
+            onTap: () => _removeBasketProducts(),
+          )
         ],
       ),
     );
   }
 
-  Container _emptyBasketInfo() {
-    return Container(
-      child: Center(
-        child: Text(
-          "No products in basket",
-          style: TextStyle(
-            color: Colors.greenAccent,
-            fontSize: 25,
+  Widget _emptyBasketInfo() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.shopping_basket_outlined,
+            size: 100,
+            color: complementaryThree,
           ),
-        ),
+          Text(
+            "Brak produktów \nw koszyku",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: complementaryThree,
+              fontSize: 25,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -110,13 +129,21 @@ class _BasketPageState extends State<BasketPage> {
     Map<String, dynamic> basketProduct = basketProducts[index];
     int quantity = basketProduct['quantity'];
     double price = basketProduct['price'];
+    String documentUrl =
+        '${HttpService.hostUrl}/files/download/${basketProduct['documentName']}.${basketProduct['documentType']}/db';
     return Card(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Icon(Icons.image, size: 60),
+            Image.network(
+              '$documentUrl/.2',
+              headers: HttpService.headers,
+              errorBuilder: (_, __, ___) {
+                return Icon(Icons.image_not_supported);
+              },
+            ),
             SizedBox(width: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,10 +186,10 @@ class _BasketPageState extends State<BasketPage> {
 
   FloatingActionButton _buyFabButton() {
     return FloatingActionButton.extended(
-      onPressed: () {},
-      label: Text("BUY", style: TextStyle(color: complementaryFour)),
+      onPressed: () => _selectedPositionDialog(),
+      label: Text("Generuj kod", style: TextStyle(color: complementaryFour)),
       icon: Icon(
-        Icons.shopping_cart,
+        Icons.qr_code_rounded,
         color: complementaryFour,
       ),
       backgroundColor: complementaryThree,
@@ -185,6 +212,79 @@ class _BasketPageState extends State<BasketPage> {
     if (response['success'] == true) {
       setState(() {
         basketSummary = response['data']['summary'];
+      });
+    }
+  }
+
+  void _selectedPositionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          backgroundColor: shadesTwo,
+          title: Text(
+            "Zeskanuj kod w kasie samoobsługowej",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+          content: Container(
+            padding: EdgeInsets.all(5),
+            color: Colors.white,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                BarcodeWidget(
+                  barcode: Barcode.upcA(),
+                  data: "21234561189",
+                  width: 300,
+                  height: 200,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            _clearBasketButton(context),
+            _hideBarsCodeButton(context)
+            // usually buttons at the bottom of the dialog
+          ],
+        );
+      },
+    );
+  }
+
+  FlatButton _clearBasketButton(BuildContext context) {
+    return FlatButton(
+      child: Text("Wyczyść koszyk"),
+      color: Colors.white,
+      textColor: Colors.black,
+      onPressed: () {
+        _removeBasketProducts();
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  FlatButton _hideBarsCodeButton(BuildContext context) {
+    return FlatButton(
+      child: Text("Zamknij"),
+      color: Colors.white,
+      textColor: Colors.black,
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  void _removeBasketProducts() async {
+    String basketUrl = "/baskets_products/removeAll";
+    final response = await _httpService.post(url: basketUrl);
+    if (response['success'] == true) {
+      setState(() {
+        _getBasketProducts();
+        _getBasketSummary();
       });
     }
   }
