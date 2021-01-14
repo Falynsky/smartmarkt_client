@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
 class ScanResultComponent extends StatefulWidget {
@@ -72,10 +73,20 @@ class ScanResultComponentState extends State<ScanResultComponent> {
       child: Column(
         children: [
           Container(
-            child: Image.network(
-                "https://ocdn.eu/pulscms-transforms/1/iW-k9kpTURBXy9mOTk1NzZhNTY3YjhlYjljZWQ3MDcxMGJjNWEzZTZhNy5qcGeTlQMAFs0C1M0Bl5MFzQMUzQG8kwmmNTk2MTk0BoGhMAE/gettyimages-954867550.jpg"),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                child: Image.network(
+                  '${HttpService.hostUrl}/files/download/${_scannedInfo['documentName']}.${_scannedInfo['documentType']}/db',
+                  headers: HttpService.headers,
+                  errorBuilder: (_, __, ___) {
+                    return Icon(Icons.image_not_supported, size: 300);
+                  },
+                ),
+              ),
+            ),
           ),
-          Icon(Icons.image_not_supported, size: 300),
           Divider(thickness: 1.5),
           SizedBox(height: 15),
           Padding(
