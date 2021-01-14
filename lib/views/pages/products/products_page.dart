@@ -134,46 +134,61 @@ class _ProductsPageState extends State<ProductsPage> {
               Spacer(),
               Text(price),
               SizedBox(width: 10),
-              _productInfoButton(index),
+              _productAddButton(index),
             ],
           ),
         ),
-        onTap: () => _selectedPositionDialog(product, context),
+        onTap: () => _productInfoDialog(product),
       ),
     );
   }
 
   InkWell _imageButton(int index) {
+    Map<String, dynamic> selectedProduct = _products[index];
+    String documentUrl =
+        '${HttpService.hostUrl}/files/download/${selectedProduct['documentName']}.${selectedProduct['documentType']}/db';
     return InkWell(
-      child: Icon(Icons.image),
+      child: Image.network(
+        '$documentUrl/70/70',
+        headers: HttpService.headers,
+        errorBuilder: (_, __, ___) {
+          return Icon(Icons.image_not_supported);
+        },
+      ),
       onTap: () {
-        Map<String, dynamic> selectedProduct = _products[index];
         showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text(selectedProduct['name']),
+                backgroundColor: Color(0xFF222222),
                 content: Row(
                   children: [
-                    Flexible(child: Text('image')),
+                    Flexible(
+                      child: Image.network(
+                        documentUrl,
+                        headers: HttpService.headers,
+                        errorBuilder: (_, __, ___) {
+                          return Icon(Icons.image_not_supported, size: 300);
+                        },
+                      ),
+                    ),
                   ],
                 ),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  _closeButton(context),
-                ],
               );
             });
       },
     );
   }
 
-  InkWell _productInfoButton(int index) {
+  InkWell _productAddButton(int index) {
     return InkWell(
-      child: Icon(Icons.help_outline),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(Icons.add_circle_outline_rounded),
+      ),
       onTap: () {
         Map<String, dynamic> selectedProduct = _products[index];
-        _productInfoDialog(selectedProduct);
+        _selectedPositionDialog(selectedProduct);
       },
     );
   }
@@ -185,8 +200,13 @@ class _ProductsPageState extends State<ProductsPage> {
         String dialogTitle = selectedProduct['name'];
         String productInfo = selectedProduct['productInfo'];
         return AlertDialog(
+          backgroundColor: Color(0xFF222222),
+          titleTextStyle: TextStyle(color: Colors.amber, fontSize: 20),
           title: Text(dialogTitle),
-          content: Text(productInfo),
+          content: Text(
+            productInfo,
+            style: TextStyle(color: Colors.white70),
+          ),
           actions: <Widget>[
             _closeButton(context),
           ],
@@ -195,10 +215,7 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  void _selectedPositionDialog(
-    dynamic selectedProduct,
-    BuildContext context,
-  ) {
+  void _selectedPositionDialog(dynamic selectedProduct) {
     _controller.text = "0";
     showDialog(
       context: context,
