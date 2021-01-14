@@ -102,16 +102,23 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
   Widget _productTypeCard(int index) {
     return Container(
       child: InkWell(
-        onTap: () {
-          _goToProductsList(index);
-        },
         child: Card(
           color: Colors.white,
           child: Container(
-            child: Text(newProductTypes[index]['name']),
+            child: Text(
+              newProductTypes[index]['name'],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
+            ),
             padding: EdgeInsets.all(20),
           ),
         ),
+        onTap: () {
+          _goToProductsList(index);
+        },
       ),
     );
   }

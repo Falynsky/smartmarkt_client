@@ -1,3 +1,6 @@
+export 'configure/configure_bloc.dart';
+export 'configure/configure_event.dart';
+export 'configure/configure_state.dart';
 export 'home_route/route_bloc.dart';
 export 'home_route/route_event.dart';
 export 'home_route/route_state.dart';

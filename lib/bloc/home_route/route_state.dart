@@ -10,7 +10,7 @@ class LoadMainMenuState extends RouteState {
   List<Object> get props => [];
 }
 
-class LoadLoginPageState extends RouteState {
+class LoginPageState extends RouteState {
   @override
   List<Object> get props => [];
 }
@@ -31,4 +31,9 @@ class LoadDashboardPageState extends RouteState {
   List<Object> get props => [
         pageIdn,
       ];
+}
+
+class ConfigurePageState extends RouteState {
+  @override
+  List<Object> get props => [];
 }

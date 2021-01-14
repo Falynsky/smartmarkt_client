@@ -8,6 +8,7 @@ import 'package:smartmarktclient/views/pages/products/products_panel.dart';
 import 'package:smartmarktclient/views/pages/profile/profile_page.dart';
 import 'package:smartmarktclient/views/pages/register/sign_up_page.dart';
 import 'package:smartmarktclient/views/pages/sales/sales_page.dart';
+import 'package:smartmarktclient/views/pages/scan_shop/configurator_page.dart';
 import 'package:smartmarktclient/views/pages/scanner/scanner_page.dart';
 import 'package:smartmarktclient/views/pages/settings/settings_page.dart';
 
@@ -20,7 +21,9 @@ class RouteWidget extends StatelessWidget {
         listener: (context, state) {},
         child: BlocBuilder<RouteBloc, RouteState>(
           builder: (context, state) {
-            if (state is LoadLoginPageState) {
+            if (state is ConfigurePageState) {
+              return ConfiguratorPage();
+            } else if (state is LoginPageState) {
               return LoginPage();
             } else if (state is SignUpPageState) {
               return SignUpPage();

@@ -55,7 +55,8 @@ class _ProductsPageState extends State<ProductsPage> {
             ],
           ),
         ),
-        elevation: .1,
+        shadowColor: Colors.black87,
+        elevation: 6,
         backgroundColor: analogThree,
       ),
       body: productList(context),
@@ -130,9 +131,17 @@ class _ProductsPageState extends State<ProductsPage> {
             children: <Widget>[
               _imageButton(index),
               SizedBox(width: 10),
-              Text(product['name']),
+              Flexible(
+                child: Text(
+                  product['name'],
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                ),
+              ),
               Spacer(),
-              Text(price),
+              Text(
+                price,
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+              ),
               SizedBox(width: 10),
               _productAddButton(index),
             ],
