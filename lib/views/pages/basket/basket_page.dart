@@ -39,7 +39,7 @@ class _BasketPageState extends State<BasketPage> {
           child: PagesAppBar(title: "Koszyk"),
         ),
         body: productList(),
-        floatingActionButton: _buyFabButton(),
+        floatingActionButton: _generateCodeFAB(),
       ),
     );
   }
@@ -184,7 +184,10 @@ class _BasketPageState extends State<BasketPage> {
     }
   }
 
-  FloatingActionButton _buyFabButton() {
+  Widget _generateCodeFAB() {
+    if (basketProducts == null || basketProducts.isEmpty) {
+      return Container();
+    }
     return FloatingActionButton.extended(
       onPressed: () => _selectedPositionDialog(),
       label: Text("Generuj kod", style: TextStyle(color: complementaryFour)),
@@ -217,42 +220,44 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   void _selectedPositionDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          backgroundColor: shadesTwo,
-          title: Text(
-            "Zeskanuj kod w kasie samoobsługowej",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
+    if (basketProducts.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            backgroundColor: shadesTwo,
+            title: Text(
+              "Zeskanuj kod w kasie samoobsługowej",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
-          content: Container(
-            padding: EdgeInsets.all(5),
-            color: Colors.white,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                BarcodeWidget(
-                  barcode: Barcode.upcA(),
-                  data: "21234561189",
-                  width: 300,
-                  height: 200,
-                ),
-              ],
+            titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+            content: Container(
+              padding: EdgeInsets.all(5),
+              color: Colors.white,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  BarcodeWidget(
+                    barcode: Barcode.upcA(),
+                    data: "21234561189",
+                    width: 300,
+                    height: 200,
+                  ),
+                ],
+              ),
             ),
-          ),
-          actions: <Widget>[
-            _clearBasketButton(context),
-            _hideBarsCodeButton(context)
-            // usually buttons at the bottom of the dialog
-          ],
-        );
-      },
-    );
+            actions: <Widget>[
+              _clearBasketButton(context),
+              _hideBarsCodeButton(context)
+              // usually buttons at the bottom of the dialog
+            ],
+          );
+        },
+      );
+    }
   }
 
   FlatButton _clearBasketButton(BuildContext context) {

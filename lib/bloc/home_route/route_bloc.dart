@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../bloc.dart';
 
@@ -11,7 +12,10 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
   Stream<RouteState> mapEventToState(
     RouteEvent event,
   ) async* {
-    if (event is LoadMainMenuEvent) {
+    if (event is ConfigurePageEvent) {
+      Key key = UniqueKey();
+      yield ConfigurePageState(key: key);
+    } else if (event is LoadMainMenuEvent) {
       yield LoadMainMenuState();
     } else if (event is LoadLoginPageEvent) {
       yield LoginPageState();

@@ -5,6 +5,11 @@ abstract class RouteState extends Equatable {
   const RouteState();
 }
 
+class InitialRouteState extends RouteState {
+  @override
+  List<Object> get props => [];
+}
+
 class LoadMainMenuState extends RouteState {
   @override
   List<Object> get props => [];
@@ -34,6 +39,12 @@ class LoadDashboardPageState extends RouteState {
 }
 
 class ConfigurePageState extends RouteState {
+  final Key key;
+
+  ConfigurePageState({this.key});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [
+        key,
+      ];
 }

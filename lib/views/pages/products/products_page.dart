@@ -321,6 +321,7 @@ class _ProductsPageState extends State<ProductsPage> {
             print(response['data']['msg']);
           }
         }
+        _getProducts();
         Navigator.of(context).pop();
       },
     );

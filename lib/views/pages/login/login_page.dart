@@ -58,31 +58,37 @@ class _LoginPageState extends State<LoginPage> {
     return _loginForm(context);
   }
 
-  GestureDetector _loginForm(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Stack(
-        children: <Widget>[
-          gradientBackground(),
-          Form(
-            key: _formKey,
-            child: Center(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _appNameTitle(),
-                    _loginField(),
-                    _passwordField(),
-                    _loginButon(),
-                    _signUpButton(),
-                  ],
+  Widget _loginForm(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        _routeBloc.add(ConfigurePageEvent());
+        return false;
+      },
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
+          children: <Widget>[
+            gradientBackground(),
+            Form(
+              key: _formKey,
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      _appNameTitle(),
+                      _loginField(),
+                      _passwordField(),
+                      _loginButon(),
+                      _signUpButton(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -170,14 +176,16 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  //todo: do ogarnięcia klasa pozwalajaca na tworzenie dialogu poprzez jej wywołanie a nie powtarzanie kodu
   Widget _signUpButton() {
     return Container(
       padding: EdgeInsets.only(top: 25, left: 15, right: 15),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => {_routeBloc.add(SignUpPageEvent())},
+        onPressed: () {
+          Key key = UniqueKey();
+          _routeBloc.add(SignUpPageEvent(key));
+        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),

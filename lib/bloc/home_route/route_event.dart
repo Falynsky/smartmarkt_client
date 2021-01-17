@@ -5,14 +5,25 @@ abstract class RouteEvent extends Equatable {
   const RouteEvent();
 }
 
+class ConfigurePageEvent extends RouteEvent {
+  ConfigurePageEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 class LoadLoginPageEvent extends RouteEvent {
   @override
   List<Object> get props => [];
 }
 
 class SignUpPageEvent extends RouteEvent {
+  final Key key;
+
+  SignUpPageEvent(this.key);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [key];
 }
 
 class LoadMainMenuEvent extends RouteEvent {

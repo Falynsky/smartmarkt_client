@@ -11,7 +11,8 @@ class ScannerRepository {
 
   Future<int> getProductCode() async {
     ScanResult scanResult = await _scannerProvider.scanBarsCode();
-    int productCode = int.parse(scanResult.rawContent);
+    String rawContent = scanResult.rawContent;
+    int productCode = int.parse(rawContent);
     return productCode;
   }
 
