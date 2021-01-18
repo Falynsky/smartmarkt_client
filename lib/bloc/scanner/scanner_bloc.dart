@@ -34,6 +34,8 @@ class ScannerBloc extends Bloc<ScannerEvent, ScannerState> {
             yield ErrorScanState();
           }
         }
+      } else {
+        yield ErrorScanState();
       }
     } else if (event is AddProductToBasketEvent) {
       Map<String, dynamic> response =

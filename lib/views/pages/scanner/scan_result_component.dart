@@ -38,7 +38,6 @@ class ScanResultComponentState extends State<ScanResultComponent> {
         setState(() {});
       },
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           if (_hasError != null && _hasError) _productNotFoundScreen(),
           if (_scannedInfo != null) productFoundScreen(context),
@@ -48,23 +47,25 @@ class ScanResultComponentState extends State<ScanResultComponent> {
   }
 
   Widget _productNotFoundScreen() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          Icons.search_off,
-          size: 90,
-          color: Colors.redAccent,
-        ),
-        Text(
-          "Nie znaleziono \nproduktu w bazie",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.redAccent,
+    return Container(
+      margin: EdgeInsets.only(top: 100),
+      child: Column(
+        children: [
+          Icon(
+            Icons.search_off,
+            size: 90,
+            color: Colors.red.shade400,
           ),
-        ),
-      ],
+          Text(
+            "Nie znaleziono \nproduktu w bazie",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.red.shade400,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

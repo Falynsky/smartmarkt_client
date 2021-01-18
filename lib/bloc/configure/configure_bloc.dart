@@ -11,9 +11,7 @@ class ConfigureBloc extends Bloc<ConfigureEvent, ConfigureState> {
   }
 
   @override
-  Stream<ConfigureState> mapEventToState(
-    ConfigureEvent event,
-  ) async* {
+  Stream<ConfigureState> mapEventToState(ConfigureEvent event) async* {
     if (event is LoadConfigurePageEvent) {
       yield LoadConfigureMenuState();
     } else if (event is ScanShopCodeEvent) {

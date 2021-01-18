@@ -44,9 +44,13 @@ class _ScannerPageState extends State<ScannerPage> {
             listener: (context, state) {
               if (state is AddToBasketState) {
                 final snackBar = SnackBar(
-                  content: Text(state.message),
+                  content: Text(
+                    state.message,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                  ),
                   behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.amber,
+                  backgroundColor: complementaryThree,
                   action: SnackBarAction(
                     label: "OK",
                     onPressed: () => {},
@@ -104,10 +108,7 @@ class _ScannerPageState extends State<ScannerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.qr_code,
-              size: 85,
-            ),
+            Icon(Icons.qr_code, size: 85),
           ],
         ),
         onTap: () => _scannerBloc.add(GetProductInfoEvent()),

@@ -12,7 +12,13 @@ class ScannerRepository {
   Future<int> getProductCode() async {
     ScanResult scanResult = await _scannerProvider.scanBarsCode();
     String rawContent = scanResult.rawContent;
-    int productCode = int.parse(rawContent);
+    int productCode;
+    try {
+      productCode = int.parse(rawContent);
+    } catch (e) {
+      return null;
+    }
+
     return productCode;
   }
 

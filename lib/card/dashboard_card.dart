@@ -36,28 +36,29 @@ class _DashboardCardState extends State<DashboardCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: analogThree,
-        elevation: 1.0,
-        margin: EdgeInsets.all(8.0),
-        child: Container(
-          child: InkWell(
-            onTap: () {
-              return _emitLoadPageEvent();
-            },
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                verticalDirection: VerticalDirection.down,
-                children: <Widget>[
-                  _icon(),
-                  SizedBox(height: 20.0),
-                  _dashboardLabel()
-                ],
-              ),
+      color: analogThree,
+      elevation: 1.5,
+      margin: EdgeInsets.all(6.0),
+      child: Container(
+        child: InkWell(
+          onTap: () {
+            return _emitLoadPageEvent();
+          },
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              verticalDirection: VerticalDirection.down,
+              children: <Widget>[
+                _icon(),
+                SizedBox(height: 20.0),
+                _dashboardLabel()
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   void _emitLoadPageEvent() {

@@ -13,8 +13,8 @@ class BasketPage extends StatefulWidget {
 
 class _BasketPageState extends State<BasketPage> {
   HttpService _httpService;
-  List<dynamic> basketProducts;
-  double basketSummary;
+  List<dynamic> _basketProducts;
+  double _basketSummary;
   RouteBloc _routeBloc;
 
   @override
@@ -45,11 +45,11 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget productList() {
-    if (basketProducts == null) {
+    if (_basketProducts == null) {
       return Container();
     }
 
-    if (basketProducts.isEmpty) {
+    if (_basketProducts.isEmpty) {
       return _emptyBasketInfo();
     }
 
@@ -69,7 +69,7 @@ class _BasketPageState extends State<BasketPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Wartość koszyka: ${basketSummary}zł",
+            "Wartość koszyka: ${_basketSummary}zł",
             style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 15,
@@ -117,7 +117,7 @@ class _BasketPageState extends State<BasketPage> {
     return Expanded(
       child: ListView.builder(
         padding: EdgeInsets.only(bottom: 70),
-        itemCount: basketProducts != null ? basketProducts.length : 0,
+        itemCount: _basketProducts != null ? _basketProducts.length : 0,
         itemBuilder: (context, index) {
           return listCard(index);
         },
@@ -126,7 +126,7 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget listCard(int index) {
-    Map<String, dynamic> basketProduct = basketProducts[index];
+    Map<String, dynamic> basketProduct = _basketProducts[index];
     int quantity = basketProduct['quantity'];
     double price = basketProduct['price'];
     String documentUrl =
@@ -172,7 +172,7 @@ class _BasketPageState extends State<BasketPage> {
 
   Future<void> removeObject(int index) async {
     Map<String, dynamic> body = {
-      "productId": basketProducts[index]['productId'],
+      "productId": _basketProducts[index]['productId'],
     };
     String removeUrl = "/baskets_products/remove";
     final response = await _httpService.post(url: removeUrl, postBody: body);
@@ -185,7 +185,7 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget _generateCodeFAB() {
-    if (basketProducts == null || basketProducts.isEmpty) {
+    if (_basketProducts == null || _basketProducts.isEmpty) {
       return Container();
     }
     return FloatingActionButton.extended(
@@ -204,7 +204,7 @@ class _BasketPageState extends State<BasketPage> {
     final response = await _httpService.get(url: basketUrl);
     if (response['success'] == true) {
       setState(() {
-        basketProducts = response['data'];
+        _basketProducts = response['data'];
       });
     }
   }
@@ -214,26 +214,26 @@ class _BasketPageState extends State<BasketPage> {
     final response = await _httpService.get(url: basketUrl);
     if (response['success'] == true) {
       setState(() {
-        basketSummary = response['data']['summary'];
+        _basketSummary = response['data']['summary'];
       });
     }
   }
 
   void _selectedPositionDialog() {
-    if (basketProducts.isNotEmpty) {
+    if (_basketProducts.isNotEmpty) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           // return object of type Dialog
           return AlertDialog(
-            backgroundColor: shadesTwo,
+            backgroundColor: shadesThree,
             title: Text(
               "Zeskanuj kod w kasie samoobsługowej",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
               ),
             ),
-            titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+            titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
             content: Container(
               padding: EdgeInsets.all(5),
               color: Colors.white,
@@ -263,8 +263,7 @@ class _BasketPageState extends State<BasketPage> {
   FlatButton _clearBasketButton(BuildContext context) {
     return FlatButton(
       child: Text("Wyczyść koszyk"),
-      color: Colors.white,
-      textColor: Colors.black,
+      textColor: complementaryThree,
       onPressed: () {
         _removeBasketProducts();
         Navigator.of(context).pop();
@@ -275,8 +274,7 @@ class _BasketPageState extends State<BasketPage> {
   FlatButton _hideBarsCodeButton(BuildContext context) {
     return FlatButton(
       child: Text("Zamknij"),
-      color: Colors.white,
-      textColor: Colors.black,
+      textColor: complementaryThree,
       onPressed: () {
         Navigator.of(context).pop();
       },

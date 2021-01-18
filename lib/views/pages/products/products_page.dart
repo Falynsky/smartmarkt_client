@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
+import 'package:smartmarktclient/views/pages/products/large_image_dialog.dart';
+import 'package:smartmarktclient/views/pages/products/product_info_dialog.dart';
 
 class ProductsPage extends StatefulWidget {
   final Map productType;
@@ -128,6 +130,7 @@ class _ProductsPageState extends State<ProductsPage> {
             horizontal: 15,
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               _imageButton(index),
               SizedBox(width: 10),
@@ -147,7 +150,7 @@ class _ProductsPageState extends State<ProductsPage> {
             ],
           ),
         ),
-        onTap: () => _productInfoDialog(product),
+        onTap: () => ProductInfoDialog().showDialogBox(context, product),
       ),
     );
   }
@@ -164,28 +167,7 @@ class _ProductsPageState extends State<ProductsPage> {
           return Icon(Icons.image_not_supported);
         },
       ),
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                backgroundColor: Color(0xFF222222),
-                content: Row(
-                  children: [
-                    Flexible(
-                      child: Image.network(
-                        documentUrl,
-                        headers: HttpService.headers,
-                        errorBuilder: (_, __, ___) {
-                          return Icon(Icons.image_not_supported, size: 300);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            });
-      },
+      onTap: () => LargeImageDialog().showDialogBox(context, documentUrl),
     );
   }
 
@@ -202,28 +184,6 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  void _productInfoDialog(selectedProduct) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        String dialogTitle = selectedProduct['name'];
-        String productInfo = selectedProduct['productInfo'];
-        return AlertDialog(
-          backgroundColor: Color(0xFF222222),
-          titleTextStyle: TextStyle(color: Colors.amber, fontSize: 20),
-          title: Text(dialogTitle),
-          content: Text(
-            productInfo,
-            style: TextStyle(color: Colors.white70),
-          ),
-          actions: <Widget>[
-            _closeButton(context),
-          ],
-        );
-      },
-    );
-  }
-
   void _selectedPositionDialog(dynamic selectedProduct) {
     _controller.text = "0";
     showDialog(
@@ -231,9 +191,9 @@ class _ProductsPageState extends State<ProductsPage> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          backgroundColor: Color(0xFF222222),
+          backgroundColor: shadesThree,
           title: Text(selectedProduct['name']),
-          titleTextStyle: TextStyle(color: Colors.amber, fontSize: 20),
+          titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -285,7 +245,7 @@ class _ProductsPageState extends State<ProductsPage> {
   FlatButton _closeButton(BuildContext context) {
     return FlatButton(
       child: Text("Zamknij"),
-      textColor: Colors.amber,
+      textColor: complementaryThree,
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -298,7 +258,7 @@ class _ProductsPageState extends State<ProductsPage> {
   ) {
     return FlatButton(
       child: Text("Dodaj do koszyka"),
-      textColor: Colors.amber,
+      textColor: complementaryThree,
       onPressed: () async {
         int selectedValue = int.parse(_controller.text);
 
@@ -333,12 +293,8 @@ class _ProductsPageState extends State<ProductsPage> {
   ) {
     return FlatButton(
       child: Text("Kod kreskowy"),
-      textColor: Colors.amber,
+      textColor: complementaryThree,
       onPressed: () {
-        int currentValue = int.parse(_controller.text);
-        if (currentValue > 0) {
-          print("Return barCode for position");
-        }
         Navigator.of(context).pop();
       },
     );

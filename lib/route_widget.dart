@@ -5,12 +5,10 @@ import 'package:smartmarktclient/views/pages/basket/basket_page.dart';
 import 'package:smartmarktclient/views/pages/login/login_page.dart';
 import 'package:smartmarktclient/views/pages/main_page.dart';
 import 'package:smartmarktclient/views/pages/products/products_panel.dart';
-import 'package:smartmarktclient/views/pages/profile/profile_page.dart';
 import 'package:smartmarktclient/views/pages/register/sign_up_page.dart';
 import 'package:smartmarktclient/views/pages/sales/sales_page.dart';
 import 'package:smartmarktclient/views/pages/scan_shop/configurator_page.dart';
 import 'package:smartmarktclient/views/pages/scanner/scanner_page.dart';
-import 'package:smartmarktclient/views/pages/settings/settings_page.dart';
 
 class RouteWidget extends StatelessWidget {
   @override
@@ -39,10 +37,6 @@ class RouteWidget extends StatelessWidget {
                 return SalesPage();
               } else if (pageIdn == 'basket') {
                 return BasketPage();
-              } else if (pageIdn == 'profile') {
-                return ProfilePage();
-              } else if (pageIdn == 'settings') {
-                return SettingsPage();
               } else {
                 return Container(color: Colors.red);
               }
