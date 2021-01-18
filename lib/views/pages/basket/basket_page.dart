@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
 class BasketPage extends StatefulWidget {
@@ -13,17 +14,17 @@ class BasketPage extends StatefulWidget {
 
 class _BasketPageState extends State<BasketPage> {
   HttpService _httpService;
-  List<dynamic> _basketProducts;
-  double _basketSummary;
   RouteBloc _routeBloc;
+  BasketBloc _basketBloc;
+  bool _isLoaded;
 
   @override
   void initState() {
+    super.initState();
     _httpService = HttpService();
     _routeBloc = BlocProvider.of<RouteBloc>(context);
-    _getBasketProducts();
-    _getBasketSummary();
-    super.initState();
+    _basketBloc = BasketBloc();
+    _isLoaded = false;
   }
 
   @override
@@ -38,55 +39,41 @@ class _BasketPageState extends State<BasketPage> {
           preferredSize: const Size.fromHeight(55),
           child: PagesAppBar(title: "Koszyk"),
         ),
-        body: productList(),
+        body: BlocProvider(
+          create: (_) => _basketBloc..add(LoadingBasketEvent()),
+          child: BlocListener<BasketBloc, BasketState>(
+            listener: (context, state) {
+              if (state is LoadingBasketState) {
+                _isLoaded = false;
+              } else if (state is LoadedBasketState) {
+                _isLoaded = true;
+              }
+              setState(() {});
+            },
+            child: productList(),
+          ),
+        ),
         floatingActionButton: _generateCodeFAB(),
       ),
     );
   }
 
   Widget productList() {
-    if (_basketProducts == null) {
-      return Container();
+    if (!_isLoaded) {
+      return CircularIndicator();
     }
 
-    if (_basketProducts.isEmpty) {
+    List<Map<String, dynamic>> basketProducts = _basketBloc.basketProducts;
+    if (basketProducts == null || basketProducts.isEmpty) {
       return _emptyBasketInfo();
     }
 
     return Column(
       children: [
-        _summary(),
+        _basketSummary(),
         Divider(thickness: 2),
         _basketProductsList(),
       ],
-    );
-  }
-
-  Widget _summary() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15, bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Wartość koszyka: ${_basketSummary}zł",
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 15,
-            ),
-          ),
-          SizedBox(width: 20),
-          InkWell(
-            borderRadius: BorderRadius.circular(25.0),
-            splashFactory: InkRipple.splashFactory,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.remove_shopping_cart_rounded),
-            ),
-            onTap: () => _removeBasketProducts(),
-          )
-        ],
-      ),
     );
   }
 
@@ -113,11 +100,41 @@ class _BasketPageState extends State<BasketPage> {
     );
   }
 
+  Widget _basketSummary() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15, bottom: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Wartość koszyka: ${_basketBloc.basketSummary}zł",
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 15,
+            ),
+          ),
+          SizedBox(width: 20),
+          InkWell(
+            borderRadius: BorderRadius.circular(25.0),
+            splashFactory: InkRipple.splashFactory,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.remove_shopping_cart_rounded),
+            ),
+            onTap: () => _emitRemoveAllBasketProducts(),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget _basketProductsList() {
     return Expanded(
       child: ListView.builder(
         padding: EdgeInsets.only(bottom: 70),
-        itemCount: _basketProducts != null ? _basketProducts.length : 0,
+        itemCount: _basketBloc.basketProducts != null
+            ? _basketBloc.basketProducts.length
+            : 0,
         itemBuilder: (context, index) {
           return listCard(index);
         },
@@ -126,7 +143,7 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget listCard(int index) {
-    Map<String, dynamic> basketProduct = _basketProducts[index];
+    Map<String, dynamic> basketProduct = _basketBloc.basketProducts[index];
     int quantity = basketProduct['quantity'];
     double price = basketProduct['price'];
     String documentUrl =
@@ -170,22 +187,24 @@ class _BasketPageState extends State<BasketPage> {
     );
   }
 
+  //todo: przenieść tę funkcjonalnosć do bloca
   Future<void> removeObject(int index) async {
     Map<String, dynamic> body = {
-      "productId": _basketProducts[index]['productId'],
+      "productId": _basketBloc.basketProducts[index]['productId'],
     };
     String removeUrl = "/baskets_products/remove";
     final response = await _httpService.post(url: removeUrl, postBody: body);
     if (response['success'] == true) {
       setState(() {
-        _getBasketProducts();
-        _getBasketSummary();
+        _basketBloc.add(LoadingBasketEvent());
       });
     }
   }
 
   Widget _generateCodeFAB() {
-    if (_basketProducts == null || _basketProducts.isEmpty) {
+    if (_basketBloc.basketProducts == null ||
+        _basketBloc.basketProducts.isEmpty ||
+        !_isLoaded) {
       return Container();
     }
     return FloatingActionButton.extended(
@@ -199,28 +218,8 @@ class _BasketPageState extends State<BasketPage> {
     );
   }
 
-  void _getBasketProducts() async {
-    String basketUrl = "/baskets_products/getUserProducts";
-    final response = await _httpService.get(url: basketUrl);
-    if (response['success'] == true) {
-      setState(() {
-        _basketProducts = response['data'];
-      });
-    }
-  }
-
-  void _getBasketSummary() async {
-    String basketUrl = "/baskets_products/getSummary";
-    final response = await _httpService.get(url: basketUrl);
-    if (response['success'] == true) {
-      setState(() {
-        _basketSummary = response['data']['summary'];
-      });
-    }
-  }
-
   void _selectedPositionDialog() {
-    if (_basketProducts.isNotEmpty) {
+    if (_basketBloc.basketProducts.isNotEmpty) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -265,7 +264,7 @@ class _BasketPageState extends State<BasketPage> {
       child: Text("Wyczyść koszyk"),
       textColor: complementaryThree,
       onPressed: () {
-        _removeBasketProducts();
+        _emitRemoveAllBasketProducts();
         Navigator.of(context).pop();
       },
     );
@@ -281,14 +280,13 @@ class _BasketPageState extends State<BasketPage> {
     );
   }
 
-  void _removeBasketProducts() async {
-    String basketUrl = "/baskets_products/removeAll";
-    final response = await _httpService.post(url: basketUrl);
-    if (response['success'] == true) {
-      setState(() {
-        _getBasketProducts();
-        _getBasketSummary();
-      });
-    }
+  void _emitRemoveAllBasketProducts() async {
+    _basketBloc.add(RemoveBasketProductsEvent());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _basketBloc.close();
   }
 }
