@@ -31,3 +31,8 @@ class RemoveBasketProductsEvent extends BasketEvent {
   @override
   List<Object> get props => [];
 }
+
+class PurchaseBasketProductsEvent extends BasketEvent {
+  @override
+  List<Object> get props => [];
+}

@@ -11,11 +11,19 @@ class BasketRepository {
     return await _basketProvider.loadBasketProducts();
   }
 
+  Future<Map<String, dynamic>> getBasketId() async {
+    return await _basketProvider.getBasketId();
+  }
+
   Future<Map<String, dynamic>> loadBasketSummary() async {
     return await _basketProvider.loadBasketSummary();
   }
 
   Future<Map<String, dynamic>> removeAllBasketProducts() async {
     return await _basketProvider.removeAllBasketProducts();
+  }
+
+  Future<Map<String, dynamic>> purchaseAllBasketProducts() async {
+    return await _basketProvider.purchaseAllBasketProducts();
   }
 }

@@ -240,8 +240,8 @@ class _BasketPageState extends State<BasketPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   BarcodeWidget(
-                    barcode: Barcode.upcA(),
-                    data: "21234561189",
+                    barcode: Barcode.code128(),
+                    data: _basketBloc.currentUserBasketId,
                     width: 300,
                     height: 200,
                   ),
@@ -249,8 +249,13 @@ class _BasketPageState extends State<BasketPage> {
               ),
             ),
             actions: <Widget>[
-              _clearBasketButton(context),
-              _hideBarsCodeButton(context)
+              Row(
+                children: [
+                  _purchasedBasketButton(context),
+                  _clearBasketButton(context),
+                  _hideBarsCodeButton(context),
+                ],
+              )
               // usually buttons at the bottom of the dialog
             ],
           );
@@ -259,15 +264,34 @@ class _BasketPageState extends State<BasketPage> {
     }
   }
 
+  FlatButton _purchasedBasketButton(BuildContext context) {
+    return FlatButton(
+      child: Text("Zakupiono \nprodukty", textAlign: TextAlign.center),
+      textColor: complementaryThree,
+      onPressed: () {
+        _emitPurchaseAllBasketProducts();
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  void _emitPurchaseAllBasketProducts() async {
+    _basketBloc.add(PurchaseBasketProductsEvent());
+  }
+
   FlatButton _clearBasketButton(BuildContext context) {
     return FlatButton(
-      child: Text("Wyczyść koszyk"),
+      child: Text("Wyczyść \nkoszyk", textAlign: TextAlign.center),
       textColor: complementaryThree,
       onPressed: () {
         _emitRemoveAllBasketProducts();
         Navigator.of(context).pop();
       },
     );
+  }
+
+  void _emitRemoveAllBasketProducts() async {
+    _basketBloc.add(RemoveBasketProductsEvent());
   }
 
   FlatButton _hideBarsCodeButton(BuildContext context) {
@@ -278,10 +302,6 @@ class _BasketPageState extends State<BasketPage> {
         Navigator.of(context).pop();
       },
     );
-  }
-
-  void _emitRemoveAllBasketProducts() async {
-    _basketBloc.add(RemoveBasketProductsEvent());
   }
 
   @override
