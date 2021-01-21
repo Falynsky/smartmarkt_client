@@ -101,29 +101,79 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget _basketSummary() {
+    final summaryAfterDiscount = _basketBloc.summaryAfterDiscount;
     return Padding(
-      padding: const EdgeInsets.only(top: 15, bottom: 8),
+      padding: const EdgeInsets.only(top: 15, bottom: 8, left: 20, right: 20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "Wartość koszyka: ${_basketBloc.basketSummary}zł",
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 15,
-            ),
+          Row(
+            children: [
+              _summaryTitle(),
+              summaryAfterDiscount != null
+                  ? _regularSummaryCrossed()
+                  : _regularSummary(),
+              SizedBox(width: 10),
+              if (summaryAfterDiscount != null) _discountSummary(),
+            ],
           ),
-          SizedBox(width: 20),
-          InkWell(
-            borderRadius: BorderRadius.circular(25.0),
-            splashFactory: InkRipple.splashFactory,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.remove_shopping_cart_rounded),
-            ),
-            onTap: () => _emitRemoveAllBasketProducts(),
-          )
+          _clearBasketTopButton()
         ],
+      ),
+    );
+  }
+
+  Widget _regularSummary() {
+    return Text(
+      "${_basketBloc.basketSummary}zł ",
+      style: TextStyle(
+        fontWeight: FontWeight.w800,
+        fontSize: 15,
+      ),
+    );
+  }
+
+  Widget _regularSummaryCrossed() {
+    return Text(
+      "${_basketBloc.basketSummary}zł ",
+      style: TextStyle(
+        decoration: TextDecoration.lineThrough,
+        decorationColor: Colors.red,
+        decorationThickness: 2,
+        fontWeight: FontWeight.w800,
+        fontSize: 15,
+      ),
+    );
+  }
+
+  Widget _discountSummary() {
+    return Text(
+      "${_basketBloc.summaryAfterDiscount}zł",
+      style: TextStyle(
+        fontWeight: FontWeight.w800,
+        fontSize: 15,
+      ),
+    );
+  }
+
+  Widget _clearBasketTopButton() {
+    return InkWell(
+      borderRadius: BorderRadius.circular(25.0),
+      splashFactory: InkRipple.splashFactory,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(Icons.remove_shopping_cart_rounded),
+      ),
+      onTap: () => _emitRemoveAllBasketProducts(),
+    );
+  }
+
+  Text _summaryTitle() {
+    return Text(
+      "Wartość koszyka: ",
+      style: TextStyle(
+        fontWeight: FontWeight.w800,
+        fontSize: 15,
       ),
     );
   }
@@ -146,6 +196,8 @@ class _BasketPageState extends State<BasketPage> {
     Map<String, dynamic> basketProduct = _basketBloc.basketProducts[index];
     int quantity = basketProduct['quantity'];
     double price = basketProduct['price'];
+    double discountPrice = basketProduct['discountPrice'];
+    double summary = basketProduct['summary'];
     String documentUrl =
         '${HttpService.hostUrl}/files/download/${basketProduct['documentName']}.${basketProduct['documentType']}/db';
     return Card(
@@ -170,8 +222,25 @@ class _BasketPageState extends State<BasketPage> {
                   basketProduct['name'],
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                 ),
-                Text('$quantity x ${price}zł'),
-                Text('${quantity * price}zł'),
+                discountPrice == null
+                    ? Text('$quantity x ${price}zł')
+                    : Text('$quantity x ${discountPrice}zł'),
+                discountPrice == null
+                    ? Text('${summary}zł')
+                    : Row(
+                        children: [
+                          Text(
+                            '${summary}zł',
+                            style: TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: Colors.red,
+                              decorationThickness: 2,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text('${discountPrice}zł'),
+                        ],
+                      ),
               ],
             ),
             Spacer(),

@@ -120,7 +120,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   Widget listCard(int index, BuildContext context) {
     Map<String, dynamic> product = _newProducts[index];
-    String price = product['price'].toString() + " " + product['currency'];
+    String price = product['price'].toString() + " zł";
     return Card(
       color: Colors.white,
       child: InkWell(

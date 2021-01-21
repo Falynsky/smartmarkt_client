@@ -28,9 +28,18 @@ class _MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("SmartMarkt"),
-            InkWell(
-              child: Icon(Icons.logout),
-              onTap: () => _showLogoutDialog(),
+            Row(
+              children: [
+                InkWell(
+                  child: Icon(Icons.person),
+                  onTap: () => _emitProfileScreen(),
+                ),
+                SizedBox(width: 15),
+                InkWell(
+                  child: Icon(Icons.logout),
+                  onTap: () => _showLogoutDialog(),
+                ),
+              ],
             )
           ],
         ),
@@ -72,8 +81,8 @@ class _MainPageState extends State<MainPage> {
             style: TextStyle(color: Colors.white70),
           ),
           actions: <Widget>[
-            _yesButton(context),
             _noButton(context),
+            _yesButton(context),
           ],
         );
       },
@@ -108,4 +117,8 @@ class _MainPageState extends State<MainPage> {
     {'label': 'Promocje', 'iconData': Icons.alarm, 'pageIdn': 'sales'},
     {'label': 'Koszyk', 'iconData': Icons.shopping_basket, 'pageIdn': 'basket'},
   ];
+
+  void _emitProfileScreen() {
+    //todo: dodać ekran profilowy z podglądem historii zakupów
+  }
 }

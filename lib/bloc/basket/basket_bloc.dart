@@ -6,12 +6,15 @@ import '../bloc.dart';
 class BasketBloc extends Bloc<BasketEvent, BasketState> {
   BasketRepository _basketRepository;
   double _basketSummary;
+  double _summaryAfterDiscount;
   String _currentUserBasketId;
   List<Map<String, dynamic>> _basketProducts;
 
   List<Map<String, dynamic>> get basketProducts => _basketProducts;
 
   double get basketSummary => _basketSummary;
+
+  double get summaryAfterDiscount => _summaryAfterDiscount;
 
   String get currentUserBasketId => _currentUserBasketId;
 
@@ -70,6 +73,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
         if (response['success'])
           {
             _basketSummary = response['data']['summary'],
+            _summaryAfterDiscount = response['data']['summaryAfterDiscount'],
             add(LoadedBasketEvent())
           }
       },
