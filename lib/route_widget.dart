@@ -5,6 +5,7 @@ import 'package:smartmarktclient/views/pages/basket/basket_page.dart';
 import 'package:smartmarktclient/views/pages/login/login_page.dart';
 import 'package:smartmarktclient/views/pages/main_page.dart';
 import 'package:smartmarktclient/views/pages/products/products_panel.dart';
+import 'package:smartmarktclient/views/pages/profile/profile_page.dart';
 import 'package:smartmarktclient/views/pages/register/sign_up_page.dart';
 import 'package:smartmarktclient/views/pages/sales/sales_page.dart';
 import 'package:smartmarktclient/views/pages/scan_shop/configurator_page.dart';
@@ -25,6 +26,8 @@ class RouteWidget extends StatelessWidget {
               return LoginPage();
             } else if (state is SignUpPageState) {
               return SignUpPage();
+            } else if (state is LoadProfilePageState) {
+              return ProfilePage();
             } else if (state is LoadMainMenuState) {
               return MainPage();
             } else if (state is LoadDashboardPageState) {

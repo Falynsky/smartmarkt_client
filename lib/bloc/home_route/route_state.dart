@@ -10,6 +10,11 @@ class InitialRouteState extends RouteState {
   List<Object> get props => [];
 }
 
+class LoadProfilePageState extends RouteState {
+  @override
+  List<Object> get props => [];
+}
+
 class LoadMainMenuState extends RouteState {
   @override
   List<Object> get props => [];

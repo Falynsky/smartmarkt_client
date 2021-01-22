@@ -12,6 +12,11 @@ class ConfigurePageEvent extends RouteEvent {
   List<Object> get props => [];
 }
 
+class LoadProfilePageEvent extends RouteEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class LoadLoginPageEvent extends RouteEvent {
   @override
   List<Object> get props => [];

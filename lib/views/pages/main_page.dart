@@ -119,6 +119,6 @@ class _MainPageState extends State<MainPage> {
   ];
 
   void _emitProfileScreen() {
-    //todo: dodać ekran profilowy z podglądem historii zakupów
+    _routeBloc.add(LoadProfilePageEvent());
   }
 }

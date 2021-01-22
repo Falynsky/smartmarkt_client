@@ -17,6 +17,8 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
       yield ConfigurePageState(key: key);
     } else if (event is LoadMainMenuEvent) {
       yield LoadMainMenuState();
+    } else if (event is LoadProfilePageEvent) {
+      yield LoadProfilePageState();
     } else if (event is LoadLoginPageEvent) {
       yield LoginPageState();
     } else if (event is SignUpPageEvent) {
