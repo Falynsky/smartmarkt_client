@@ -40,8 +40,23 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         yield LoadProfileScreenState();
       } else {}
     } else if (event is ShowBasketHistoryDialogEvent) {
-      Key key = UniqueKey();
-      yield ShowBasketHistoryDialogState(key: key);
+      int basketHistoryId = event.basketHistoryId;
+      Map<String, dynamic> response =
+          await _profileRepository.loadSelectedBasketHistoryInfo(
+        userId: userId,
+        basketHistoryId: basketHistoryId,
+      );
+      if (response['success']) {
+        final productsList =
+            List<Map<String, dynamic>>.from(response['data']['productsList']);
+        Key key = UniqueKey();
+        yield ShowBasketHistoryDialogState(
+          key: key,
+          productsList: productsList,
+          purchasedDate: event.purchasedDate,
+          productSummary: event.productSummary,
+        );
+      } else {}
     }
   }
 }

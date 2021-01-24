@@ -22,6 +22,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       yield LoadedSignUpState();
     } else if (event is RegisterAccountEvent) {
       Map<String, dynamic> response = await _signUpRepository.register(
+        mail: event.mail,
         login: event.login,
         password: event.password,
         firstName: event.firstName,

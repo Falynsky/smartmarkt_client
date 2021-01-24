@@ -9,12 +9,14 @@ class SignUpRepository {
   }
 
   Future<Map<String, dynamic>> register({
+    @required String mail,
     @required String login,
     @required String password,
     @required String firstName,
     @required String lastName,
   }) async {
     return await _signUpProvider.register(
+      mail: mail,
       login: login,
       password: password,
       firstName: firstName,

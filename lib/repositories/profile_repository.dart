@@ -16,4 +16,12 @@ class ProfileRepository {
       {@required String userId}) async {
     return await _profileProvider.loadBasketHistoryInfo(userId: userId);
   }
+
+  Future<Map<String, dynamic>> loadSelectedBasketHistoryInfo({
+    @required String userId,
+    @required int basketHistoryId,
+  }) async {
+    return await _profileProvider.loadSelectedBasketHistoryInfo(
+        userId: userId, basketHistoryId: basketHistoryId);
+  }
 }

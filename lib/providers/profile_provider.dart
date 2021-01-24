@@ -22,4 +22,13 @@ class ProfileProvider {
     Map<String, dynamic> response = await _httpService.get(url: url);
     return response;
   }
+
+  Future<Map<String, dynamic>> loadSelectedBasketHistoryInfo({
+    @required String userId,
+    @required int basketHistoryId,
+  }) async {
+    String url = "$_historyEndPoint/$userId/$basketHistoryId";
+    Map<String, dynamic> response = await _httpService.get(url: url);
+    return response;
+  }
 }

@@ -20,6 +20,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final password = TextEditingController();
   final firstName = TextEditingController();
   final lastName = TextEditingController();
+  final mail = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -83,6 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     _signUpTitle(),
+                    _mailField(),
                     _loginField(),
                     _passwordField(),
                     _firstNameField(),
@@ -117,6 +119,16 @@ class _SignUpPageState extends State<SignUpPage> {
           fontWeight: FontWeight.bold,
         ),
       ),
+    );
+  }
+
+  Widget _mailField() {
+    return TextFieldComponent(
+      controller: mail,
+      label: 'E-mail',
+      placeHolder: 'E-mail',
+      icon: Icons.local_post_office_rounded,
+      isRequired: true,
     );
   }
 
@@ -198,12 +210,14 @@ class _SignUpPageState extends State<SignUpPage> {
   void _signUpButton() async {
     bool validate = _formKey.currentState.validate();
     if (validate) {
+      String _mail = mail.text.toString();
       String _login = login.text.toString();
       String _password = password.text.toString();
       String _firstName = firstName.text.toString();
       String _lastName = lastName.text.toString();
 
       final registerAccountEvent = RegisterAccountEvent(
+        mail: _mail,
         login: _login,
         password: _password,
         firstName: _firstName,

@@ -16,12 +16,14 @@ class LoadedSignUpEvent extends SignUpEvent {
 }
 
 class RegisterAccountEvent extends SignUpEvent {
+  final String mail;
   final String login;
   final String password;
   final String firstName;
   final String lastName;
 
   RegisterAccountEvent({
+    @required this.mail,
     @required this.login,
     @required this.password,
     @required this.firstName,
@@ -30,6 +32,7 @@ class RegisterAccountEvent extends SignUpEvent {
 
   @override
   List<Object> get props => [
+        mail,
         login,
         password,
         firstName,

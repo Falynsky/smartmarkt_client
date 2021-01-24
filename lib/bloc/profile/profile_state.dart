@@ -17,11 +17,22 @@ class LoadProfileScreenState extends ProfileState {
 
 class ShowBasketHistoryDialogState extends ProfileState {
   final Key key;
+  final List<Map<String, dynamic>> productsList;
+  final String purchasedDate;
+  final String productSummary;
 
-  ShowBasketHistoryDialogState({@required this.key});
+  ShowBasketHistoryDialogState({
+    @required this.key,
+    @required this.productsList,
+    @required this.purchasedDate,
+    @required this.productSummary,
+  });
 
   @override
   List<Object> get props => [
         key,
+        productsList,
+        purchasedDate,
+        productSummary,
       ];
 }

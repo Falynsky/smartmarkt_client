@@ -41,7 +41,12 @@ class _ProfilePageState extends State<ProfilePage> {
             listener: (context, state) {
               if (state is LoadProfileScreenState) {
               } else if (state is ShowBasketHistoryDialogState) {
-                _showOverlay(context);
+                _showOverlay(
+                  context,
+                  state.productsList,
+                  state.purchasedDate,
+                  state.productSummary,
+                );
               }
               setState(() {});
             },
@@ -71,16 +76,17 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: [
           CircleAvatar(
+            backgroundColor: complementaryThree,
             radius: 65,
             child: Text(
               _profileBloc.initials ?? '',
-              style: TextStyle(fontSize: 45, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 55),
             ),
           ),
           SizedBox(height: 10),
           Text(
             _profileBloc.name ?? '',
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
           )
         ],
       ),
@@ -123,6 +129,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget listCard(BuildContext context, int index) {
     Map<String, dynamic> basketHistory = _profileBloc.basketHistory[index];
+    String _purchasedDate = basketHistory["purchasedDateTime"];
+    String _productSummary = basketHistory["purchasedPriceSummary"].toString();
     return Card(
       child: InkWell(
         child: Container(
@@ -132,23 +140,40 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(basketHistory["purchasedDateTime"]),
-              Text("${basketHistory["purchasedPriceSummary"]} zł"),
+              Text(_purchasedDate),
+              Text("$_productSummary zł"),
             ],
           ),
         ),
-        onTap: () => {_profileBloc.add(ShowBasketHistoryDialogEvent())},
+        onTap: () => {
+          _profileBloc.add(
+            ShowBasketHistoryDialogEvent(
+              basketHistoryId: basketHistory["basketHistoryId"],
+              purchasedDate: _purchasedDate,
+              productSummary: _productSummary,
+            ),
+          )
+        },
         splashFactory: InkSplash.splashFactory,
         splashColor: secondaryColor,
       ),
     );
   }
 
-  void _showOverlay(BuildContext context) {
+  void _showOverlay(
+    BuildContext context,
+    List<Map<String, dynamic>> productsList,
+    String purchasedDate,
+    String productSummary,
+  ) {
     Navigator.of(context).push(
       new MaterialPageRoute<Null>(
         builder: (BuildContext context) {
-          return HistoryDetailsPage();
+          return HistoryDetailsPage(
+            purchasedDate: purchasedDate,
+            productsList: productsList,
+            productSummary: productSummary,
+          );
         },
         fullscreenDialog: true,
       ),
