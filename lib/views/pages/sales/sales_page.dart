@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
+import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
+import 'package:smartmarktclient/views/pages/products/large_image_dialog.dart';
 
 class SalesPage extends StatefulWidget {
   @override
@@ -79,23 +81,32 @@ class _SalesPageState extends State<SalesPage> {
         child: Card(
           color: Colors.white,
           child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  "${_sale['title']}",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                _imageButton(index),
+                SizedBox(width: 10),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${_sale['title']}",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text("${_sale['description']}",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          )),
+                      SizedBox(height: 10),
+                      if (_sale['discount'] != null)
+                        _salePricesRow(_sale, index),
+                    ],
                   ),
                 ),
-                Text("${_sale['description']}",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                    )),
-                SizedBox(height: 10),
-                if (_sale['discount'] != null) _salePricesRow(_sale, index),
               ],
             ),
             padding: EdgeInsets.all(20),
@@ -129,8 +140,58 @@ class _SalesPageState extends State<SalesPage> {
     );
   }
 
+  InkWell _imageButton(int index) {
+    Map<String, dynamic> selectedProduct = _sales[index];
+    String documentUrl =
+        '${HttpService.hostUrl}/files/download/${selectedProduct['docName']}.${selectedProduct['docType']}/db';
+    return InkWell(
+      child: Image.network(
+        '$documentUrl/70/70',
+        headers: HttpService.headers,
+        errorBuilder: (_, __, ___) {
+          return Icon(Icons.image_not_supported);
+        },
+      ),
+      onTap: () => LargeImageDialog().showDialogBox(context, documentUrl),
+    );
+  }
+
   String _afterDiscountRounded(Map<String, dynamic> sale, int index) {
     return (sale['originalPrice'] * (1 - sale['discount'])).toStringAsFixed(2);
+  }
+
+  Widget _searchBar() {
+    TextEditingController _textEditingController;
+    return Container(
+      color: primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: TextField(
+          controller: _textEditingController,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.search_rounded),
+            border: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(5.0),
+              ),
+            ),
+            hintText: 'Wyszukaj...',
+            filled: true,
+            fillColor: Colors.white,
+          ),
+          onChanged: onItemChanged,
+        ),
+      ),
+    );
+  }
+
+  onItemChanged(String value) {
+    // setState(() {
+    //   _newProducts = _products
+    //       .where((productType) =>
+    //       productType['name'].toLowerCase().contains(value.toLowerCase()))
+    //       .toList();
+    // });
   }
 
   @override
