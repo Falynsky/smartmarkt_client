@@ -20,7 +20,12 @@ class BasketProvider {
     return await _httpService.get(url: _endPoint + '/getSummary');
   }
 
-  Future<Map<String, dynamic>> removeAllBasketProducts() async {
+  Future<Map<String, dynamic>> removeBasketProduct(int productId) async {
+    Map<String, dynamic> body = {"productId": productId};
+    return await _httpService.post(url: _endPoint + '/remove', postBody: body);
+  }
+
+  Future<Map<String, dynamic>> clearBasket() async {
     return await _httpService.post(url: _endPoint + '/removeAll');
   }
 

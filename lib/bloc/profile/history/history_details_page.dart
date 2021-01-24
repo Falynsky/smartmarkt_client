@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:smartmarktclient/models/product_history.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
 class HistoryDetailsPage extends StatelessWidget {
-  final List<Map<String, dynamic>> productsList;
+  final List<ProductHistory> productsList;
   final String purchasedDate;
   final String productSummary;
 
@@ -23,26 +24,30 @@ class HistoryDetailsPage extends StatelessWidget {
       body: Container(
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              color: Colors.white70,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  flexibleText("Data zakupu:"),
-                  SizedBox(width: 5),
-                  Text(purchasedDate),
-                  SizedBox(width: 10),
-                  flexibleText("Podsumowanie:"),
-                  SizedBox(width: 5),
-                  Text("$productSummary zł"),
-                ],
-              ),
-            ),
-            Divider(height: 0, thickness: 2),
-            buildDetailsPage(),
+            _historyDetailsHeader(),
+            Divider(height: 0, thickness: 3, color: Colors.black45),
+            _buildDetailsPage(),
           ],
         ),
+      ),
+    );
+  }
+
+  Container _historyDetailsHeader() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20),
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          flexibleText("Data zakupu:"),
+          SizedBox(width: 5),
+          Text(purchasedDate),
+          SizedBox(width: 10),
+          flexibleText("Podsumowanie:"),
+          SizedBox(width: 5),
+          Text("$productSummary zł"),
+        ],
       ),
     );
   }
@@ -57,20 +62,24 @@ class HistoryDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget buildDetailsPage() {
+  Widget _buildDetailsPage() {
     return Expanded(
-      child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 70),
-        itemCount: productsList != null ? productsList.length : 0,
-        itemBuilder: (context, index) {
-          return listCard(context, index);
-        },
+      child: Container(
+        padding: EdgeInsets.only(top: 2),
+        color: complementaryThree.withOpacity(0.7),
+        child: ListView.builder(
+          padding: EdgeInsets.only(bottom: 70),
+          itemCount: productsList != null ? productsList.length : 0,
+          itemBuilder: (context, index) {
+            return listCard(context, index);
+          },
+        ),
       ),
     );
   }
 
   Widget listCard(BuildContext context, int index) {
-    Map<String, dynamic> product = productsList[index];
+    ProductHistory product = productsList[index];
     return Card(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -80,14 +89,14 @@ class HistoryDetailsPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              product["productName"],
+              product.productName,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
             Row(
               children: [
-                Text("${product["quantity"]} szt."),
+                Text("${product.quantity} szt."),
                 SizedBox(width: 10),
-                Text("${product["purchasedPrice"]} zł"),
+                Text("${product.purchasedPrice} zł"),
               ],
             ),
           ],

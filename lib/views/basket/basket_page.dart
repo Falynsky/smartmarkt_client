@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/models/basket_product.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
@@ -13,7 +14,6 @@ class BasketPage extends StatefulWidget {
 }
 
 class _BasketPageState extends State<BasketPage> {
-  HttpService _httpService;
   RouteBloc _routeBloc;
   BasketBloc _basketBloc;
   bool _isLoaded;
@@ -21,7 +21,6 @@ class _BasketPageState extends State<BasketPage> {
   @override
   void initState() {
     super.initState();
-    _httpService = HttpService();
     _routeBloc = BlocProvider.of<RouteBloc>(context);
     _basketBloc = BasketBloc();
     _isLoaded = false;
@@ -63,8 +62,8 @@ class _BasketPageState extends State<BasketPage> {
       return CircularIndicator();
     }
 
-    List<Map<String, dynamic>> basketProducts = _basketBloc.basketProducts;
-    if (basketProducts == null || basketProducts.isEmpty) {
+    if (_basketBloc.basketProducts == null ||
+        _basketBloc.basketProducts.isEmpty) {
       return _emptyBasketInfo();
     }
 
@@ -193,13 +192,13 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget listCard(int index) {
-    Map<String, dynamic> basketProduct = _basketBloc.basketProducts[index];
-    int quantity = basketProduct['quantity'];
-    double price = basketProduct['price'];
-    double discountPrice = basketProduct['discountPrice'];
-    double summary = basketProduct['summary'];
+    BasketProduct basketProduct = _basketBloc.basketProducts[index];
+    int quantity = basketProduct.quantity;
+    double price = basketProduct.price;
+    double discountPrice = basketProduct.discountPrice;
+    double summary = basketProduct.summary;
     String documentUrl =
-        '${HttpService.hostUrl}/files/download/${basketProduct['documentName']}.${basketProduct['documentType']}/db';
+        '${HttpService.hostUrl}/files/download/${basketProduct.documentName}.${basketProduct.documentType}/db';
     return Card(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -219,7 +218,7 @@ class _BasketPageState extends State<BasketPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  basketProduct['name'],
+                  basketProduct.name,
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                 ),
                 discountPrice == null
@@ -246,28 +245,13 @@ class _BasketPageState extends State<BasketPage> {
             Spacer(),
             InkWell(
               child: Icon(Icons.close),
-              onTap: () {
-                removeObject(index);
-              },
+              onTap: () =>
+                  _basketBloc.add(RemoveBasketProductEvent(index: index)),
             )
           ],
         ),
       ),
     );
-  }
-
-  //todo: przenieść tę funkcjonalnosć do bloca
-  Future<void> removeObject(int index) async {
-    Map<String, dynamic> body = {
-      "productId": _basketBloc.basketProducts[index]['productId'],
-    };
-    String removeUrl = "/baskets_products/remove";
-    final response = await _httpService.post(url: removeUrl, postBody: body);
-    if (response['success'] == true) {
-      setState(() {
-        _basketBloc.add(LoadingBasketEvent());
-      });
-    }
   }
 
   Widget _generateCodeFAB() {
@@ -360,7 +344,7 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   void _emitRemoveAllBasketProducts() async {
-    _basketBloc.add(RemoveBasketProductsEvent());
+    _basketBloc.add(ClearBasketEvent());
   }
 
   FlatButton _hideBarsCodeButton(BuildContext context) {

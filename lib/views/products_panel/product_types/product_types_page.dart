@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
-import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/models/product_type.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
 class ProductTypesPage extends StatefulWidget {
@@ -11,28 +11,15 @@ class ProductTypesPage extends StatefulWidget {
 }
 
 class _ProductTypesPageState extends State<ProductTypesPage> {
-  List<dynamic> productTypes;
-  List<dynamic> newProductTypes;
-  ProductsBloc _productsBloc;
-
-  HttpService _httpService;
-  final String url = "/productType/all";
-  List data;
+  ProductsPanelBloc _productsPanelBloc;
+  ProductTypesBloc _productTypesBloc;
+  List<ProductType> newProductTypes;
 
   @override
   void initState() {
     super.initState();
-    _productsBloc = BlocProvider.of<ProductsBloc>(context);
-    _httpService = HttpService();
-    _getProductTypes();
-  }
-
-  void _getProductTypes() async {
-    final response = await _httpService.get(url: url);
-    setState(() {
-      productTypes = response['data'];
-      newProductTypes = productTypes;
-    });
+    _productsPanelBloc = BlocProvider.of<ProductsPanelBloc>(context);
+    _productTypesBloc = ProductTypesBloc();
   }
 
   @override
@@ -42,34 +29,26 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
         preferredSize: const Size.fromHeight(55),
         child: PagesAppBar(title: "Kategorie"),
       ),
-      body: productList(),
+      body: BlocProvider(
+        create: (_) => _productTypesBloc..add(InitialProductTypesEvent()),
+        child: BlocListener<ProductTypesBloc, ProductTypesState>(
+          listener: (context, state) {
+            if (state is LoadedProductTypesState) {
+              newProductTypes = _productTypesBloc.productTypes;
+            }
+            setState(() {});
+          },
+          child: productList(),
+        ),
+      ),
     );
-  }
-
-  onItemChanged(String value) {
-    setState(() {
-      newProductTypes = productTypes
-          .where((productType) =>
-              productType['name'].toLowerCase().contains(value.toLowerCase()))
-          .toList();
-    });
   }
 
   Widget productList() {
     return Column(
       children: [
         _searchBar(),
-        Expanded(
-          child: Container(
-            color: primaryColor,
-            child: ListView.builder(
-              itemCount: newProductTypes != null ? newProductTypes.length : 0,
-              itemBuilder: (context, index) {
-                return _productTypeCard(index);
-              },
-            ),
-          ),
-        ),
+        _productTypesList(),
       ],
     );
   }
@@ -99,6 +78,29 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
     );
   }
 
+  onItemChanged(String value) {
+    setState(() {
+      newProductTypes = _productTypesBloc.productTypes
+          .where((productType) =>
+              productType.name.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+  }
+
+  Widget _productTypesList() {
+    return Expanded(
+      child: Container(
+        color: primaryColor,
+        child: ListView.builder(
+          itemCount: newProductTypes != null ? newProductTypes.length : 0,
+          itemBuilder: (context, index) {
+            return _productTypeCard(index);
+          },
+        ),
+      ),
+    );
+  }
+
   Widget _productTypeCard(int index) {
     return Container(
       child: InkWell(
@@ -106,7 +108,7 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
           color: Colors.white,
           child: Container(
             child: Text(
-              newProductTypes[index]['name'],
+              newProductTypes[index].name,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
@@ -124,9 +126,9 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
   }
 
   void _goToProductsList(int index) {
-    Map<String, dynamic> productType = newProductTypes[index];
+    ProductType productType = newProductTypes[index];
     final emitSelectedTypeProductsEvent =
         SelectedTypeProductsEvent(productType: productType);
-    _productsBloc.add(emitSelectedTypeProductsEvent);
+    _productsPanelBloc.add(emitSelectedTypeProductsEvent);
   }
 }

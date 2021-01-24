@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
-import 'package:smartmarktclient/views/pages/basket/basket_page.dart';
-import 'package:smartmarktclient/views/pages/login/login_page.dart';
-import 'package:smartmarktclient/views/pages/main_page.dart';
-import 'package:smartmarktclient/views/pages/products/products_panel.dart';
-import 'package:smartmarktclient/views/pages/profile/profile_page.dart';
-import 'package:smartmarktclient/views/pages/register/sign_up_page.dart';
-import 'package:smartmarktclient/views/pages/sales/sales_page.dart';
-import 'package:smartmarktclient/views/pages/scan_shop/configurator_page.dart';
-import 'package:smartmarktclient/views/pages/scanner/scanner_page.dart';
+import 'package:smartmarktclient/views/basket/basket_page.dart';
+import 'package:smartmarktclient/views/configurator/configurator_page.dart';
+import 'package:smartmarktclient/views/login/login_page.dart';
+import 'package:smartmarktclient/views/main_page.dart';
+import 'package:smartmarktclient/views/products_panel/products_panel.dart';
+import 'package:smartmarktclient/views/profile/profile_page.dart';
+import 'package:smartmarktclient/views/register/sign_up_page.dart';
+import 'package:smartmarktclient/views/sales/sales_page.dart';
+import 'package:smartmarktclient/views/scanner/scanner_page.dart';
 
 class RouteWidget extends StatelessWidget {
   @override

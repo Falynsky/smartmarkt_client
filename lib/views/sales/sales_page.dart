@@ -4,9 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/models/sale.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
-import 'package:smartmarktclient/views/pages/products/large_image_dialog.dart';
+import 'package:smartmarktclient/views/products_panel/products/large_image_dialog.dart';
 
 class SalesPage extends StatefulWidget {
   @override
@@ -17,8 +18,7 @@ class _SalesPageState extends State<SalesPage> {
   RouteBloc _routeBloc;
   SalesBloc _salesBloc;
   bool _isLoaded;
-  List<Map<String, dynamic>> _sales;
-  List<Map<String, dynamic>> _newSales;
+  List<Sale> _newSales;
 
   @override
   void initState() {
@@ -48,7 +48,6 @@ class _SalesPageState extends State<SalesPage> {
                 _isLoaded = false;
               } else if (state is LoadedSalesState) {
                 _isLoaded = true;
-                _sales = state.sales;
                 _newSales = state.sales;
               }
               setState(() {});
@@ -83,7 +82,7 @@ class _SalesPageState extends State<SalesPage> {
   }
 
   Widget _salesTypeCard(int index) {
-    Map<String, dynamic> _sale = _newSales[index];
+    Sale _sale = _newSales[index];
     return Container(
       child: InkWell(
         onTap: () {},
@@ -99,20 +98,19 @@ class _SalesPageState extends State<SalesPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${_sale['title']}",
+                        "${_sale.title}",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Text("${_sale['description']}",
+                      Text("${_sale.description}",
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,
                           )),
                       SizedBox(height: 10),
-                      if (_sale['discount'] != null)
-                        _salePricesRow(_sale, index),
+                      if (_sale.discount != null) _salePricesRow(_sale, index),
                     ],
                   ),
                 ),
@@ -125,16 +123,16 @@ class _SalesPageState extends State<SalesPage> {
     );
   }
 
-  Widget _salePricesRow(Map<String, dynamic> _sale, int index) {
+  Widget _salePricesRow(Sale _sale, int index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Rabat: ${_sale['discount'] * 100}%"),
+        Text("Rabat: ${_sale.discount * 100}%"),
         Row(
           children: <Widget>[
             Text("Cena: "),
             Text(
-              "${_sale['originalPrice']} zł",
+              "${_sale.originalPrice} zł",
               style: TextStyle(
                 decoration: TextDecoration.lineThrough,
                 decorationColor: Colors.red,
@@ -150,9 +148,9 @@ class _SalesPageState extends State<SalesPage> {
   }
 
   InkWell _imageButton(int index) {
-    Map<String, dynamic> selectedProduct = _newSales[index];
+    Sale sale = _newSales[index];
     String documentUrl =
-        '${HttpService.hostUrl}/files/download/${selectedProduct['docName']}.${selectedProduct['docType']}/db';
+        '${HttpService.hostUrl}/files/download/${sale.docName}.${sale.docType}/db';
     return InkWell(
       child: Image.network(
         '$documentUrl/70/70',
@@ -165,8 +163,8 @@ class _SalesPageState extends State<SalesPage> {
     );
   }
 
-  String _afterDiscountRounded(Map<String, dynamic> sale, int index) {
-    return (sale['originalPrice'] * (1 - sale['discount'])).toStringAsFixed(2);
+  String _afterDiscountRounded(Sale sale, int index) {
+    return (sale.originalPrice * (1 - sale.discount)).toStringAsFixed(2);
   }
 
   Widget _searchBar() {
@@ -194,12 +192,13 @@ class _SalesPageState extends State<SalesPage> {
     );
   }
 
-  onItemChanged(String value) {
+  onItemChanged(String input) {
     setState(() {
-      _newSales = _sales
-          .where((sale) =>
-              sale['title'].toLowerCase().contains(value.toLowerCase()))
-          .toList();
+      _newSales = _salesBloc.sales.where((sale) {
+        final lowerCaseTitle = sale.title.toLowerCase();
+        final lowerCaseInput = input.toLowerCase();
+        return lowerCaseTitle.contains(lowerCaseInput);
+      }).toList();
     });
   }
 

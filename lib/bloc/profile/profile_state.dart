@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:smartmarktclient/models/product_history.dart';
 
 abstract class ProfileState extends Equatable {
   const ProfileState();
@@ -17,7 +18,7 @@ class LoadProfileScreenState extends ProfileState {
 
 class ShowBasketHistoryDialogState extends ProfileState {
   final Key key;
-  final List<Map<String, dynamic>> productsList;
+  final List<ProductHistory> productsList;
   final String purchasedDate;
   final String productSummary;
 

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smartmarktclient/models/basket_product.dart';
 import 'package:smartmarktclient/repositories/basket_repository.dart';
 
 import '../bloc.dart';
@@ -8,9 +10,9 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   double _basketSummary;
   double _summaryAfterDiscount;
   String _currentUserBasketId;
-  List<Map<String, dynamic>> _basketProducts;
+  List<BasketProduct> _basketProducts;
 
-  List<Map<String, dynamic>> get basketProducts => _basketProducts;
+  List<BasketProduct> get basketProducts => _basketProducts;
 
   double get basketSummary => _basketSummary;
 
@@ -25,22 +27,22 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   @override
   Stream<BasketState> mapEventToState(BasketEvent event) async* {
     if (event is LoadingBasketEvent) {
-      yield LoadingBasketState();
+      Key uniqueKey = UniqueKey();
+      yield LoadingBasketState(uniqueKey);
       if (_currentUserBasketId == null) {
         _getBasketId();
       }
       _loadBasketProducts();
     } else if (event is LoadingSummaryBasketEvent) {
       _loadBasketSummary();
-    } else if (event is RemoveBasketProductsEvent) {
-      _removeAllBasketProducts();
+    } else if (event is RemoveBasketProductEvent) {
+      _removeObject(event.index);
+    } else if (event is ClearBasketEvent) {
+      _clearBasket();
     } else if (event is PurchaseBasketProductsEvent) {
       _purchaseAllBasketProducts();
     } else if (event is LoadedBasketEvent) {
-      yield LoadedBasketState(
-        basketProducts: _basketProducts,
-        basketSummary: _basketSummary,
-      );
+      yield LoadedBasketState();
     }
   }
 
@@ -55,14 +57,22 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     Future<Map<String, dynamic>> basketProducts =
         _basketRepository.loadBasketProducts();
     basketProducts.then(
-      (response) => {
-        if (response['success'])
-          {
-            _basketProducts = List<Map<String, dynamic>>.from(response['data']),
-            add(LoadingSummaryBasketEvent())
-          }
+      (response) {
+        if (response['success']) {
+          _collectBasketProducts(response);
+        }
+        add(LoadingSummaryBasketEvent());
       },
     );
+  }
+
+  void _collectBasketProducts(Map<String, dynamic> response) {
+    _basketProducts = [];
+    final basketProducts = List<Map<String, dynamic>>.from(response['data']);
+    basketProducts.forEach((jsonBasketProduct) {
+      BasketProduct basketProduct = BasketProduct.fromJson(jsonBasketProduct);
+      _basketProducts.add(basketProduct);
+    });
   }
 
   void _loadBasketSummary() {
@@ -80,9 +90,22 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     );
   }
 
-  void _removeAllBasketProducts() {
+  void _removeObject(int index) {
+    int productId = basketProducts[index].productId;
+    Future<Map<String, dynamic>> removeBasketProduct =
+        _basketRepository.removeBasketProduct(productId);
+    removeBasketProduct.then(
+      (response) {
+        if (response['success'] == true) {
+          add(LoadingBasketEvent());
+        }
+      },
+    );
+  }
+
+  void _clearBasket() {
     Future<Map<String, dynamic>> removeAllProducts =
-        _basketRepository.removeAllBasketProducts();
+        _basketRepository.clearBasket();
     removeAllProducts.then(
       (response) => {
         if (response['success'] == true)

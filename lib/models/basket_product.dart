@@ -1,50 +1,50 @@
 import 'package:flutter/material.dart';
 
-class Product {
-  int id;
-  String name;
-  int quantity;
-  double price;
-  double weight;
-  int productTypeId;
-  String productInfo;
-  int documentId;
-  String documentName;
-  String documentType;
+class BasketProduct {
+  final int id;
+  final int productId;
+  final String name;
+  final int quantity;
+  final double price;
+  final double summary;
+  final double discountPrice;
+  final int documentId;
+  final String documentName;
+  final String documentType;
 
-  Product({
+  BasketProduct({
     @required this.id,
+    @required this.productId,
     @required this.name,
     @required this.quantity,
     @required this.price,
-    @required this.weight,
-    @required this.productTypeId,
-    @required this.productInfo,
+    @required this.summary,
+    @required this.discountPrice,
     @required this.documentId,
     @required this.documentName,
     @required this.documentType,
   });
 
-  Product.fromJson(Map<String, dynamic> json)
+  BasketProduct.fromJson(Map<String, dynamic> json)
       : id = json['id'],
+        productId = json['productId'],
         name = json['name'],
         quantity = json['quantity'],
         price = json['price'],
-        weight = json['weight'],
-        productTypeId = json['productTypeId'],
-        productInfo = json['productInfo'],
+        summary = json['summary'],
+        discountPrice = json['discountPrice'],
         documentId = json['documentId'],
         documentName = json['documentName'],
         documentType = json['documentType'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'productId': productId,
         'name': name,
         'quantity': quantity,
         'price': price,
-        'weight': weight,
-        'productTypeId': productTypeId,
-        'productInfo': productInfo,
+        'summary': summary,
+        'discountPrice': discountPrice,
         'documentId': documentId,
         'documentName': documentName,
         'documentType': documentType,

@@ -6,9 +6,7 @@ import 'package:smartmarktclient/bloc/scanner/scanner_event.dart';
 import 'package:smartmarktclient/bloc/scanner/scanner_state.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
-import 'package:smartmarktclient/views/pages/scanner/scan_result_component.dart';
-
-//todo: dodać usuwanie pozycji z koszyka poprzez zeskanowanie produktu
+import 'package:smartmarktclient/views/scanner/scan_result_component.dart';
 
 class ScannerPage extends StatefulWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Product {
+class Sale {
   final int id;
   final String title;
   final String description;
@@ -9,7 +9,7 @@ class Product {
   final String docName;
   final String docType;
 
-  Product({
+  Sale({
     @required this.id,
     @required this.title,
     @required this.description,
@@ -19,7 +19,7 @@ class Product {
     @required this.docType,
   });
 
-  Product.fromJson(Map<String, dynamic> json)
+  Sale.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         title = json['title'],
         description = json['description'],

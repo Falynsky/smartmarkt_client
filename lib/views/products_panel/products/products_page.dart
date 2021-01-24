@@ -4,28 +4,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/http/http_service.dart';
+import 'package:smartmarktclient/models/product.dart';
+import 'package:smartmarktclient/models/product_type.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
-import 'package:smartmarktclient/views/pages/products/large_image_dialog.dart';
-import 'package:smartmarktclient/views/pages/products/product_info_dialog.dart';
+import 'package:smartmarktclient/views/products_panel/products/product_info_dialog.dart';
+
+import 'large_image_dialog.dart';
 
 class ProductsPage extends StatefulWidget {
-  final Map productType;
+  final ProductType productType;
 
-  ProductsPage({
-    this.productType,
-  });
+  ProductsPage({@required this.productType});
 
   @override
   _ProductsPageState createState() => _ProductsPageState();
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  List<Map<String, dynamic>> _products;
-  List<Map<String, dynamic>> _newProducts;
-  List<dynamic> selectedProducts = [];
+  ProductsPanelBloc _productsPanelBloc;
   ProductsBloc _productsBloc;
-  HttpService _httpService;
-  final String url = "/products/typeId";
+  List<Product> _newProducts;
   List data;
   bool rememberMe = false;
   TextEditingController _controller;
@@ -33,9 +31,8 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   void initState() {
     super.initState();
-    _httpService = HttpService();
-    _getProducts();
-    _productsBloc = BlocProvider.of<ProductsBloc>(context);
+    _productsPanelBloc = BlocProvider.of<ProductsPanelBloc>(context);
+    _productsBloc = ProductsBloc();
     _controller = TextEditingController();
   }
 
@@ -49,11 +46,11 @@ class _ProductsPageState extends State<ProductsPage> {
               IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  _productsBloc.add(LoadedProductTypesEvent());
+                  _productsPanelBloc.add(LoadedProductTypesPageEvent());
                 },
               ),
               SizedBox(width: 20),
-              Text(widget.productType['name']),
+              Text(widget.productType.name),
             ],
           ),
         ),
@@ -61,15 +58,48 @@ class _ProductsPageState extends State<ProductsPage> {
         elevation: 6,
         backgroundColor: analogThree,
       ),
-      body: productList(context),
+      body: BlocProvider(
+        create: (_) => _productsBloc
+          ..add(InitialProductsEvent(productTypeId: widget.productType.id)),
+        child: BlocListener<ProductsBloc, ProductsState>(
+          listener: (context, state) {
+            if (state is LoadedProductsState) {
+              _newProducts = _productsBloc.products;
+            } else if (state is AddToBasketSucceedState) {
+              Navigator.of(context).pop();
+            }
+            setState(() {});
+          },
+          child: productList(context),
+        ),
+      ),
+    );
+  }
+
+  Widget productList(BuildContext context) {
+    return Column(
+      children: [
+        _searchBar(),
+        Expanded(
+          child: Container(
+            color: primaryColor,
+            child: ListView.builder(
+              itemCount: _newProducts != null ? _newProducts.length : 0,
+              itemBuilder: (context, index) {
+                return listCard(index, context);
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   onItemChanged(String value) {
     setState(() {
-      _newProducts = _products
+      _newProducts = _productsBloc.products
           .where((productType) =>
-              productType['name'].toLowerCase().contains(value.toLowerCase()))
+              productType.name.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }
@@ -99,28 +129,9 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  Widget productList(BuildContext context) {
-    return Column(
-      children: [
-        _searchBar(),
-        Expanded(
-          child: Container(
-            color: primaryColor,
-            child: ListView.builder(
-              itemCount: _newProducts != null ? _newProducts.length : 0,
-              itemBuilder: (context, index) {
-                return listCard(index, context);
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget listCard(int index, BuildContext context) {
-    Map<String, dynamic> product = _newProducts[index];
-    String price = product['price'].toString() + " zł";
+    Product product = _newProducts[index];
+    String price = product.price.toString() + " zł";
     return Card(
       color: Colors.white,
       child: InkWell(
@@ -136,7 +147,7 @@ class _ProductsPageState extends State<ProductsPage> {
               SizedBox(width: 10),
               Flexible(
                 child: Text(
-                  product['name'],
+                  product.name,
                   style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
                 ),
               ),
@@ -156,9 +167,9 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   InkWell _imageButton(int index) {
-    Map<String, dynamic> selectedProduct = _products[index];
+    Product products = _newProducts[index];
     String documentUrl =
-        '${HttpService.hostUrl}/files/download/${selectedProduct['documentName']}.${selectedProduct['documentType']}/db';
+        '${HttpService.hostUrl}/files/download/${products.documentName}.${products.documentType}/db';
     return InkWell(
       child: Image.network(
         '$documentUrl/70/70',
@@ -178,13 +189,13 @@ class _ProductsPageState extends State<ProductsPage> {
         child: Icon(Icons.add_circle_outline_rounded),
       ),
       onTap: () {
-        Map<String, dynamic> selectedProduct = _products[index];
+        Product selectedProduct = _productsBloc.products[index];
         _selectedPositionDialog(selectedProduct);
       },
     );
   }
 
-  void _selectedPositionDialog(dynamic selectedProduct) {
+  void _selectedPositionDialog(Product selectedProduct) {
     _controller.text = "0";
     showDialog(
       context: context,
@@ -192,7 +203,7 @@ class _ProductsPageState extends State<ProductsPage> {
         // return object of type Dialog
         return AlertDialog(
           backgroundColor: shadesThree,
-          title: Text(selectedProduct['name']),
+          title: Text(selectedProduct.name),
           titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -205,7 +216,7 @@ class _ProductsPageState extends State<ProductsPage> {
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             _closeButton(context),
-            _getCodeButton(context, selectedProduct),
+            _getCodeButton(context),
             _addToCardButton(context, selectedProduct),
           ],
         );
@@ -228,15 +239,12 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  Row _availabilityInfoRow(Map<String, dynamic> selectedProduct) {
+  Row _availabilityInfoRow(Product selectedProduct) {
     return Row(children: <Widget>[
-      Text(
-        "Dostępne: ",
-        style: TextStyle(color: Colors.white70),
-      ),
+      Text("Dostępne: ", style: TextStyle(color: Colors.white70)),
       Spacer(),
       Text(
-        "${selectedProduct['quantity']} szt.",
+        "${selectedProduct.quantity} szt.",
         style: TextStyle(color: Colors.white70),
       ),
     ]);
@@ -254,43 +262,25 @@ class _ProductsPageState extends State<ProductsPage> {
 
   FlatButton _addToCardButton(
     BuildContext context,
-    Map<String, dynamic> selectedProduct,
+    Product product,
   ) {
     return FlatButton(
       child: Text("Dodaj do koszyka"),
       textColor: complementaryThree,
       onPressed: () async {
-        int selectedValue = int.parse(_controller.text);
-
-        if (selectedValue > 0) {
-          int productId = selectedProduct['id'];
-
-          Map<String, dynamic> body = {
-            "productId": productId,
-            "quantity": selectedValue
-          };
-
-          String basketUrl = "/baskets_products/add";
-          final response =
-              await _httpService.post(url: basketUrl, postBody: body);
-
-          if (response['success'] == true) {
-            print(response['data']['msg']);
-          } else {
-            print(response['statusCode']);
-            print(response['data']['msg']);
-          }
+        int quantity = int.parse(_controller.text);
+        if (quantity > 0) {
+          final addToBasketEvent = AddToBasketEvent(
+            productId: product.id,
+            quantity: quantity,
+          );
+          _productsBloc.add(addToBasketEvent);
         }
-        _getProducts();
-        Navigator.of(context).pop();
       },
     );
   }
 
-  FlatButton _getCodeButton(
-    BuildContext context,
-    Map<String, dynamic> selectedProduct,
-  ) {
+  FlatButton _getCodeButton(BuildContext context) {
     return FlatButton(
       child: Text("Kod kreskowy"),
       textColor: complementaryThree,
@@ -358,20 +348,5 @@ class _ProductsPageState extends State<ProductsPage> {
         },
       ),
     );
-  }
-
-  void _getProducts() async {
-    Map<String, dynamic> body = {
-      "id": widget.productType['id'],
-    };
-    Map<String, dynamic> response =
-        await _httpService.post(url: url, postBody: body);
-    setState(() {
-      _products = new List<Map<String, dynamic>>.from(response['data']);
-      _newProducts = _products;
-      _products.forEach((element) {
-        selectedProducts.add(false);
-      });
-    });
   }
 }

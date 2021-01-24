@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:smartmarktclient/models/product.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
 class ProductInfoDialog {
   void showDialogBox(
     BuildContext context,
-    Map<String, dynamic> selectedProduct,
+    Product product,
   ) {
     showDialog(
       context: context,
@@ -12,9 +13,9 @@ class ProductInfoDialog {
         return AlertDialog(
           backgroundColor: shadesThree,
           titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
-          title: Text(selectedProduct['name']),
+          title: Text(product.name),
           content: Text(
-            selectedProduct['productInfo'],
+            product.productInfo,
             style: TextStyle(color: Colors.white70),
           ),
           actions: <Widget>[

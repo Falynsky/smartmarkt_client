@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
-import 'package:smartmarktclient/views/pages/products/product_types_page.dart';
-import 'package:smartmarktclient/views/pages/products/products_page.dart';
+import 'package:smartmarktclient/views/products_panel/product_types/product_types_page.dart';
+import 'package:smartmarktclient/views/products_panel/products/products_page.dart';
 
 class ProductsPanel extends StatefulWidget {
   ProductsPanel();
@@ -12,12 +12,12 @@ class ProductsPanel extends StatefulWidget {
 }
 
 class _ProductsPanelState extends State<ProductsPanel> {
-  ProductsBloc _productsBloc;
+  ProductsPanelBloc _productsBloc;
   RouteBloc _routeBloc;
 
   @override
   void initState() {
-    _productsBloc = ProductsBloc();
+    _productsBloc = ProductsPanelBloc();
     _routeBloc = BlocProvider.of<RouteBloc>(context);
     super.initState();
   }
@@ -38,17 +38,15 @@ class _ProductsPanelState extends State<ProductsPanel> {
       child: Center(
         child: BlocProvider(
           create: (_) => _productsBloc,
-          child: BlocListener<ProductsBloc, ProductsState>(
+          child: BlocListener<ProductsPanelBloc, ProductsPanelState>(
             listener: (context, state) {},
             child: BlocBuilder(
               cubit: _productsBloc,
               builder: (context, state) {
-                if (state is ProductTypesState) {
+                if (state is ProductTypesPageState) {
                   return ProductTypesPage();
                 } else if (state is SelectedTypeProductsState) {
-                  return ProductsPage(
-                    productType: state.productType,
-                  );
+                  return ProductsPage(productType: state.productType);
                 } else {
                   return Container(color: Colors.red);
                 }

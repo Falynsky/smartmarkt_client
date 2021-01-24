@@ -1,24 +1,45 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 abstract class ProductsEvent extends Equatable {
   const ProductsEvent();
 }
 
-class LoadedProductTypesEvent extends ProductsEvent {
+class InitialProductsEvent extends ProductsEvent {
+  final int productTypeId;
+
+  InitialProductsEvent({this.productTypeId});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [
+        productTypeId,
+      ];
 }
 
-class SelectedTypeProductsEvent extends ProductsEvent {
-  final Map productType;
+class AddToBasketEvent extends ProductsEvent {
+  final int productId;
+  final int quantity;
 
-  SelectedTypeProductsEvent({
-    @required this.productType,
+  AddToBasketEvent({
+    @required this.productId,
+    @required this.quantity,
   });
 
   @override
   List<Object> get props => [
-        productType,
+        productId,
+        quantity,
       ];
+}
+
+class AddToBasketSucceedEvent extends ProductsEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class LoadedProductsEvent extends ProductsEvent {
+  LoadedProductsEvent();
+
+  @override
+  List<Object> get props => [];
 }

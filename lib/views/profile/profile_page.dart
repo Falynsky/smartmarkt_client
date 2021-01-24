@@ -5,6 +5,8 @@ import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/bloc/profile/history/history_details_page.dart';
 import 'package:smartmarktclient/bloc/profile/profile_bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
+import 'package:smartmarktclient/models/basket_history.dart';
+import 'package:smartmarktclient/models/product_history.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -115,22 +117,26 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Expanded _shoppingHistoryList() {
     return Expanded(
-      child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 70),
-        itemCount: _profileBloc.basketHistory != null
-            ? _profileBloc.basketHistory.length
-            : 0,
-        itemBuilder: (context, index) {
-          return listCard(context, index);
-        },
+      child: Container(
+        padding: EdgeInsets.only(top: 3),
+        color: complementaryThree.withOpacity(0.7),
+        child: ListView.builder(
+          padding: EdgeInsets.only(bottom: 70),
+          itemCount: _profileBloc.basketHistory != null
+              ? _profileBloc.basketHistory.length
+              : 0,
+          itemBuilder: (context, index) {
+            return listCard(context, index);
+          },
+        ),
       ),
     );
   }
 
   Widget listCard(BuildContext context, int index) {
-    Map<String, dynamic> basketHistory = _profileBloc.basketHistory[index];
-    String _purchasedDate = basketHistory["purchasedDateTime"];
-    String _productSummary = basketHistory["purchasedPriceSummary"].toString();
+    BasketHistory basketHistory = _profileBloc.basketHistory[index];
+    String _purchasedDate = basketHistory.purchasedDateTime;
+    String _productSummary = basketHistory.purchasedPriceSummary.toString();
     return Card(
       child: InkWell(
         child: Container(
@@ -148,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
         onTap: () => {
           _profileBloc.add(
             ShowBasketHistoryDialogEvent(
-              basketHistoryId: basketHistory["basketHistoryId"],
+              basketHistoryId: basketHistory.id,
               purchasedDate: _purchasedDate,
               productSummary: _productSummary,
             ),
@@ -162,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _showOverlay(
     BuildContext context,
-    List<Map<String, dynamic>> productsList,
+    List<ProductHistory> productsList,
     String purchasedDate,
     String productSummary,
   ) {

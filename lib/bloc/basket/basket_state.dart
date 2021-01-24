@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 abstract class BasketState extends Equatable {
   const BasketState();
@@ -11,24 +11,16 @@ class InitialBasketState extends BasketState {
 }
 
 class LoadingBasketState extends BasketState {
+  final Key key;
+
+  LoadingBasketState(this.key);
   @override
   List<Object> get props => [];
 }
 
 class LoadedBasketState extends BasketState {
-  final List<Map<String, dynamic>> basketProducts;
-  final double basketSummary;
-
-  LoadedBasketState({
-    @required this.basketProducts,
-    @required this.basketSummary,
-  });
-
   @override
-  List<Object> get props => [
-        basketProducts,
-        basketSummary,
-      ];
+  List<Object> get props => [];
 }
 
 class RemoveBasketProductsState extends BasketState {
