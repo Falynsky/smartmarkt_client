@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
-import 'package:smartmarktclient/card/dashboard_card.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
+import 'package:smartmarktclient/views/main/card/dashboard_card.dart';
 
 class MainPage extends StatefulWidget {
   @override

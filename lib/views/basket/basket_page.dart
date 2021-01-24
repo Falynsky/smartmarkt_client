@@ -221,9 +221,7 @@ class _BasketPageState extends State<BasketPage> {
                   basketProduct.name,
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                 ),
-                discountPrice == null
-                    ? Text('$quantity x ${price}zł')
-                    : Text('$quantity x ${discountPrice}zł'),
+                Text('$quantity x ${price}zł'),
                 discountPrice == null
                     ? Text('${summary}zł')
                     : Row(
@@ -243,7 +241,26 @@ class _BasketPageState extends State<BasketPage> {
               ],
             ),
             Spacer(),
+            Column(
+              children: [
+                InkWell(
+                  borderRadius: BorderRadius.circular(25.0),
+                  splashFactory: InkRipple.splashFactory,
+                  child: Icon(Icons.arrow_drop_up_rounded, size: 35),
+                  onTap: () => {},
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(25.0),
+                  splashFactory: InkRipple.splashFactory,
+                  child: Icon(Icons.arrow_drop_down_rounded, size: 35),
+                  onTap: () => {},
+                )
+              ],
+            ),
+            SizedBox(width: 20),
             InkWell(
+              borderRadius: BorderRadius.circular(25.0),
+              splashFactory: InkRipple.splashFactory,
               child: Icon(Icons.close),
               onTap: () =>
                   _basketBloc.add(RemoveBasketProductEvent(index: index)),
