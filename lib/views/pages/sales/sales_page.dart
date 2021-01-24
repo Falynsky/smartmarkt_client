@@ -18,6 +18,7 @@ class _SalesPageState extends State<SalesPage> {
   SalesBloc _salesBloc;
   bool _isLoaded;
   List<Map<String, dynamic>> _sales;
+  List<Map<String, dynamic>> _newSales;
 
   @override
   void initState() {
@@ -48,6 +49,7 @@ class _SalesPageState extends State<SalesPage> {
               } else if (state is LoadedSalesState) {
                 _isLoaded = true;
                 _sales = state.sales;
+                _newSales = state.sales;
               }
               setState(() {});
             },
@@ -64,17 +66,24 @@ class _SalesPageState extends State<SalesPage> {
     }
     return Container(
       color: primaryColor,
-      child: ListView.builder(
-        itemCount: _sales != null ? _sales.length : 0,
-        itemBuilder: (context, index) {
-          return _salesTypeCard(index);
-        },
+      child: Column(
+        children: [
+          _searchBar(),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _newSales != null ? _newSales.length : 0,
+              itemBuilder: (context, index) {
+                return _salesTypeCard(index);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _salesTypeCard(int index) {
-    Map<String, dynamic> _sale = _sales[index];
+    Map<String, dynamic> _sale = _newSales[index];
     return Container(
       child: InkWell(
         onTap: () {},
@@ -141,7 +150,7 @@ class _SalesPageState extends State<SalesPage> {
   }
 
   InkWell _imageButton(int index) {
-    Map<String, dynamic> selectedProduct = _sales[index];
+    Map<String, dynamic> selectedProduct = _newSales[index];
     String documentUrl =
         '${HttpService.hostUrl}/files/download/${selectedProduct['docName']}.${selectedProduct['docType']}/db';
     return InkWell(
@@ -186,12 +195,12 @@ class _SalesPageState extends State<SalesPage> {
   }
 
   onItemChanged(String value) {
-    // setState(() {
-    //   _newProducts = _products
-    //       .where((productType) =>
-    //       productType['name'].toLowerCase().contains(value.toLowerCase()))
-    //       .toList();
-    // });
+    setState(() {
+      _newSales = _sales
+          .where((sale) =>
+              sale['title'].toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
