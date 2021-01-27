@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/utilities/colors.dart';
 import 'package:smartmarktclient/utilities/gradient.dart';
 
 class ConfiguratorPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _ConfiguratorPageState extends State<ConfiguratorPage> {
                 final snackBar = SnackBar(
                   content: Text("Nie znaleziono sklepu"),
                   behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.amber,
+                  backgroundColor: complementaryThree,
                   action: SnackBarAction(
                     label: "OK",
                     onPressed: () => {},

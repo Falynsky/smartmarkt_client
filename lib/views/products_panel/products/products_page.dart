@@ -67,6 +67,19 @@ class _ProductsPageState extends State<ProductsPage> {
               _newProducts = _productsBloc.products;
             } else if (state is AddToBasketSucceedState) {
               Navigator.of(context).pop();
+            } else if (state is AddToBasketUnSucceedState) {
+              final snackBar = SnackBar(
+                content: Text(state.msg),
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: complementaryThree,
+                action: SnackBarAction(
+                  label: "OK",
+                  onPressed: () => {},
+                  textColor: Colors.black54,
+                ),
+              );
+              Scaffold.of(context).showSnackBar(snackBar);
+              Navigator.of(context).pop();
             }
             setState(() {});
           },
@@ -80,17 +93,44 @@ class _ProductsPageState extends State<ProductsPage> {
     return Column(
       children: [
         _searchBar(),
-        Expanded(
-          child: Container(
-            color: primaryColor,
-            child: ListView.builder(
-              itemCount: _newProducts != null ? _newProducts.length : 0,
-              itemBuilder: (context, index) {
-                return listCard(index, context);
-              },
+        if (_newProducts != null && _newProducts.isNotEmpty)
+          Expanded(
+            child: Container(
+              color: primaryColor,
+              child: ListView.builder(
+                itemCount: _newProducts != null ? _newProducts.length : 0,
+                itemBuilder: (context, index) {
+                  return listCard(index, context);
+                },
+              ),
             ),
           ),
-        ),
+        if (_newProducts == null || _newProducts.isEmpty)
+          Expanded(
+            child: Container(
+              color: primaryColor,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.format_list_bulleted_rounded,
+                      size: 100,
+                      color: shadesThree,
+                    ),
+                    Text(
+                      "Brak produktów",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: shadesThree,
+                        fontSize: 25,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
       ],
     );
   }
@@ -200,7 +240,6 @@ class _ProductsPageState extends State<ProductsPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
           backgroundColor: shadesThree,
           title: Text(selectedProduct.name),
@@ -214,9 +253,7 @@ class _ProductsPageState extends State<ProductsPage> {
             ],
           ),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
             _closeButton(context),
-            _getCodeButton(context),
             _addToCardButton(context, selectedProduct),
           ],
         );
@@ -276,16 +313,6 @@ class _ProductsPageState extends State<ProductsPage> {
           );
           _productsBloc.add(addToBasketEvent);
         }
-      },
-    );
-  }
-
-  FlatButton _getCodeButton(BuildContext context) {
-    return FlatButton(
-      child: Text("Kod kreskowy"),
-      textColor: complementaryThree,
-      onPressed: () {
-        Navigator.of(context).pop();
       },
     );
   }

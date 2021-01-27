@@ -37,6 +37,14 @@ class AddToBasketSucceedEvent extends ProductsEvent {
   List<Object> get props => [];
 }
 
+class AddToBasketUnSucceedEvent extends ProductsEvent {
+  final String msg;
+
+  AddToBasketUnSucceedEvent(this.msg);
+  @override
+  List<Object> get props => [];
+}
+
 class LoadedProductsEvent extends ProductsEvent {
   LoadedProductsEvent();
 

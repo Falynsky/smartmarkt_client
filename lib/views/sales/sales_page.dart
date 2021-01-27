@@ -63,20 +63,45 @@ class _SalesPageState extends State<SalesPage> {
     if (!_isLoaded) {
       return CircularIndicator();
     }
+    if (_newSales != null && _newSales.isNotEmpty) {
+      return Container(
+        color: primaryColor,
+        child: Column(
+          children: [
+            _searchBar(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _newSales != null ? _newSales.length : 0,
+                itemBuilder: (context, index) {
+                  return _salesTypeCard(index);
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    }
     return Container(
       color: primaryColor,
-      child: Column(
-        children: [
-          _searchBar(),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _newSales != null ? _newSales.length : 0,
-              itemBuilder: (context, index) {
-                return _salesTypeCard(index);
-              },
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.format_list_bulleted_rounded,
+              size: 100,
+              color: shadesThree,
             ),
-          ),
-        ],
+            Text(
+              "Brak promocji",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: shadesThree,
+                fontSize: 25,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

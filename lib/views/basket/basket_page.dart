@@ -101,6 +101,8 @@ class _BasketPageState extends State<BasketPage> {
 
   Widget _basketSummary() {
     final summaryAfterDiscount = _basketBloc.summaryAfterDiscount;
+    final basketSummary = _basketBloc.basketSummary;
+    var basketWithDiscount = summaryAfterDiscount < basketSummary;
     return Padding(
       padding: const EdgeInsets.only(top: 15, bottom: 8, left: 20, right: 20),
       child: Row(
@@ -109,11 +111,9 @@ class _BasketPageState extends State<BasketPage> {
           Row(
             children: [
               _summaryTitle(),
-              summaryAfterDiscount != null
-                  ? _regularSummaryCrossed()
-                  : _regularSummary(),
+              basketWithDiscount ? _regularSummaryCrossed() : _regularSummary(),
               SizedBox(width: 10),
-              if (summaryAfterDiscount != null) _discountSummary(),
+              if (basketWithDiscount) _discountSummary(),
             ],
           ),
           _clearBasketTopButton()
@@ -124,7 +124,7 @@ class _BasketPageState extends State<BasketPage> {
 
   Widget _regularSummary() {
     return Text(
-      "${_basketBloc.basketSummary}zł ",
+      "${_basketBloc.summaryAfterDiscount}zł ",
       style: TextStyle(
         fontWeight: FontWeight.w800,
         fontSize: 15,
@@ -157,14 +157,16 @@ class _BasketPageState extends State<BasketPage> {
 
   Widget _clearBasketTopButton() {
     return InkWell(
-      borderRadius: BorderRadius.circular(25.0),
-      splashFactory: InkRipple.splashFactory,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Icon(Icons.remove_shopping_cart_rounded),
-      ),
-      onTap: () => _emitRemoveAllBasketProducts(),
-    );
+        borderRadius: BorderRadius.circular(25.0),
+        splashFactory: InkRipple.splashFactory,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Icon(Icons.remove_shopping_cart_rounded),
+        ),
+        onTap: () => _showRemoveButtonDialog(
+              event: ClearBasketEvent(),
+              info: "Czy na pewno chcesz wyczyścić koszyk?",
+            ));
   }
 
   Text _summaryTitle() {
@@ -262,12 +264,63 @@ class _BasketPageState extends State<BasketPage> {
               borderRadius: BorderRadius.circular(25.0),
               splashFactory: InkRipple.splashFactory,
               child: Icon(Icons.close),
-              onTap: () =>
-                  _basketBloc.add(RemoveBasketProductEvent(index: index)),
+              onTap: () => _showRemoveButtonDialog(
+                event: RemoveBasketProductEvent(index: index),
+                info: "Czy na pewno chcesz usunąć produkt z koszyka?",
+              ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showRemoveButtonDialog({
+    @required BasketEvent event,
+    @required String info,
+  }) {
+    return showDialog<void>(
+      context: context,
+      barrierColor: Colors.black54,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.all(Radius.circular(90.0)),
+          ),
+          child: AlertDialog(
+            backgroundColor: shadesThree,
+            title: Text("Uwaga!"),
+            titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(info),
+                ],
+              ),
+            ),
+            contentTextStyle: TextStyle(color: Colors.white70, fontSize: 16),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Nie'),
+                textColor: complementaryThree,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('Tak'),
+                textColor: complementaryThree,
+                onPressed: () {
+                  _basketBloc.add(event);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -293,15 +346,9 @@ class _BasketPageState extends State<BasketPage> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          // return object of type Dialog
           return AlertDialog(
             backgroundColor: shadesThree,
-            title: Text(
-              "Zeskanuj kod w kasie samoobsługowej",
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            title: Text("Zeskanuj kod w kasie samoobsługowej"),
             titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
             content: Container(
               padding: EdgeInsets.all(5),
@@ -322,7 +369,6 @@ class _BasketPageState extends State<BasketPage> {
               Row(
                 children: [
                   _purchasedBasketButton(context),
-                  _clearBasketButton(context),
                   _hideBarsCodeButton(context),
                 ],
               )
@@ -347,21 +393,6 @@ class _BasketPageState extends State<BasketPage> {
 
   void _emitPurchaseAllBasketProducts() async {
     _basketBloc.add(PurchaseBasketProductsEvent());
-  }
-
-  FlatButton _clearBasketButton(BuildContext context) {
-    return FlatButton(
-      child: Text("Wyczyść \nkoszyk", textAlign: TextAlign.center),
-      textColor: complementaryThree,
-      onPressed: () {
-        _emitRemoveAllBasketProducts();
-        Navigator.of(context).pop();
-      },
-    );
-  }
-
-  void _emitRemoveAllBasketProducts() async {
-    _basketBloc.add(ClearBasketEvent());
   }
 
   FlatButton _hideBarsCodeButton(BuildContext context) {

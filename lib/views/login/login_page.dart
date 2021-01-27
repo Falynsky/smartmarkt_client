@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                       _appNameTitle(),
                       _loginField(),
                       _passwordField(),
-                      _loginButon(),
+                      _loginButton(),
                       _signUpButton(),
                     ],
                   ),
@@ -132,16 +132,17 @@ class _LoginPageState extends State<LoginPage> {
       placeHolder: 'Wprowadź hasło',
       icon: Icons.lock,
       isRequired: true,
+      obscureText: true,
     );
   }
 
-  Widget _loginButon() {
+  Widget _loginButton() {
     return Container(
       padding: EdgeInsets.only(top: 25, left: 15, right: 15),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: _loginButton,
+        onPressed: _loginButtonOnPress,
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -161,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _loginButton() async {
+  void _loginButtonOnPress() async {
     bool validate = _formKey.currentState.validate();
     if (validate) {
       String _login = _loginController.text.toString();
@@ -217,12 +218,9 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.all(Radius.circular(90.0)),
           ),
           child: AlertDialog(
+            backgroundColor: shadesThree,
             title: Text(title),
-            titleTextStyle: TextStyle(
-              color: Colors.red,
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-            ),
+            titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
@@ -230,10 +228,11 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
+            contentTextStyle: TextStyle(color: Colors.white70, fontSize: 16),
             actions: <Widget>[
               FlatButton(
+                textColor: complementaryThree,
                 child: Text('OK'),
-                textColor: Colors.blueAccent,
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],

@@ -35,14 +35,16 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       if (response['success'] == true) {
         add(AddToBasketSucceedEvent());
       } else {
-        print(response['statusCode']);
-        print(response['data']['msg']);
+        String msg = response['data']['msg'];
+        add(AddToBasketUnSucceedEvent(msg));
       }
       add(InitialProductsEvent(productTypeId: _productTypeId));
     } else if (event is LoadedProductsEvent) {
       yield LoadedProductsState();
     } else if (event is AddToBasketSucceedEvent) {
       yield AddToBasketSucceedState(UniqueKey());
+    } else if (event is AddToBasketUnSucceedEvent) {
+      yield AddToBasketUnSucceedState(UniqueKey(), event.msg);
     }
   }
 

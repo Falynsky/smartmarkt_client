@@ -25,3 +25,19 @@ class AddToBasketSucceedState extends ProductsState {
         key,
       ];
 }
+
+class AddToBasketUnSucceedState extends ProductsState {
+  final Key key;
+  final String msg;
+
+  AddToBasketUnSucceedState(
+    this.key,
+    this.msg,
+  );
+
+  @override
+  List<Object> get props => [
+        key,
+        msg,
+      ];
+}

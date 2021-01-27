@@ -42,11 +42,7 @@ class _ScannerPageState extends State<ScannerPage> {
             listener: (context, state) {
               if (state is AddToBasketState) {
                 final snackBar = SnackBar(
-                  content: Text(
-                    state.message,
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w500),
-                  ),
+                  content: Text(state.message),
                   behavior: SnackBarBehavior.floating,
                   backgroundColor: complementaryThree,
                   action: SnackBarAction(
@@ -86,7 +82,7 @@ class _ScannerPageState extends State<ScannerPage> {
 
   Widget _buttonLabel() {
     return Text(
-      "Zeskanuj produkt",
+      "Wciśnij aby \nzeskanować produkt",
       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
       textAlign: TextAlign.center,
     );

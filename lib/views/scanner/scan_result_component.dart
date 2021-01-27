@@ -50,18 +50,19 @@ class ScanResultComponentState extends State<ScanResultComponent> {
     return Container(
       margin: EdgeInsets.only(top: 100),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.search_off,
             size: 90,
-            color: Colors.red.shade400,
+            color: complementaryThree,
           ),
           Text(
-            "Nie znaleziono \nproduktu w bazie",
+            "Nie znaleziono \nproduktu",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
-              color: Colors.red.shade400,
+              color: complementaryThree,
             ),
           ),
         ],

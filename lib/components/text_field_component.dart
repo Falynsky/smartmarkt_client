@@ -8,6 +8,7 @@ class TextFieldComponent extends StatefulWidget {
   final String placeHolder;
   final IconData icon;
   final bool isRequired;
+  final bool obscureText;
 
   TextFieldComponent({
     @required this.controller,
@@ -15,6 +16,7 @@ class TextFieldComponent extends StatefulWidget {
     @required this.placeHolder,
     @required this.icon,
     @required this.isRequired,
+    this.obscureText,
   });
 
   @override
@@ -27,6 +29,7 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
   String _placeHolder;
   IconData _icon;
   bool _isRequired;
+  bool _obscureText;
 
   @override
   void initState() {
@@ -36,6 +39,7 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
     _placeHolder = widget.placeHolder;
     _icon = widget.icon;
     _isRequired = widget.isRequired ?? false;
+    _obscureText = widget.obscureText ?? false;
   }
 
   @override
@@ -53,6 +57,7 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
           Container(
             alignment: Alignment.centerLeft,
             child: TextFormField(
+              obscureText: _obscureText,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: _validateField,
               textInputAction: TextInputAction.next,

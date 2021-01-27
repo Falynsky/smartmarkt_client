@@ -76,10 +76,14 @@ class _MainPageState extends State<MainPage> {
           backgroundColor: shadesThree,
           titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
           title: Text("Wylogowanie"),
-          content: Text(
-            "Czy na pewno chcesz się wylogować?",
-            style: TextStyle(color: Colors.white70),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("Czy na pewno chcesz się wylogować?"),
+              ],
+            ),
           ),
+          contentTextStyle: TextStyle(color: Colors.white70, fontSize: 16),
           actions: <Widget>[
             _noButton(context),
             _yesButton(context),
@@ -112,10 +116,10 @@ class _MainPageState extends State<MainPage> {
   }
 
   List<Map<String, dynamic>> gridViewData = [
-    {'label': 'Produkty', 'iconData': Icons.fastfood, 'pageIdn': 'products'},
-    {'label': 'Skaner', 'iconData': Icons.scanner, 'pageIdn': 'scanner'},
-    {'label': 'Promocje', 'iconData': Icons.alarm, 'pageIdn': 'sales'},
-    {'label': 'Koszyk', 'iconData': Icons.shopping_basket, 'pageIdn': 'basket'},
+    {'label': 'SKANER', 'iconData': Icons.scanner, 'pageIdn': 'scanner'},
+    {'label': 'PRODUKTY', 'iconData': Icons.fastfood, 'pageIdn': 'products'},
+    {'label': 'PROMOCJE', 'iconData': Icons.alarm, 'pageIdn': 'sales'},
+    {'label': 'KOSZYK', 'iconData': Icons.shopping_basket, 'pageIdn': 'basket'},
   ];
 
   void _emitProfileScreen() {

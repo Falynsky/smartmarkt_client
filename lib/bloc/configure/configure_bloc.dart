@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/repositories/configuration_repository.dart';
 
@@ -23,10 +24,11 @@ class ConfigureBloc extends Bloc<ConfigureEvent, ConfigureState> {
       Map<String, dynamic> _serverAvailableInfo = await _configurationRepository
           .isServerAvailable(storeAddress: event.storeAddress);
       bool serverAvailableInfo = _serverAvailableInfo["success"];
+      Key key = UniqueKey();
       if (serverAvailableInfo) {
-        yield ShopAvailableState();
+        yield ShopAvailableState(key);
       } else {
-        yield ShopUnAvailableState();
+        yield ShopUnAvailableState(key);
       }
     }
   }

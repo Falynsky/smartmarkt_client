@@ -15,6 +15,6 @@ class ConfigurationProvider {
   Future<Map<String, dynamic>> isServerAvailable({String storeAddress}) async {
     String barsCode = "/isAlive";
     HttpService.hostUrl = storeAddress;
-    return await _httpService.post(url: barsCode);
+    return await _httpService.post(url: barsCode, postBody: {});
   }
 }

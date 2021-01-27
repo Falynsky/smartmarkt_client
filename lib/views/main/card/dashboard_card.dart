@@ -51,7 +51,7 @@ class _DashboardCardState extends State<DashboardCard> {
               verticalDirection: VerticalDirection.down,
               children: <Widget>[
                 _icon(),
-                SizedBox(height: 20.0),
+                SizedBox(height: 10),
                 _dashboardLabel()
               ],
             ),
@@ -70,7 +70,7 @@ class _DashboardCardState extends State<DashboardCard> {
     return Center(
       child: Icon(
         _iconData,
-        size: 40.0,
+        size: _pageIdn == 'scanner' ? 90 : 40,
         color: Colors.black,
       ),
     );
@@ -81,7 +81,7 @@ class _DashboardCardState extends State<DashboardCard> {
       child: Text(
         _label,
         style: TextStyle(
-          fontSize: 18.0,
+          fontSize: _pageIdn == 'scanner' ? 25 : 18.0,
           color: Colors.black,
         ),
       ),

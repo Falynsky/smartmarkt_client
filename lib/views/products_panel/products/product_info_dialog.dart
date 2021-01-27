@@ -14,10 +14,14 @@ class ProductInfoDialog {
           backgroundColor: shadesThree,
           titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
           title: Text(product.name),
-          content: Text(
-            product.productInfo,
-            style: TextStyle(color: Colors.white70),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(product.productInfo),
+              ],
+            ),
           ),
+          contentTextStyle: TextStyle(color: Colors.white70, fontSize: 16),
           actions: <Widget>[
             _closeButton(context),
           ],

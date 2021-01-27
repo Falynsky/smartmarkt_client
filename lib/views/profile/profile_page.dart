@@ -115,22 +115,51 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Expanded _shoppingHistoryList() {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.only(top: 3),
-        color: complementaryThree.withOpacity(0.7),
-        child: ListView.builder(
-          padding: EdgeInsets.only(bottom: 70),
-          itemCount: _profileBloc.basketHistory != null
-              ? _profileBloc.basketHistory.length
-              : 0,
-          itemBuilder: (context, index) {
-            return listCard(context, index);
-          },
+  Widget _shoppingHistoryList() {
+    if (_profileBloc.basketHistory != null &&
+        _profileBloc.basketHistory.isNotEmpty) {
+      return Expanded(
+        child: Container(
+          padding: EdgeInsets.only(top: 3),
+          color: complementaryThree.withOpacity(0.7),
+          child: ListView.builder(
+            padding: EdgeInsets.only(bottom: 70),
+            itemCount: _profileBloc.basketHistory != null
+                ? _profileBloc.basketHistory.length
+                : 0,
+            itemBuilder: (context, index) {
+              return listCard(context, index);
+            },
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Expanded(
+        child: Container(
+          color: complementaryThree.withOpacity(0.7),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.shopping_basket_outlined,
+                  size: 100,
+                  color: shadesThree,
+                ),
+                Text(
+                  "Brak produktów \nw koszyku",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: shadesThree,
+                    fontSize: 25,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget listCard(BuildContext context, int index) {

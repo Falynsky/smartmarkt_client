@@ -149,6 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
       placeHolder: 'Hasło',
       icon: Icons.lock,
       isRequired: true,
+      obscureText: true,
     );
   }
 
@@ -266,12 +267,9 @@ class _SignUpPageState extends State<SignUpPage> {
             borderRadius: BorderRadius.all(Radius.circular(90.0)),
           ),
           child: AlertDialog(
+            backgroundColor: shadesThree,
             title: Text(title),
-            titleTextStyle: TextStyle(
-              color: Colors.red,
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-            ),
+            titleTextStyle: TextStyle(color: complementaryThree, fontSize: 20),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
@@ -279,10 +277,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 ],
               ),
             ),
+            contentTextStyle: TextStyle(color: Colors.white70, fontSize: 16),
             actions: <Widget>[
               FlatButton(
                 child: Text('OK'),
-                textColor: Colors.blueAccent,
+                textColor: complementaryThree,
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],

@@ -22,12 +22,16 @@ class HttpService {
     Map<String, dynamic> postBody,
   }) async {
     final encodedBody = jsonEncode(postBody);
-    http.Response response = await http.post(
-      hostUrl + url,
-      headers: headers,
-      body: encodedBody,
-    );
-
+    http.Response response;
+    try {
+      response = await http.post(
+        hostUrl + url,
+        headers: headers,
+        body: encodedBody,
+      );
+    } catch (e) {
+      return _collectResponseData(false, 404, e.toString());
+    }
     String body = response.body;
     Map<String, Object> decodedBody = {};
 
