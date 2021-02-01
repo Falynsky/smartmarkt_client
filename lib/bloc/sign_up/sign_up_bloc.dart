@@ -38,7 +38,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
             data['msg'] ?? 'Sprawdź wprowadzone wartości i spróbuj ponownie';
 
         yield RegisterErrorOccurredState(
-            title: title, msg: msg, key: GlobalKey());
+          title: title,
+          msg: msg,
+          key: GlobalKey(),
+        );
       }
     }
   }

@@ -103,7 +103,12 @@ class ScanResultComponentState extends State<ScanResultComponent> {
                       _productInfoRow(
                           "Kategoria:", _scannedInfo['productType']),
                       SizedBox(height: 5),
-                      _productInfoRow("Cena:", "${_scannedInfo['price']}zł"),
+                      _scannedInfo['afterDiscount'] == null
+                          ? _productInfoRow(
+                              "Cena:", "${_scannedInfo['price']}zł")
+                          : _productInfoRow(
+                              "Cena:", "${_scannedInfo['price']}zł",
+                              newValue: "${_scannedInfo['afterDiscount']}zł"),
                     ],
                   ),
                 ),
@@ -124,7 +129,7 @@ class ScanResultComponentState extends State<ScanResultComponent> {
     );
   }
 
-  Widget _productInfoRow(String label, String value) {
+  Widget _productInfoRow(String label, String value, {String newValue}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -134,8 +139,18 @@ class ScanResultComponentState extends State<ScanResultComponent> {
         ),
         Text(
           value,
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(
+            fontSize: 15,
+            decoration: newValue != null ? TextDecoration.lineThrough : null,
+            decorationColor: newValue != null ? Colors.red : null,
+            decorationThickness: newValue != null ? 2 : null,
+          ),
         ),
+        if (newValue != null)
+          Text(
+            newValue,
+            style: TextStyle(fontSize: 15),
+          ),
       ],
     );
   }

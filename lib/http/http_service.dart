@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-//  final String hostUrl = "https://smartmarkt-server.herokuapp.com";
   static String hostUrl = "http://192.168.21.4:8080";
-  static final Map<String, String> headers = {
+
+  static Map<String, String> headers = {
     'Content-type': 'application/json; charset=UTF-8',
     'Accept-Encoding': 'gzip, deflate, br',
     'Accept-Language': 'pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7',
