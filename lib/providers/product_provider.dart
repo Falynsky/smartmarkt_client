@@ -4,6 +4,7 @@ import 'package:smartmarktclient/http/http_service.dart';
 class ProductProvider {
   HttpService _httpService;
   final String _addToBasketEndPoint = "/baskets_products/add";
+  final String _removeFromBasketEndPoint = "/baskets_products/remove";
   final String _getProductsEndPoint = "/products/typeId";
 
   ProductProvider() {
@@ -21,6 +22,23 @@ class ProductProvider {
 
     final response = await _httpService.post(
       url: _addToBasketEndPoint,
+      postBody: body,
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> removeProductFromBasket({
+    @required int productId,
+    int quantity,
+  }) async {
+    Map<String, dynamic> body = {
+      "productId": productId,
+      "quantity": quantity,
+    };
+
+    final response = await _httpService.post(
+      url: _removeFromBasketEndPoint,
       postBody: body,
     );
 

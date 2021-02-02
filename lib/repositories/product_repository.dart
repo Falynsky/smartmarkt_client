@@ -21,6 +21,19 @@ class ProductRepository {
     return productInfo;
   }
 
+  Future<Map<String, dynamic>> removeProductFromBasket({
+    @required int productId,
+    int quantity,
+  }) async {
+    Map<String, dynamic> productInfo =
+        await _productProvider.removeProductFromBasket(
+      productId: productId,
+      quantity: quantity,
+    );
+
+    return productInfo;
+  }
+
   Future<Map<String, dynamic>> getProducts({
     int productTypeId,
   }) async {

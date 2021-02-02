@@ -46,6 +46,17 @@ class _BasketPageState extends State<BasketPage> {
                 _isLoaded = false;
               } else if (state is LoadedBasketState) {
                 _isLoaded = true;
+              } else if (state is ShowBasketSnackBarState) {
+                final snackBar = SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: complementaryThree,
+                  action: SnackBarAction(
+                    label: "OK",
+                    onPressed: () => {},
+                    textColor: Colors.black54,
+                  ),
+                );
+                Scaffold.of(context).showSnackBar(snackBar);
               }
               setState(() {});
             },
@@ -199,6 +210,7 @@ class _BasketPageState extends State<BasketPage> {
     double price = basketProduct.price;
     double discountPrice = basketProduct.discountPrice;
     double summary = basketProduct.summary;
+    int productId = basketProduct.productId;
     String documentUrl =
         '${HttpService.hostUrl}/files/download/${basketProduct.documentName}.${basketProduct.documentType}/db';
     return Card(
@@ -249,14 +261,25 @@ class _BasketPageState extends State<BasketPage> {
                   borderRadius: BorderRadius.circular(25.0),
                   splashFactory: InkRipple.splashFactory,
                   child: Icon(Icons.arrow_drop_up_rounded, size: 35),
-                  onTap: () => {},
+                  onTap: () {
+                    final addOneToBasketEvent =
+                        AddOneToBasketEvent(productId: productId);
+                    _basketBloc.add(addOneToBasketEvent);
+                  },
                 ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(25.0),
-                  splashFactory: InkRipple.splashFactory,
-                  child: Icon(Icons.arrow_drop_down_rounded, size: 35),
-                  onTap: () => {},
-                )
+                if (quantity > 1)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(25.0),
+                    splashFactory: InkRipple.splashFactory,
+                    child: Icon(Icons.arrow_drop_down_rounded, size: 35),
+                    onTap: () {
+                      final addOneToBasketEvent =
+                          RemoveOneFromBasketEvent(productId: productId);
+                      _basketBloc.add(addOneToBasketEvent);
+                    },
+                  ),
+                if(quantity==1)
+                  SizedBox(height: 35, width: 35)
               ],
             ),
             SizedBox(width: 20),

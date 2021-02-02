@@ -4,8 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
-
-import 'file:///S:/repositories/e_thesis/smartmarkt_client/lib/views/route_widget.dart';
+import 'package:smartmarktclient/views/route_widget.dart';
 
 Future<bool> addSelfSignedCertificate() async {
   ByteData data = await rootBundle.load('assets/keystore2.p12');

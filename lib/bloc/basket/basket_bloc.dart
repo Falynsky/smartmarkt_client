@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/models/basket_product.dart';
 import 'package:smartmarktclient/repositories/basket_repository.dart';
+import 'package:smartmarktclient/repositories/product_repository.dart';
 
 import '../bloc.dart';
 
 class BasketBloc extends Bloc<BasketEvent, BasketState> {
   BasketRepository _basketRepository;
+  ProductRepository _productRepository;
   double _basketSummary;
   double _summaryAfterDiscount;
   String _currentUserBasketId;
@@ -22,6 +24,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
 
   BasketBloc() : super(InitialBasketState()) {
     _basketRepository = BasketRepository();
+    _productRepository = ProductRepository();
   }
 
   @override
@@ -39,6 +42,23 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
       _removeObject(event.index);
     } else if (event is ClearBasketEvent) {
       _clearBasket();
+    } else if (event is RemoveOneFromBasketEvent) {
+      Map<String, dynamic> response =
+          await _productRepository.removeProductFromBasket(
+        productId: event.productId,
+        quantity: 1,
+      );
+      add(LoadingBasketEvent());
+      String message = response['data']['msg'];
+      add(ShowBasketSnackBarEvent(message: message));
+    } else if (event is AddOneToBasketEvent) {
+      Map<String, dynamic> response = await _productRepository
+          .addProductToBasket(productId: event.productId);
+      add(LoadingBasketEvent());
+      String message = response['data']['msg'];
+      add(ShowBasketSnackBarEvent(message: message));
+    } else if (event is ShowBasketSnackBarEvent) {
+      yield ShowBasketSnackBarState(message: event.message);
     } else if (event is PurchaseBasketProductsEvent) {
       _purchaseAllBasketProducts();
     } else if (event is LoadedBasketEvent) {
@@ -98,6 +118,8 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
       (response) {
         if (response['success'] == true) {
           add(LoadingBasketEvent());
+          String message = response['data']['msg'];
+          add(ShowBasketSnackBarEvent(message: message));
         }
       },
     );
@@ -107,11 +129,12 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     Future<Map<String, dynamic>> removeAllProducts =
         _basketRepository.clearBasket();
     removeAllProducts.then(
-      (response) => {
-        if (response['success'] == true)
-          {
-            add(LoadingBasketEvent()),
-          }
+      (response) {
+        if (response['success'] == true) {
+          add(LoadingBasketEvent());
+          String message = response['data']['msg'];
+          add(ShowBasketSnackBarEvent(message: message));
+        }
       },
     );
   }

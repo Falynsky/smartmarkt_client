@@ -48,3 +48,33 @@ class PurchaseBasketProductsEvent extends BasketEvent {
   @override
   List<Object> get props => [];
 }
+
+class AddOneToBasketEvent extends BasketEvent {
+  final int productId;
+
+  AddOneToBasketEvent({@required this.productId});
+
+  @override
+  List<Object> get props => [];
+}
+
+class RemoveOneFromBasketEvent extends BasketEvent {
+  final int productId;
+
+  RemoveOneFromBasketEvent({@required this.productId});
+  @override
+  List<Object> get props => [productId];
+}
+
+class ShowBasketSnackBarEvent extends BasketEvent {
+  final String message;
+
+  ShowBasketSnackBarEvent({this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class BasketUnSucceedEvent extends BasketEvent {
+  @override
+  List<Object> get props => [];
+}
