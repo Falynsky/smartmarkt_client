@@ -52,7 +52,7 @@ class HistoryDetailsPage extends StatelessWidget {
     );
   }
 
-  Flexible flexibleText(String text) {
+  Widget flexibleText(String text) {
     return Flexible(
       child: Text(
         text,

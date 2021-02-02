@@ -208,17 +208,19 @@ class _ProductsPageState extends State<ProductsPage> {
 
   InkWell _imageButton(int index) {
     Product products = _newProducts[index];
-    String documentUrl =
-        '${HttpService.hostUrl}/files/download/${products.documentName}.${products.documentType}/db';
+    String documentName = products.documentName;
+    String documentType = products.documentType;
+    String endpointUrl = '${HttpService.hostUrl}/files/download/';
+    String fileUrl = endpointUrl + '$documentName.$documentType/db';
     return InkWell(
       child: Image.network(
-        '$documentUrl/70/70',
+        '$fileUrl/70/70',
         headers: HttpService.headers,
         errorBuilder: (_, __, ___) {
           return Icon(Icons.image_not_supported);
         },
       ),
-      onTap: () => LargeImageDialog().showDialogBox(context, documentUrl),
+      onTap: () => LargeImageDialog().showDialogBox(context, fileUrl),
     );
   }
 
