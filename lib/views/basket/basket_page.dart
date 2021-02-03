@@ -8,6 +8,7 @@ import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 import 'package:smartmarktclient/views/basket/basket_header.dart';
 import 'package:smartmarktclient/views/basket/basket_position.dart';
+import 'package:smartmarktclient/views/basket/empty_basket_page.dart';
 
 class BasketPage extends StatefulWidget {
   @override
@@ -77,7 +78,7 @@ class _BasketPageState extends State<BasketPage> {
     }
 
     if (basketProducts == null || basketProducts.isEmpty) {
-      return _emptyBasketInfo();
+      return EmptyBasketPage();
     }
 
     return Column(
@@ -86,29 +87,6 @@ class _BasketPageState extends State<BasketPage> {
         Divider(thickness: 2),
         _basketPositions(),
       ],
-    );
-  }
-
-  Widget _emptyBasketInfo() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.shopping_basket_outlined,
-            size: 100,
-            color: complementaryThree,
-          ),
-          Text(
-            "Brak produktów \nw koszyku",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: complementaryThree,
-              fontSize: 25,
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -193,7 +171,7 @@ class _BasketPageState extends State<BasketPage> {
     _basketBloc.add(PurchaseBasketProductsEvent());
   }
 
-  FlatButton _hideBarsCodeButton(BuildContext context) {
+  Widget _hideBarsCodeButton(BuildContext context) {
     return FlatButton(
       child: Text("Zamknij"),
       textColor: complementaryThree,

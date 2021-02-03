@@ -6,8 +6,8 @@ import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 import 'package:smartmarktclient/utilities/gradient.dart';
 import 'package:smartmarktclient/views/login/app_title.dart';
-import 'package:smartmarktclient/views/login/login_button.dart';
-import 'package:smartmarktclient/views/login/register_button.dart';
+import 'package:smartmarktclient/views/login/buttons/login_button.dart';
+import 'package:smartmarktclient/views/login/buttons/register_button.dart';
 
 class LoginPage extends StatefulWidget {
   @override

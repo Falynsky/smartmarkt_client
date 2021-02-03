@@ -5,8 +5,8 @@ import 'package:smartmarktclient/components/text_field_component.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 import 'package:smartmarktclient/utilities/gradient.dart';
-import 'package:smartmarktclient/views/register/sign_up_back_button.dart';
-import 'package:smartmarktclient/views/register/sign_up_button.dart';
+import 'package:smartmarktclient/views/register/buttons/sign_up_back_button.dart';
+import 'package:smartmarktclient/views/register/buttons/sign_up_button.dart';
 import 'package:smartmarktclient/views/register/sign_up_title.dart';
 
 class SignUpPage extends StatefulWidget {
