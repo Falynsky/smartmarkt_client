@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/bloc/scanner/scanner_bloc.dart';
-import 'package:smartmarktclient/bloc/scanner/scanner_event.dart';
 import 'package:smartmarktclient/bloc/scanner/scanner_state.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
-import 'package:smartmarktclient/views/scanner/scan_result_component.dart';
+import 'package:smartmarktclient/views/scanner/scanner_page_scan_button.dart';
+
+import 'file:///S:/repositories/e_thesis/smartmarkt_client/lib/views/scanner/scanner_result/scan_component.dart';
 
 class ScannerPage extends StatefulWidget {
   @override
@@ -68,19 +69,19 @@ class _ScannerPageState extends State<ScannerPage> {
         padding: const EdgeInsets.only(top: 20),
         child: Column(
           children: [
-            _buttonLabel(),
+            _scanButtonLabel(),
             SizedBox(height: 10),
-            _scanProductButton(context),
+            _scanProductButton(),
             SizedBox(height: 30),
             Divider(thickness: 1.5),
-            ScanResultComponent()
+            ScanComponent()
           ],
         ),
       ),
     );
   }
 
-  Widget _buttonLabel() {
+  Widget _scanButtonLabel() {
     return Text(
       "Wciśnij aby \nzeskanować produkt",
       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
@@ -88,26 +89,8 @@ class _ScannerPageState extends State<ScannerPage> {
     );
   }
 
-  Widget _scanProductButton(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        border: Border.all(
-          color: Colors.black,
-          width: 1.5,
-        ),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: InkWell(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.qr_code, size: 85),
-          ],
-        ),
-        onTap: () => _scannerBloc.add(GetProductInfoEvent()),
-      ),
-    );
+  Widget _scanProductButton() {
+    return ScannerPageScanButton();
   }
 
   @override

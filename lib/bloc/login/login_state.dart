@@ -16,8 +16,11 @@ class LoadedLoginState extends LoginState {
 }
 
 class CorrectLoginState extends LoginState {
+  final Key key;
+
+  CorrectLoginState({this.key});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [key];
 }
 
 class LoginErrorOccurredState extends LoginState {

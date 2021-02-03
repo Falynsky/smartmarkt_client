@@ -5,6 +5,9 @@ import 'package:smartmarktclient/components/text_field_component.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 import 'package:smartmarktclient/utilities/gradient.dart';
+import 'package:smartmarktclient/views/login/app_title.dart';
+import 'package:smartmarktclient/views/login/login_button.dart';
+import 'package:smartmarktclient/views/login/register_button.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -67,52 +70,35 @@ class _LoginPageState extends State<LoginPage> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Stack(
-          children: <Widget>[
-            gradientBackground(),
-            Form(
-              key: _formKey,
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      _appNameTitle(),
-                      _loginField(),
-                      _passwordField(),
-                      _loginButton(),
-                      _signUpButton(),
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ],
+          children: <Widget>[gradientBackground(), _loginPageForm()],
+        ),
+      ),
+    );
+  }
+
+  Widget _loginPageForm() {
+    return Form(
+      key: _formKey,
+      child: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _appNameTitle(),
+              _loginField(),
+              _passwordField(),
+              _loginButton(),
+              _registerButton(),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _appNameTitle() {
-    return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        'SmartMarkt',
-        style: TextStyle(
-          shadows: <Shadow>[
-            Shadow(
-              offset: Offset(5, 5),
-              blurRadius: 8.0,
-              color: Colors.black12,
-            ),
-          ],
-          color: complementaryOne,
-          fontFamily: 'OpenSans',
-          fontSize: 45,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
+    return AppTitle();
   }
 
   Widget _loginField() {
@@ -137,73 +123,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginButton() {
-    return Container(
-      padding: EdgeInsets.only(top: 25, left: 15, right: 15),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: _loginButtonOnPress,
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'ZALOGUJ',
-          style: TextStyle(
-            color: secondaryColor,
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
+    return LoginButton(
+      formKey: _formKey,
+      loginController: _loginController,
+      passwordController: _passwordController,
     );
   }
 
-  void _loginButtonOnPress() async {
-    bool validate = _formKey.currentState.validate();
-    if (validate) {
-      String _login = _loginController.text.toString();
-      String _password = _passwordController.text.toString();
-
-      final loginAccountEvent = LoginAccountEvent(
-        login: _login,
-        password: _password,
-      );
-
-      _loginBloc.add(loginAccountEvent);
-    }
-  }
-
-  Widget _signUpButton() {
-    return Container(
-      padding: EdgeInsets.only(top: 25, left: 15, right: 15),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: () {
-          Key key = UniqueKey();
-          _routeBloc.add(SignUpPageEvent(key));
-        },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'NOWE KONTO',
-          style: TextStyle(
-            color: secondaryColor,
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
-    );
+  Widget _registerButton() {
+    return RegisterButton();
   }
 
   Future<void> _showMyDialog(String title, String body) async {

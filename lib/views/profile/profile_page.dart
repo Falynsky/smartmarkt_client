@@ -5,9 +5,11 @@ import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/bloc/profile/history/history_details_page.dart';
 import 'package:smartmarktclient/bloc/profile/profile_bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
-import 'package:smartmarktclient/models/basket_history.dart';
 import 'package:smartmarktclient/models/product_history.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
+import 'package:smartmarktclient/views/profile/history/history_component.dart';
+import 'package:smartmarktclient/views/profile/history/history_header.dart';
+import 'package:smartmarktclient/views/profile/profile_avatar.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -63,135 +65,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildProfilePage() {
     return Column(
       children: [
-        _circleAvatar(),
+        ProfileAvatar(),
         Divider(height: 0, thickness: 2),
-        _historyListHeader(),
+        HistoryHeader(),
         Divider(height: 0, thickness: 2),
-        _shoppingHistoryList()
+        HistoryComponent()
       ],
-    );
-  }
-
-  Padding _circleAvatar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      child: Column(
-        children: [
-          CircleAvatar(
-            backgroundColor: complementaryThree,
-            radius: 65,
-            child: Text(
-              _profileBloc.initials ?? '',
-              style: TextStyle(fontSize: 55),
-            ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            _profileBloc.name ?? '',
-            style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container _historyListHeader() {
-    return Container(
-      color: shadesTwo,
-      padding: EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Historia zakupów",
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-              color: complementaryTwo,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _shoppingHistoryList() {
-    if (_profileBloc.basketHistory != null &&
-        _profileBloc.basketHistory.isNotEmpty) {
-      return Expanded(
-        child: Container(
-          padding: EdgeInsets.only(top: 3),
-          color: complementaryThree.withOpacity(0.7),
-          child: ListView.builder(
-            padding: EdgeInsets.only(bottom: 70),
-            itemCount: _profileBloc.basketHistory != null
-                ? _profileBloc.basketHistory.length
-                : 0,
-            itemBuilder: (context, index) {
-              return listCard(context, index);
-            },
-          ),
-        ),
-      );
-    } else {
-      return Expanded(
-        child: Container(
-          color: complementaryThree.withOpacity(0.7),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.shopping_basket_outlined,
-                  size: 100,
-                  color: shadesThree,
-                ),
-                Text(
-                  "Brak produktów \nw koszyku",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: shadesThree,
-                    fontSize: 25,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-  Widget listCard(BuildContext context, int index) {
-    BasketHistory basketHistory = _profileBloc.basketHistory[index];
-    String _purchasedDate = basketHistory.purchasedDateTime;
-    String _productSummary = basketHistory.purchasedPriceSummary.toString();
-    return Card(
-      child: InkWell(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          margin: EdgeInsets.symmetric(horizontal: 5),
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(_purchasedDate),
-              Text("$_productSummary zł"),
-            ],
-          ),
-        ),
-        onTap: () => {
-          _profileBloc.add(
-            ShowBasketHistoryDialogEvent(
-              basketHistoryId: basketHistory.id,
-              purchasedDate: _purchasedDate,
-              productSummary: _productSummary,
-            ),
-          )
-        },
-        splashFactory: InkSplash.splashFactory,
-        splashColor: secondaryColor,
-      ),
     );
   }
 

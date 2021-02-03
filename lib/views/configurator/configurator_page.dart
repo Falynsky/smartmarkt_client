@@ -45,12 +45,12 @@ class _ConfiguratorPageState extends State<ConfiguratorPage> {
               }
               setState(() {});
             },
-            child: _loginPage(context)),
+            child: _configPage(context)),
       ),
     );
   }
 
-  Widget _loginPage(BuildContext context) {
+  Widget _configPage(BuildContext context) {
     return Stack(
       children: <Widget>[
         gradientBackground(),
@@ -58,31 +58,47 @@ class _ConfiguratorPageState extends State<ConfiguratorPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Aby rozpocząć zakupy\nzeskanuj kod sklepu",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(height: 15),
-              InkWell(
-                borderRadius: BorderRadius.circular(25.0),
-                splashFactory: InkRipple.splashFactory,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.qr_code_scanner_rounded,
-                    size: 150,
-                  ),
-                ),
-                onTap: () => _configureBloc.add(ScanShopCodeEvent()),
-              ),
+              _buttonDescription(),
+              SizedBox(height: 25),
+              _scannerButton(),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buttonDescription() {
+    return Text(
+      "Aby rozpocząć zakupy\nzeskanuj kod sklepu",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 20,
+      ),
+    );
+  }
+
+  Widget _scannerButton() {
+    return InkWell(
+      borderRadius: BorderRadius.circular(25.0),
+      splashFactory: InkRipple.splashFactory,
+      child: Container(
+        decoration: BoxDecoration(
+          color: secondaryColor,
+          border: Border.all(
+            color: Colors.black,
+            width: 1.5,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.qr_code_scanner_rounded,
+          size: 150,
+        ),
+      ),
+      onTap: () => _configureBloc.add(ScanShopCodeEvent()),
     );
   }
 

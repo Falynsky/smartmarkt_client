@@ -27,7 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
 
       if (response['success']) {
-        yield CorrectLoginState();
+        yield CorrectLoginState(key: UniqueKey());
       } else {
         Map<String, dynamic> data = response['data'];
         String title = data['title'] ?? 'Błąd logowania';

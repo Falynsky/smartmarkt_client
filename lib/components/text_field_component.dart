@@ -9,6 +9,8 @@ class TextFieldComponent extends StatefulWidget {
   final IconData icon;
   final bool isRequired;
   final bool obscureText;
+  final bool isMail;
+  final bool autoValidate;
 
   TextFieldComponent({
     @required this.controller,
@@ -17,6 +19,8 @@ class TextFieldComponent extends StatefulWidget {
     @required this.icon,
     @required this.isRequired,
     this.obscureText,
+    this.isMail,
+    this.autoValidate,
   });
 
   @override
@@ -30,6 +34,10 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
   IconData _icon;
   bool _isRequired;
   bool _obscureText;
+  bool _isMail;
+  bool _autoValidate;
+
+  bool get _isAutoValidate => _autoValidate != null && _autoValidate == false;
 
   @override
   void initState() {
@@ -40,6 +48,8 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
     _icon = widget.icon;
     _isRequired = widget.isRequired ?? false;
     _obscureText = widget.obscureText ?? false;
+    _isMail = widget.isMail;
+    _autoValidate = widget.autoValidate;
   }
 
   @override
@@ -58,7 +68,8 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
             alignment: Alignment.centerLeft,
             child: TextFormField(
               obscureText: _obscureText,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
+              autovalidateMode:
+                  _isAutoValidate ? null : AutovalidateMode.onUserInteraction,
               validator: _validateField,
               textInputAction: TextInputAction.next,
               controller: _controller,
@@ -83,6 +94,11 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
     RegExp regExp = new RegExp(r'(\s)');
     if (regExp.hasMatch(value)) {
       return 'Puste znaki niedozwolone.';
+    }
+    RegExp regExpMail = new RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    if (_isMail != null && _isMail && !regExpMail.hasMatch(value)) {
+      return 'Błędy format maila.';
     }
 
     return null;

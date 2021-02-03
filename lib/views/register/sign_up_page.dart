@@ -5,6 +5,9 @@ import 'package:smartmarktclient/components/text_field_component.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 import 'package:smartmarktclient/utilities/gradient.dart';
+import 'package:smartmarktclient/views/register/sign_up_back_button.dart';
+import 'package:smartmarktclient/views/register/sign_up_button.dart';
+import 'package:smartmarktclient/views/register/sign_up_title.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -16,11 +19,11 @@ class _SignUpPageState extends State<SignUpPage> {
   SignUpBloc _signUpBloc;
   bool _isLoading;
 
-  final login = TextEditingController();
-  final password = TextEditingController();
-  final firstName = TextEditingController();
-  final lastName = TextEditingController();
-  final mail = TextEditingController();
+  final _loginController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _mailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -73,68 +76,53 @@ class _SignUpPageState extends State<SignUpPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Stack(
-        children: <Widget>[
-          gradientBackground(),
-          Form(
-            key: _formKey,
-            child: Center(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _signUpTitle(),
-                    _mailField(),
-                    _loginField(),
-                    _passwordField(),
-                    _firstNameField(),
-                    _lastNameField(),
-                    _buttons(),
-                  ],
-                ),
-              ),
-            ),
-          )
-        ],
+        children: <Widget>[gradientBackground(), _signUpForm()],
       ),
     );
   }
 
-  Widget _signUpTitle() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 25.0),
-      child: Text(
-        'REJESTRACJA',
-        style: TextStyle(
-          shadows: <Shadow>[
-            Shadow(
-              offset: Offset(5, 5),
-              blurRadius: 8.0,
-              color: Colors.black12,
-            ),
-          ],
-          color: complementaryOne,
-          fontFamily: 'OpenSans',
-          fontSize: 35,
-          fontWeight: FontWeight.bold,
+  Widget _signUpForm() {
+    return Form(
+      key: _formKey,
+      child: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _signUpTitle(),
+              _mailField(),
+              _loginField(),
+              _passwordField(),
+              _firstNameField(),
+              _lastNameField(),
+              _buttons(),
+            ],
+          ),
         ),
       ),
     );
   }
 
+  Widget _signUpTitle() {
+    return SignUpTitle();
+  }
+
   Widget _mailField() {
     return TextFieldComponent(
-      controller: mail,
+      controller: _mailController,
       label: 'E-mail',
       placeHolder: 'E-mail',
       icon: Icons.local_post_office_rounded,
       isRequired: true,
+      isMail: true,
+      autoValidate: false,
     );
   }
 
   Widget _loginField() {
     return TextFieldComponent(
-      controller: login,
+      controller: _loginController,
       label: 'Login',
       placeHolder: 'Login',
       icon: Icons.person,
@@ -144,7 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _passwordField() {
     return TextFieldComponent(
-      controller: password,
+      controller: _passwordController,
       label: 'Hasło',
       placeHolder: 'Hasło',
       icon: Icons.lock,
@@ -155,7 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _firstNameField() {
     return TextFieldComponent(
-      controller: firstName,
+      controller: _firstNameController,
       label: 'Imię',
       placeHolder: 'Imię',
       icon: Icons.person,
@@ -165,7 +153,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _lastNameField() {
     return TextFieldComponent(
-      controller: lastName,
+      controller: _lastNameController,
       label: 'Nazwisko',
       placeHolder: 'Nazwisko',
       icon: Icons.person,
@@ -176,82 +164,24 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buttons() {
     return Row(
       children: [
-        Flexible(child: _buildBackButton()),
-        Flexible(child: _buildSignUpButton()),
+        _buildBackButton(),
+        _buildSignUpButton(),
       ],
     );
   }
 
-  Widget _buildSignUpButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: _signUpButton,
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'ZAPISZ',
-          style: TextStyle(
-            color: secondaryColor,
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _signUpButton() async {
-    bool validate = _formKey.currentState.validate();
-    if (validate) {
-      String _mail = mail.text.toString();
-      String _login = login.text.toString();
-      String _password = password.text.toString();
-      String _firstName = firstName.text.toString();
-      String _lastName = lastName.text.toString();
-
-      final registerAccountEvent = RegisterAccountEvent(
-        mail: _mail,
-        login: _login,
-        password: _password,
-        firstName: _firstName,
-        lastName: _lastName,
-      );
-
-      _signUpBloc.add(registerAccountEvent);
-    }
-  }
-
   Widget _buildBackButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: () => _routeBloc.add(LoadLoginPageEvent()),
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'POWRÓT',
-          style: TextStyle(
-            color: secondaryColor,
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
+    return SignUpBackButton();
+  }
+
+  Widget _buildSignUpButton() {
+    return SignUpButton(
+      loginController: _loginController,
+      passwordController: _passwordController,
+      firstNameController: _firstNameController,
+      lastNameController: _lastNameController,
+      mailController: _mailController,
+      formKey: _formKey,
     );
   }
 
