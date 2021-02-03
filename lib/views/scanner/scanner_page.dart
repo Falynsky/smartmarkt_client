@@ -6,8 +6,7 @@ import 'package:smartmarktclient/bloc/scanner/scanner_state.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 import 'package:smartmarktclient/views/scanner/scanner_page_scan_button.dart';
-
-import 'file:///S:/repositories/e_thesis/smartmarkt_client/lib/views/scanner/scanner_result/scan_component.dart';
+import 'package:smartmarktclient/views/scanner/scanner_result/scan_component.dart';
 
 class ScannerPage extends StatefulWidget {
   @override

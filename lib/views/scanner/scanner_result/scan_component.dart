@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
+import 'package:smartmarktclient/views/scanner/scanner_result/empty_scanner_result.dart';
 import 'package:smartmarktclient/views/scanner/scanner_result/scanner_result.dart';
-
-import 'file:///S:/repositories/e_thesis/smartmarkt_client/lib/views/scanner/scanner_result/empty_scanner_result.dart';
 
 class ScanComponent extends StatefulWidget {
   ScanComponent();

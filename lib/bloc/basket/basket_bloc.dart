@@ -43,20 +43,9 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     } else if (event is ClearBasketEvent) {
       _clearBasket();
     } else if (event is RemoveOneFromBasketEvent) {
-      Map<String, dynamic> response =
-          await _productRepository.removeProductFromBasket(
-        productId: event.productId,
-        quantity: 1,
-      );
-      add(LoadingBasketEvent());
-      String message = response['data']['msg'];
-      add(ShowBasketSnackBarEvent(message: message));
+      await _removeOneFromBasket(event);
     } else if (event is AddOneToBasketEvent) {
-      Map<String, dynamic> response = await _productRepository
-          .addProductToBasket(productId: event.productId);
-      add(LoadingBasketEvent());
-      String message = response['data']['msg'];
-      add(ShowBasketSnackBarEvent(message: message));
+      await _addOneToBasket(event);
     } else if (event is ShowBasketSnackBarEvent) {
       yield ShowBasketSnackBarState(message: event.message);
     } else if (event is PurchaseBasketProductsEvent) {
@@ -117,9 +106,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     removeBasketProduct.then(
       (response) {
         if (response['success'] == true) {
-          add(LoadingBasketEvent());
-          String message = response['data']['msg'];
-          add(ShowBasketSnackBarEvent(message: message));
+          _emitRefreshAndShowSnackBar(response);
         }
       },
     );
@@ -131,12 +118,31 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     removeAllProducts.then(
       (response) {
         if (response['success'] == true) {
-          add(LoadingBasketEvent());
-          String message = response['data']['msg'];
-          add(ShowBasketSnackBarEvent(message: message));
+          _emitRefreshAndShowSnackBar(response);
         }
       },
     );
+  }
+
+  Future _removeOneFromBasket(RemoveOneFromBasketEvent event) async {
+    Map<String, dynamic> response =
+        await _productRepository.removeProductFromBasket(
+      productId: event.productId,
+      quantity: 1,
+    );
+    _emitRefreshAndShowSnackBar(response);
+  }
+
+  Future _addOneToBasket(AddOneToBasketEvent event) async {
+    Map<String, dynamic> response =
+        await _productRepository.addProductToBasket(productId: event.productId);
+    _emitRefreshAndShowSnackBar(response);
+  }
+
+  void _emitRefreshAndShowSnackBar(Map<String, dynamic> response) {
+    add(LoadingBasketEvent());
+    String message = response['data']['msg'];
+    add(ShowBasketSnackBarEvent(message: message));
   }
 
   void _purchaseAllBasketProducts() {
