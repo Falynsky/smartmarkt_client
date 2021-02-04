@@ -29,13 +29,16 @@ class ScannerBloc extends Bloc<ScannerEvent, ScannerState> {
         if (isSuccess) {
           Map<String, dynamic> productData = response['data'];
           if (productData.isNotEmpty) {
-            yield CorrectScanState(productData: productData);
+            yield CorrectScanState(
+              key: UniqueKey(),
+              productData: productData,
+            );
           } else {
-            yield ErrorScanState();
+            yield ErrorScanState(key: UniqueKey());
           }
         }
       } else {
-        yield ErrorScanState();
+        yield ErrorScanState(key: UniqueKey());
       }
     } else if (event is AddProductToBasketEvent) {
       Map<String, dynamic> response =

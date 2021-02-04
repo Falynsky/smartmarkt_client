@@ -11,19 +11,28 @@ class InitialScannerState extends ScannerState {
 }
 
 class ErrorScanState extends ScannerState {
+  final Key key;
+
+  ErrorScanState({@required this.key});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [key];
 }
 
 class CorrectScanState extends ScannerState {
+  final Key key;
   final Map<String, dynamic> productData;
 
   CorrectScanState({
+    @required this.key,
     @required this.productData,
   });
 
   @override
-  List<Object> get props => [productData];
+  List<Object> get props => [
+        key,
+        productData,
+      ];
 }
 
 class AddToBasketState extends ScannerState {

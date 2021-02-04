@@ -26,6 +26,14 @@ class _ScannerResultState extends State<ScannerResult> {
   }
 
   @override
+  void didUpdateWidget(covariant ScannerResult oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.scannedInfo != widget.scannedInfo) {
+      _scannedInfo = widget.scannedInfo;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
