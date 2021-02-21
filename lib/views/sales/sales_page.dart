@@ -6,7 +6,7 @@ import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/models/sale.dart';
 import 'package:smartmarktclient/utilities/circular_idicator.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
-import 'package:smartmarktclient/views/sales/empty_sale_screen.dart';
+import 'package:smartmarktclient/views/empty_list_screen.dart';
 import 'package:smartmarktclient/views/sales/sales_position.dart';
 
 class SalesPage extends StatefulWidget {
@@ -64,20 +64,18 @@ class _SalesPageState extends State<SalesPage> {
       return CircularIndicator();
     }
 
-    if (_newSales == null || !_newSales.isNotEmpty) {
-      return EmptySaleScreen();
-    }
-
     return _salesComponent();
   }
 
   Widget _salesComponent() {
+    var salesNotExists = _newSales == null || !_newSales.isNotEmpty;
     return Container(
       color: primaryColor,
       child: Column(
         children: [
           _searchBar(),
-          _salesList(),
+          if (salesNotExists) EmptyListScreen(msg: "Brak promocji"),
+          if (!salesNotExists) _salesList(),
         ],
       ),
     );

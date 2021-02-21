@@ -13,6 +13,7 @@ class EmptyHistoryScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _emptyHistoryIcon(),
+              SizedBox(height: 15),
               _emptyHistoryDescription(),
             ],
           ),
@@ -23,7 +24,7 @@ class EmptyHistoryScreen extends StatelessWidget {
 
   Widget _emptyHistoryIcon() {
     return Icon(
-      Icons.shopping_basket_outlined,
+      Icons.history_toggle_off_rounded,
       size: 100,
       color: shadesThree,
     );
@@ -31,7 +32,7 @@ class EmptyHistoryScreen extends StatelessWidget {
 
   Widget _emptyHistoryDescription() {
     return Text(
-      "Brak produktów \nw koszyku",
+      "Brak historii\nzakupów",
       textAlign: TextAlign.center,
       style: TextStyle(
         color: shadesThree,

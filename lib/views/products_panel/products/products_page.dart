@@ -7,6 +7,7 @@ import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/models/product.dart';
 import 'package:smartmarktclient/models/product_type.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
+import 'package:smartmarktclient/views/empty_list_screen.dart';
 import 'package:smartmarktclient/views/products_panel/products/product_info_dialog.dart';
 
 import 'large_image_dialog.dart';
@@ -90,10 +91,11 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   Widget productList(BuildContext context) {
+    var productsExists = _newProducts != null && _newProducts.isNotEmpty;
     return Column(
       children: [
         _searchBar(),
-        if (_newProducts != null && _newProducts.isNotEmpty)
+        if (productsExists)
           Expanded(
             child: Container(
               color: primaryColor,
@@ -105,32 +107,7 @@ class _ProductsPageState extends State<ProductsPage> {
               ),
             ),
           ),
-        if (_newProducts == null || _newProducts.isEmpty)
-          Expanded(
-            child: Container(
-              color: primaryColor,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.format_list_bulleted_rounded,
-                      size: 100,
-                      color: shadesThree,
-                    ),
-                    Text(
-                      "Brak produktów",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: shadesThree,
-                        fontSize: 25,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          )
+        if (!productsExists) EmptyListScreen(msg: "Brak produktów")
       ],
     );
   }

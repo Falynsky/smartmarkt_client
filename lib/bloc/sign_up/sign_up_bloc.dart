@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
@@ -14,10 +16,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
     if (event is SignUpLoadingEvent) {
       yield SignUpLoadingState();
-      Future.delayed(Duration(milliseconds: 10), () {
-        final loadedSignUpEvent = LoadedSignUpEvent();
-        add(loadedSignUpEvent);
-      });
+      Future.delayed(
+        Duration(milliseconds: 10),
+        _emitLoadedSignUpEvent,
+      );
     } else if (event is LoadedSignUpEvent) {
       yield LoadedSignUpState();
     } else if (event is RegisterAccountEvent) {
@@ -44,5 +46,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         );
       }
     }
+  }
+
+  FutureOr<dynamic> _emitLoadedSignUpEvent() {
+    final loadedSignUpEvent = LoadedSignUpEvent();
+    add(loadedSignUpEvent);
   }
 }

@@ -94,6 +94,7 @@ class _ScannerPageState extends State<ScannerPage> {
 
   @override
   void dispose() {
+    _scannerBloc.close();
     super.dispose();
   }
 }
