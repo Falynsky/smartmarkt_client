@@ -21,36 +21,44 @@ class ScannerBloc extends Bloc<ScannerEvent, ScannerState> {
     if (event is InitialScannerEvent) {
       yield InitialScannerState();
     } else if (event is GetProductInfoEvent) {
-      int productCode = await _scannerRepository.getProductCode();
-      if (productCode != null) {
-        Map<String, dynamic> response =
-            await _scannerRepository.getProductInfo(productCode: productCode);
-        bool isSuccess = response['success'];
-        if (isSuccess) {
-          Map<String, dynamic> productData = response['data'];
-          if (productData.isNotEmpty) {
-            yield CorrectScanState(
-              key: UniqueKey(),
-              productData: productData,
-            );
-          } else {
-            yield ErrorScanState(key: UniqueKey());
-          }
-        }
-      } else {
-        yield ErrorScanState(key: UniqueKey());
-      }
+      yield* _getProductInfo();
     } else if (event is AddProductToBasketEvent) {
-      Map<String, dynamic> response =
-          await _productRepository.addProductToBasket(
-        productId: event.productId,
-      );
-
-      String message = response['data']['msg'];
-      yield AddToBasketState(
-        message: message,
-        key: UniqueKey(),
-      );
+      yield* _addProductToBasket(event);
     }
+  }
+
+  Stream<ScannerState> _getProductInfo() async* {
+    int productCode = await _scannerRepository.getProductCode();
+    if (productCode != null) {
+      Map<String, dynamic> response =
+          await _scannerRepository.getProductInfo(productCode: productCode);
+      bool isSuccess = response['success'];
+      if (isSuccess) {
+        Map<String, dynamic> productData = response['data'];
+        if (productData.isNotEmpty) {
+          yield CorrectScanState(
+            key: UniqueKey(),
+            productData: productData,
+          );
+        } else {
+          yield ErrorScanState(key: UniqueKey());
+        }
+      }
+    } else {
+      yield ErrorScanState(key: UniqueKey());
+    }
+  }
+
+  Stream<ScannerState> _addProductToBasket(
+      AddProductToBasketEvent event) async* {
+    Map<String, dynamic> response = await _productRepository.addProductToBasket(
+      productId: event.productId,
+    );
+
+    String message = response['data']['msg'];
+    yield AddToBasketState(
+      message: message,
+      key: UniqueKey(),
+    );
   }
 }

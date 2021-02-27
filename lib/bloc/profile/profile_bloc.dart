@@ -34,21 +34,21 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         initials = firstName[0] + lastName[0];
         userId = data['userId'].toString();
         add(LoadBasketHistoryEvent());
-      } else {}
+      }
     } else if (event is LoadBasketHistoryEvent) {
       Map<String, dynamic> response =
           await _profileRepository.loadBasketHistoryInfo(userId: userId);
       if (response['success']) {
         _basketHistory = [];
-        final basketHistory =
-            List<Map<String, dynamic>>.from(response['data']['historyList']);
+        final historyList = response['data']['historyList'];
+        final basketHistory = List<Map<String, dynamic>>.from(historyList);
         basketHistory.forEach((jsonBasketHistory) {
           BasketHistory basketHistory =
               BasketHistory.fromJson(jsonBasketHistory);
           _basketHistory.add(basketHistory);
         });
         yield LoadProfileScreenState();
-      } else {}
+      }
     } else if (event is ShowBasketHistoryDialogEvent) {
       int basketHistoryId = event.basketHistoryId;
       Map<String, dynamic> response =
@@ -72,7 +72,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           purchasedDate: event.purchasedDate,
           productSummary: event.productSummary,
         );
-      } else {}
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  static String hostUrl = "http://192.168.21.4:8080";
+  static String hostUrl = "";
 
   static Map<String, String> headers = {
     'Content-type': 'application/json; charset=UTF-8',
@@ -21,7 +21,7 @@ class HttpService {
     @required String url,
     Map<String, dynamic> postBody,
   }) async {
-    final encodedBody = jsonEncode(postBody);
+    final encodedBody = jsonEncode(postBody ?? {});
     http.Response response;
     try {
       response = await http.post(
@@ -38,8 +38,6 @@ class HttpService {
     if (body.isNotEmpty) {
       String decode = utf8.decode(response.bodyBytes);
       decodedBody = json.decode(decode);
-    } else {
-      decodedBody = {};
     }
 
     int statusCode = response.statusCode;
@@ -47,12 +45,25 @@ class HttpService {
     if (statusCode >= 400) {
       return _collectResponseData(false, statusCode, data);
     } else if (statusCode >= 200 && statusCode <= 299) {
-      if (statusCode == 200 && url == '/auth/login') {
+      bool isCorrectLoginResponse = _isCorrectLoginResponse(
+        statusCode: statusCode,
+        url: url,
+      );
+      if (isCorrectLoginResponse) {
         headers['Auth'] = 'Wave ' + data['token'];
       }
       return _collectResponseData(true, statusCode, data);
     }
     return _collectResponseData(false, statusCode, data);
+  }
+
+  bool _isCorrectLoginResponse({
+    @required int statusCode,
+    @required String url,
+  }) {
+    bool isStatusCorrect = statusCode == 200;
+    bool isAuthLoginEndpoint = url == '/auth/login';
+    return isStatusCorrect && isAuthLoginEndpoint;
   }
 
   dynamic _getDataFromDataBody(Map<String, dynamic> dataBody) {

@@ -21,24 +21,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is LoadedLoginEvent) {
       yield LoadedLoginState();
     } else if (event is LoginAccountEvent) {
-      Map<String, dynamic> response = await _loginRepository.login(
-        login: event.login,
-        password: event.password,
+      yield* _loginToSystem(event);
+    }
+  }
+
+  Stream<LoginState> _loginToSystem(LoginAccountEvent event) async* {
+    Map<String, dynamic> response = await _loginRepository.login(
+      login: event.login,
+      password: event.password,
+    );
+
+    if (response['success']) {
+      yield CorrectLoginState(key: UniqueKey());
+    } else {
+      Map<String, dynamic> data = response['data'];
+      String title = data['title'] ?? 'Błąd logowania';
+      String msg = data['msg'] ?? 'Niepoprawne dane.';
+
+      yield LoginErrorOccurredState(
+        title: title,
+        msg: msg,
+        key: UniqueKey(),
       );
-
-      if (response['success']) {
-        yield CorrectLoginState(key: UniqueKey());
-      } else {
-        Map<String, dynamic> data = response['data'];
-        String title = data['title'] ?? 'Błąd logowania';
-        String msg = data['msg'] ?? 'Niepoprawne dane.';
-
-        yield LoginErrorOccurredState(
-          title: title,
-          msg: msg,
-          key: GlobalKey(),
-        );
-      }
     }
   }
 }

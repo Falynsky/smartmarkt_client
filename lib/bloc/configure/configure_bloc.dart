@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/repositories/configuration_repository.dart';
 
 import '../bloc.dart';
@@ -18,18 +19,28 @@ class ConfigureBloc extends Bloc<ConfigureEvent, ConfigureState> {
     } else if (event is ScanShopCodeEvent) {
       String storeAddress = await _configurationRepository.getStoreAddress();
       if (storeAddress.isNotEmpty) {
-        add(CheckShopCodeEvent(storeAddress: storeAddress));
+        final checkShopCodeEvent =
+            CheckShopCodeEvent(storeAddress: storeAddress);
+        add(checkShopCodeEvent);
       }
     } else if (event is CheckShopCodeEvent) {
-      Map<String, dynamic> _serverAvailableInfo = await _configurationRepository
-          .isServerAvailable(storeAddress: event.storeAddress);
-      bool serverAvailableInfo = _serverAvailableInfo["success"];
-      Key key = UniqueKey();
-      if (serverAvailableInfo) {
-        yield ShopAvailableState(key);
-      } else {
-        yield ShopUnAvailableState(key);
-      }
+      yield* checkShopAvailability(event);
+    }
+  }
+
+  Stream<ConfigureState> checkShopAvailability(
+    CheckShopCodeEvent event,
+  ) async* {
+    String storeAddress = event.storeAddress;
+    bool isServerAvailable = await _configurationRepository.isServerAvailable(
+      storeAddress: storeAddress,
+    );
+    if (isServerAvailable) {
+      HttpService.hostUrl = storeAddress;
+      yield ShopAvailableState(UniqueKey());
+    } else {
+      HttpService.hostUrl = null;
+      yield ShopUnAvailableState(UniqueKey());
     }
   }
 }

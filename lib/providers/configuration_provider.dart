@@ -12,9 +12,10 @@ class ConfigurationProvider {
     return BarcodeScanner.scan();
   }
 
-  Future<Map<String, dynamic>> isServerAvailable({String storeAddress}) async {
+  Future<bool> isServerAvailable({String storeAddress}) async {
     String barsCode = "/isAlive";
     HttpService.hostUrl = storeAddress;
-    return await _httpService.post(url: barsCode, postBody: {});
+    Map<String, dynamic> response = await _httpService.post(url: barsCode);
+    return response['success'];
   }
 }

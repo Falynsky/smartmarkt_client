@@ -14,7 +14,7 @@ class ConfigurationRepository {
     return scanResult.rawContent;
   }
 
-  Future<Map<String, dynamic>> isServerAvailable({
+  Future<bool> isServerAvailable({
     @required String storeAddress,
   }) async {
     return await _configurationProvider.isServerAvailable(
