@@ -10,7 +10,7 @@ class SignUpBackButton extends StatefulWidget {
 }
 
 class _SignUpBackButtonState extends State<SignUpBackButton> {
-  RouteBloc _routeBloc;
+  late RouteBloc _routeBloc;
 
   @override
   void initState() {

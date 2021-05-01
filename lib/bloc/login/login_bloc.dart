@@ -4,7 +4,7 @@ import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/repositories/login_repository.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginRepository _loginRepository;
+ late LoginRepository _loginRepository;
 
   LoginBloc() : super(LoginLoadingState()) {
     _loginRepository = LoginRepository();

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class ProductHistory {
   final int quantity;
@@ -6,9 +5,9 @@ class ProductHistory {
   final double purchasedPrice;
 
   ProductHistory({
-    @required this.quantity,
-    @required this.productName,
-    @required this.purchasedPrice,
+    required this.quantity,
+    required this.productName,
+    required this.purchasedPrice,
   });
 
   ProductHistory.fromJson(Map<String, dynamic> json)

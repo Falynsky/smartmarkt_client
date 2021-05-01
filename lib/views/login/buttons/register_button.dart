@@ -9,7 +9,7 @@ class RegisterButton extends StatefulWidget {
 }
 
 class _RegisterButtonState extends State<RegisterButton> {
-  RouteBloc _routeBloc;
+ late RouteBloc _routeBloc;
 
   @override
   void initState() {

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:smartmarktclient/models/product_type.dart';
 
 abstract class ProductsPanelState extends Equatable {
@@ -15,7 +14,7 @@ class SelectedTypeProductsState extends ProductsPanelState {
   final ProductType productType;
 
   SelectedTypeProductsState({
-    @required this.productType,
+    required this.productType,
   });
 
   @override

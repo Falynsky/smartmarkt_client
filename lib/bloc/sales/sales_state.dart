@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:smartmarktclient/models/sale.dart';
 
 abstract class SalesState extends Equatable {
@@ -19,7 +18,7 @@ class SalesLoadingState extends SalesState {
 class LoadedSalesState extends SalesState {
   final List<Sale> sales;
 
-  LoadedSalesState({@required this.sales});
+  LoadedSalesState({required this.sales});
 
   @override
   List<Object> get props => [

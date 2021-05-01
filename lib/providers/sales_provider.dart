@@ -1,7 +1,7 @@
 import 'package:smartmarktclient/http/http_service.dart';
 
 class SalesProvider {
-  HttpService _httpService;
+  late HttpService _httpService;
   final String _endPoint = "/sales";
 
   SalesProvider() {

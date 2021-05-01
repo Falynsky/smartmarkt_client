@@ -7,9 +7,9 @@ import 'package:smartmarktclient/repositories/sales_repository.dart';
 import '../bloc.dart';
 
 class SalesBloc extends Bloc<SalesEvent, SalesState> {
-  SalesRepository _salesRepository;
-  List<Sale> _sales;
-  List<Sale> get sales => _sales;
+late SalesRepository _salesRepository;
+late List<Sale> _sales;
+List<Sale> get sales => _sales;
 
   SalesBloc() : super(SalesLoadingState()) {
     _salesRepository = SalesRepository();

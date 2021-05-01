@@ -11,7 +11,7 @@ class ProfileAvatar extends StatefulWidget {
 }
 
 class _ProfileAvatarState extends State<ProfileAvatar> {
-  ProfileBloc _profileBloc;
+  late ProfileBloc _profileBloc;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
       backgroundColor: complementaryThree,
       radius: 65,
       child: Text(
-        _profileBloc.initials ?? '',
+        _profileBloc.initials,
         style: TextStyle(fontSize: 55),
       ),
     );
@@ -42,7 +42,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
 
   Widget _profileName() {
     return Text(
-      _profileBloc.name ?? '',
+      _profileBloc.name,
       style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
     );
   }

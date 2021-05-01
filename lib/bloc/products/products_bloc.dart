@@ -8,9 +8,9 @@ import 'package:smartmarktclient/repositories/product_repository.dart';
 import '../bloc.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  ProductRepository _productRepository;
-  List<Product> _products;
-  int _productTypeId;
+  late ProductRepository _productRepository;
+  late List<Product> _products;
+  late int _productTypeId;
 
   ProductsBloc() : super(InitialProductsState()) {
     _productRepository = ProductRepository();
@@ -26,8 +26,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       _productTypeId = event.productTypeId;
       _getProducts(event);
     } else if (event is AddToBasketEvent) {
-      Map<String, dynamic> response =
-          await _productRepository.addProductToBasket(
+      Map<String, dynamic> response = await _productRepository.addProductToBasket(
         productId: event.productId,
         quantity: event.quantity,
       );
@@ -55,8 +54,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       (response) {
         if (response['success']) {
           _products = [];
-          final products =
-              new List<Map<String, dynamic>>.from(response['data']);
+          final products = new List<Map<String, dynamic>>.from(response['data']);
           products.forEach((jsonProduct) {
             Product product = Product.fromJson(jsonProduct);
             _products.add(product);

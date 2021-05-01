@@ -6,12 +6,12 @@ import 'package:smartmarktclient/utilities/colors.dart';
 class LoginButton extends StatefulWidget {
   final TextEditingController loginController;
   final TextEditingController passwordController;
-  final GlobalKey formKey;
+  final GlobalKey<FormState>  formKey;
 
   const LoginButton({
-    this.loginController,
-    this.passwordController,
-    this.formKey,
+    required this.loginController,
+    required this.formKey,
+    required this.passwordController,
   });
 
   @override
@@ -19,10 +19,10 @@ class LoginButton extends StatefulWidget {
 }
 
 class _LoginButtonState extends State<LoginButton> {
-  LoginBloc _loginBloc;
-  TextEditingController _loginController;
-  TextEditingController _passwordController;
-  GlobalKey<FormState> _formKey;
+ late LoginBloc _loginBloc;
+ late TextEditingController _loginController;
+ late TextEditingController _passwordController;
+ late GlobalKey<FormState> _formKey;
 
   @override
   void initState() {
@@ -56,7 +56,7 @@ class _LoginButtonState extends State<LoginButton> {
   }
 
   void _buttonOnPress() async {
-    bool validate = _formKey.currentState.validate();
+    bool validate = _formKey.currentState?.validate() ?? false;
     if (validate) {
       String _login = _loginController.text.toString();
       String _password = _passwordController.text.toString();

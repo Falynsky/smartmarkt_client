@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 abstract class ProductsEvent extends Equatable {
   const ProductsEvent();
@@ -8,7 +7,7 @@ abstract class ProductsEvent extends Equatable {
 class InitialProductsEvent extends ProductsEvent {
   final int productTypeId;
 
-  InitialProductsEvent({this.productTypeId});
+  InitialProductsEvent({required this.productTypeId});
 
   @override
   List<Object> get props => [
@@ -21,8 +20,8 @@ class AddToBasketEvent extends ProductsEvent {
   final int quantity;
 
   AddToBasketEvent({
-    @required this.productId,
-    @required this.quantity,
+    required this.productId,
+    required this.quantity,
   });
 
   @override
@@ -41,6 +40,7 @@ class AddToBasketUnSucceedEvent extends ProductsEvent {
   final String msg;
 
   AddToBasketUnSucceedEvent(this.msg);
+
   @override
   List<Object> get props => [];
 }

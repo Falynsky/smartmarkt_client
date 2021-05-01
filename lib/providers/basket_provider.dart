@@ -1,7 +1,7 @@
 import 'package:smartmarktclient/http/http_service.dart';
 
 class BasketProvider {
-  HttpService _httpService;
+  late HttpService _httpService;
   final String _endPoint = "/baskets_products";
 
   BasketProvider() {

@@ -4,17 +4,17 @@ import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
 class PagesAppBar extends StatefulWidget {
-  final String title;
+  late final String title;
 
-  PagesAppBar({@required this.title});
+  PagesAppBar({required this.title});
 
   @override
   _PagesAppBarState createState() => _PagesAppBarState();
 }
 
 class _PagesAppBarState extends State<PagesAppBar> {
-  RouteBloc _routeBloc;
-  String _title;
+  late RouteBloc _routeBloc;
+  late String _title;
 
   @override
   void initState() {

@@ -31,7 +31,7 @@ class RemoveBasketProductsState extends BasketState {
 class ShowBasketSnackBarState extends BasketState {
   final String message;
 
-  ShowBasketSnackBarState({this.message});
+  ShowBasketSnackBarState({required this.message});
   @override
   List<Object> get props => [message];
 }

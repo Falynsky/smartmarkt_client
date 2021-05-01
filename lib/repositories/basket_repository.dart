@@ -1,7 +1,7 @@
 import 'package:smartmarktclient/providers/basket_provider.dart';
 
 class BasketRepository {
-  BasketProvider _basketProvider;
+  late BasketProvider _basketProvider;
 
   BasketRepository() {
     _basketProvider = BasketProvider();

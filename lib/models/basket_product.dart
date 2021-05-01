@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class BasketProduct {
   final int id;
@@ -13,16 +12,16 @@ class BasketProduct {
   final String documentType;
 
   BasketProduct({
-    @required this.id,
-    @required this.productId,
-    @required this.name,
-    @required this.quantity,
-    @required this.price,
-    @required this.summary,
-    @required this.discountPrice,
-    @required this.documentId,
-    @required this.documentName,
-    @required this.documentType,
+    required this.id,
+    required this.productId,
+    required this.name,
+    required this.quantity,
+    required this.price,
+    required this.summary,
+    required this.discountPrice,
+    required this.documentId,
+    required this.documentName,
+    required this.documentType,
   });
 
   BasketProduct.fromJson(Map<String, dynamic> json)

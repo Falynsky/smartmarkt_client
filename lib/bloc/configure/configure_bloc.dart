@@ -6,7 +6,7 @@ import 'package:smartmarktclient/repositories/configuration_repository.dart';
 import '../bloc.dart';
 
 class ConfigureBloc extends Bloc<ConfigureEvent, ConfigureState> {
-  ConfigurationRepository _configurationRepository;
+  late ConfigurationRepository _configurationRepository;
 
   ConfigureBloc() : super(LoadConfigureMenuState()) {
     _configurationRepository = ConfigurationRepository();
@@ -17,7 +17,7 @@ class ConfigureBloc extends Bloc<ConfigureEvent, ConfigureState> {
     if (event is LoadConfigurePageEvent) {
       yield LoadConfigureMenuState();
     } else if (event is ScanShopCodeEvent) {
-      String storeAddress = await _configurationRepository.getStoreAddress();
+      String storeAddress = "192.168.2.2:8080"/*await _configurationRepository.getStoreAddress()*/;
       if (storeAddress.isNotEmpty) {
         final checkShopCodeEvent =
             CheckShopCodeEvent(storeAddress: storeAddress);
@@ -39,7 +39,7 @@ class ConfigureBloc extends Bloc<ConfigureEvent, ConfigureState> {
       HttpService.hostUrl = storeAddress;
       yield ShopAvailableState(UniqueKey());
     } else {
-      HttpService.hostUrl = null;
+      HttpService.hostUrl = "";
       yield ShopUnAvailableState(UniqueKey());
     }
   }

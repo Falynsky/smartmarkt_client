@@ -12,8 +12,8 @@ class ProductsPanel extends StatefulWidget {
 }
 
 class _ProductsPanelState extends State<ProductsPanel> {
-  ProductsPanelBloc _productsBloc;
-  RouteBloc _routeBloc;
+  late ProductsPanelBloc _productsBloc;
+  late RouteBloc _routeBloc;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _ProductsPanelState extends State<ProductsPanel> {
           child: BlocListener<ProductsPanelBloc, ProductsPanelState>(
             listener: (context, state) {},
             child: BlocBuilder(
-              cubit: _productsBloc,
+              bloc: _productsBloc,
               builder: (context, state) {
                 if (state is ProductTypesPageState) {
                   return ProductTypesPage();

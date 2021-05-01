@@ -15,9 +15,9 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  RouteBloc _routeBloc;
-  SignUpBloc _signUpBloc;
-  bool _isLoading;
+  late RouteBloc _routeBloc;
+  late SignUpBloc _signUpBloc;
+  late bool _isLoading;
 
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -209,9 +209,8 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             contentTextStyle: TextStyle(color: Colors.white70, fontSize: 16),
             actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                textColor: complementaryThree,
+              TextButton(
+                child: Text('OK', style: TextStyle(color: complementaryThree)),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],

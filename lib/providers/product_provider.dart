@@ -1,23 +1,22 @@
-import 'package:flutter/material.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
 class ProductProvider {
-  HttpService _httpService;
-  final String _addToBasketEndPoint = "/baskets_products/add";
-  final String _removeFromBasketEndPoint = "/baskets_products/remove";
-  final String _getProductsEndPoint = "/products/typeId";
+late HttpService _httpService;
+late final String _addToBasketEndPoint = "/baskets_products/add";
+late final String _removeFromBasketEndPoint = "/baskets_products/remove";
+late final String _getProductsEndPoint = "/products/typeId";
 
   ProductProvider() {
     _httpService = HttpService();
   }
 
   Future<Map<String, dynamic>> addProductToBasket({
-    @required int productId,
-    int quantity,
+    required int productId,
+    required int quantity,
   }) async {
     Map<String, dynamic> body = {
       "productId": productId,
-      "quantity": quantity ?? 1
+      "quantity": quantity
     };
 
     final response = await _httpService.post(
@@ -29,12 +28,11 @@ class ProductProvider {
   }
 
   Future<Map<String, dynamic>> removeProductFromBasket({
-    @required int productId,
-    int quantity,
+    required int productId,
   }) async {
     Map<String, dynamic> body = {
       "productId": productId,
-      "quantity": quantity,
+      "quantity": 1,
     };
 
     final response = await _httpService.post(
@@ -46,7 +44,7 @@ class ProductProvider {
   }
 
   Future<Map<String, dynamic>> getProducts({
-    @required int productTypeId,
+    required int productTypeId,
   }) async {
     Map<String, dynamic> body = {
       "id": productTypeId,

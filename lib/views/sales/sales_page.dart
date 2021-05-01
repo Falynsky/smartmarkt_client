@@ -15,10 +15,10 @@ class SalesPage extends StatefulWidget {
 }
 
 class _SalesPageState extends State<SalesPage> {
-  RouteBloc _routeBloc;
-  SalesBloc _salesBloc;
-  bool _isLoaded;
-  List<Sale> _newSales;
+late RouteBloc _routeBloc;
+late SalesBloc _salesBloc;
+late bool _isLoaded;
+late List<Sale> _newSales;
 
   @override
   void initState() {
@@ -68,7 +68,7 @@ class _SalesPageState extends State<SalesPage> {
   }
 
   Widget _salesComponent() {
-    var salesNotExists = _newSales == null || !_newSales.isNotEmpty;
+    var salesNotExists = !_newSales.isNotEmpty;
     return Container(
       color: primaryColor,
       child: Column(
@@ -82,7 +82,7 @@ class _SalesPageState extends State<SalesPage> {
   }
 
   Widget _searchBar() {
-    TextEditingController _textEditingController;
+    TextEditingController? _textEditingController;
     return Container(
       color: primaryColor,
       child: Padding(
@@ -119,7 +119,7 @@ class _SalesPageState extends State<SalesPage> {
   Widget _salesList() {
     return Expanded(
       child: ListView.builder(
-        itemCount: _newSales != null ? _newSales.length : 0,
+        itemCount: _newSales.length,
         itemBuilder: (context, index) {
           Sale sale = _newSales[index];
           return SalesPosition(sale: sale);

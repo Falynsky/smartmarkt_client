@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 abstract class ProfileEvent extends Equatable {
   const ProfileEvent();
@@ -21,9 +20,9 @@ class ShowBasketHistoryDialogEvent extends ProfileEvent {
   final String productSummary;
 
   ShowBasketHistoryDialogEvent({
-    @required this.basketHistoryId,
-    @required this.purchasedDate,
-    @required this.productSummary,
+    required this.basketHistoryId,
+    required this.purchasedDate,
+    required this.productSummary,
   });
 
   @override

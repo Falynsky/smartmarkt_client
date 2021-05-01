@@ -14,7 +14,7 @@ class HistoryComponent extends StatefulWidget {
 }
 
 class _HistoryComponentState extends State<HistoryComponent> {
-  ProfileBloc _profileBloc;
+ late ProfileBloc _profileBloc;
 
   List<BasketHistory> get basketProducts => _profileBloc.basketHistory;
 
@@ -30,7 +30,7 @@ class _HistoryComponentState extends State<HistoryComponent> {
   }
 
   Widget _shoppingHistoryList() {
-    if (basketProducts == null || basketProducts.isEmpty) {
+    if (basketProducts.isEmpty) {
       return EmptyHistoryScreen();
     }
     return _historyList();
@@ -43,7 +43,7 @@ class _HistoryComponentState extends State<HistoryComponent> {
         color: complementaryThree.withOpacity(0.7),
         child: ListView.builder(
           padding: EdgeInsets.only(bottom: 70),
-          itemCount: basketProducts != null ? basketProducts.length : 0,
+          itemCount: basketProducts.length,
           itemBuilder: (_, index) {
             return HistoryPosition(index: index);
           },

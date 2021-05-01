@@ -11,9 +11,9 @@ class ProductTypesPage extends StatefulWidget {
 }
 
 class _ProductTypesPageState extends State<ProductTypesPage> {
-  ProductsPanelBloc _productsPanelBloc;
-  ProductTypesBloc _productTypesBloc;
-  List<ProductType> newProductTypes;
+  late ProductsPanelBloc _productsPanelBloc;
+  late ProductTypesBloc _productTypesBloc;
+  late List<ProductType> newProductTypes;
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
   }
 
   Widget _searchBar() {
-    TextEditingController _textEditingController;
+    TextEditingController? _textEditingController;
     return Container(
       color: primaryColor,
       child: Padding(
@@ -92,7 +92,7 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
       child: Container(
         color: primaryColor,
         child: ListView.builder(
-          itemCount: newProductTypes != null ? newProductTypes.length : 0,
+          itemCount: newProductTypes.length,
           itemBuilder: (context, index) {
             return _productTypeCard(index);
           },

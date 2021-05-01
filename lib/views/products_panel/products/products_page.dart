@@ -15,19 +15,19 @@ import 'large_image_dialog.dart';
 class ProductsPage extends StatefulWidget {
   final ProductType productType;
 
-  ProductsPage({@required this.productType});
+  ProductsPage({required this.productType});
 
   @override
   _ProductsPageState createState() => _ProductsPageState();
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  ProductsPanelBloc _productsPanelBloc;
-  ProductsBloc _productsBloc;
-  List<Product> _newProducts;
-  List data;
-  bool rememberMe = false;
-  TextEditingController _controller;
+  late ProductsPanelBloc _productsPanelBloc;
+  late ProductsBloc _productsBloc;
+  late List<Product> _newProducts;
+  late List data;
+  late bool rememberMe = false;
+  late TextEditingController _controller;
 
   @override
   void initState() {
@@ -79,7 +79,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   textColor: Colors.black54,
                 ),
               );
-              Scaffold.of(context).showSnackBar(snackBar);
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
               Navigator.of(context).pop();
             }
             setState(() {});
@@ -91,7 +91,7 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   Widget productList(BuildContext context) {
-    var productsExists = _newProducts != null && _newProducts.isNotEmpty;
+    var productsExists = _newProducts.isNotEmpty;
     return Column(
       children: [
         _searchBar(),
@@ -100,7 +100,7 @@ class _ProductsPageState extends State<ProductsPage> {
             child: Container(
               color: primaryColor,
               child: ListView.builder(
-                itemCount: _newProducts != null ? _newProducts.length : 0,
+                itemCount: _newProducts.length,
                 itemBuilder: (context, index) {
                   return listCard(index, context);
                 },
@@ -122,7 +122,7 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   Widget _searchBar() {
-    TextEditingController _textEditingController;
+    TextEditingController? _textEditingController;
     return Container(
       color: primaryColor,
       child: Padding(
@@ -266,23 +266,21 @@ class _ProductsPageState extends State<ProductsPage> {
     ]);
   }
 
-  FlatButton _closeButton(BuildContext context) {
-    return FlatButton(
-      child: Text("Zamknij"),
-      textColor: complementaryThree,
+  TextButton _closeButton(BuildContext context) {
+    return TextButton(
+      child: Text("Zamknij", style: TextStyle(color: complementaryThree)),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
   }
 
-  FlatButton _addToCardButton(
+  TextButton _addToCardButton(
     BuildContext context,
     Product product,
   ) {
-    return FlatButton(
-      child: Text("Dodaj do koszyka"),
-      textColor: complementaryThree,
+    return TextButton(
+      child: Text("Dodaj do koszyka", style: TextStyle(color: complementaryThree)),
       onPressed: () async {
         int quantity = int.parse(_controller.text);
         if (quantity > 0) {

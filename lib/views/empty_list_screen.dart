@@ -3,10 +3,10 @@ import 'package:smartmarktclient/utilities/colors.dart';
 
 class EmptyListScreen extends StatelessWidget {
   final String msg;
-  final IconData iconData;
+  final IconData? iconData;
 
   EmptyListScreen({
-    @required this.msg,
+    required this.msg,
     this.iconData,
   });
 

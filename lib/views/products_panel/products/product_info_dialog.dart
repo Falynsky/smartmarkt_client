@@ -30,10 +30,9 @@ class ProductInfoDialog {
     );
   }
 
-  FlatButton _closeButton(BuildContext context) {
-    return FlatButton(
-      child: Text("Zamknij"),
-      textColor: complementaryThree,
+  TextButton _closeButton(BuildContext context) {
+    return TextButton(
+      child: Text("Zamknij", style: TextStyle(color: complementaryThree)),
       onPressed: () {
         Navigator.of(context).pop();
       },

@@ -32,8 +32,8 @@ class RouteWidget extends StatelessWidget {
             String pageIdn = state.pageIdn;
             if (pageIdn == 'products') {
               return ProductsPanel();
-            } else if (pageIdn == 'scanner') {
-              return ScannerPage();
+            // } else if (pageIdn == 'scanner') {
+            //   return ScannerPage();
             } else if (pageIdn == 'sales') {
               return SalesPage();
             } else if (pageIdn == 'basket') {

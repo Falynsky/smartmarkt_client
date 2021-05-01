@@ -9,18 +9,18 @@ import 'package:smartmarktclient/models/product_history.dart';
 import 'package:smartmarktclient/repositories/profile_repository.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileRepository _profileRepository;
+  late ProfileRepository _profileRepository;
+
+  late String name;
+  late String initials;
+  late String userId;
+  late List<BasketHistory> _basketHistory;
+
+  List<BasketHistory> get basketHistory => _basketHistory;
 
   ProfileBloc() : super(InitialProfileState()) {
     _profileRepository = ProfileRepository();
   }
-
-  String name;
-  String initials;
-  String userId;
-  List<BasketHistory> _basketHistory;
-
-  List<BasketHistory> get basketHistory => _basketHistory;
 
   @override
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
@@ -36,33 +36,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         add(LoadBasketHistoryEvent());
       }
     } else if (event is LoadBasketHistoryEvent) {
-      Map<String, dynamic> response =
-          await _profileRepository.loadBasketHistoryInfo(userId: userId);
+      Map<String, dynamic> response = await _profileRepository.loadBasketHistoryInfo(userId: userId);
       if (response['success']) {
         _basketHistory = [];
         final historyList = response['data']['historyList'];
         final basketHistory = List<Map<String, dynamic>>.from(historyList);
         basketHistory.forEach((jsonBasketHistory) {
-          BasketHistory basketHistory =
-              BasketHistory.fromJson(jsonBasketHistory);
+          BasketHistory basketHistory = BasketHistory.fromJson(jsonBasketHistory);
           _basketHistory.add(basketHistory);
         });
         yield LoadProfileScreenState();
       }
     } else if (event is ShowBasketHistoryDialogEvent) {
       int basketHistoryId = event.basketHistoryId;
-      Map<String, dynamic> response =
-          await _profileRepository.loadSelectedBasketHistoryInfo(
+      Map<String, dynamic> response = await _profileRepository.loadSelectedBasketHistoryInfo(
         userId: userId,
         basketHistoryId: basketHistoryId,
       );
       if (response['success']) {
-        final productsList =
-            List<Map<String, dynamic>>.from(response['data']['productsList']);
+        final productsList = List<Map<String, dynamic>>.from(response['data']['productsList']);
         List<ProductHistory> objectedProductList = [];
         productsList.forEach((jsonProductsList) {
-          ProductHistory productsList =
-              ProductHistory.fromJson(jsonProductsList);
+          ProductHistory productsList = ProductHistory.fromJson(jsonProductsList);
           objectedProductList.add(productsList);
         });
         Key key = UniqueKey();

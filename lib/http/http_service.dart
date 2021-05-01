@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
@@ -18,14 +17,14 @@ class HttpService {
   }
 
   Future<Map<String, dynamic>> post({
-    @required String url,
-    Map<String, dynamic> postBody,
+    required String url,
+    Map<String, dynamic>? postBody,
   }) async {
     final encodedBody = jsonEncode(postBody ?? {});
     http.Response response;
     try {
       response = await http.post(
-        hostUrl + url,
+        Uri.http(hostUrl, url),
         headers: headers,
         body: encodedBody,
       );
@@ -58,8 +57,8 @@ class HttpService {
   }
 
   bool _isCorrectLoginResponse({
-    @required int statusCode,
-    @required String url,
+    required int statusCode,
+    required String url,
   }) {
     bool isStatusCorrect = statusCode == 200;
     bool isAuthLoginEndpoint = url == '/auth/login';
@@ -87,10 +86,10 @@ class HttpService {
   }
 
   Future<Map<String, dynamic>> get({
-    @required String url,
+    required String url,
   }) async {
     http.Response response = await http.get(
-      hostUrl + url,
+      Uri.http(hostUrl, url),
       headers: headers,
     );
     String data = response.body;

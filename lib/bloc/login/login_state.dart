@@ -18,7 +18,8 @@ class LoadedLoginState extends LoginState {
 class CorrectLoginState extends LoginState {
   final Key key;
 
-  CorrectLoginState({this.key});
+  CorrectLoginState({key}) : key = UniqueKey();
+
   @override
   List<Object> get props => [key];
 }
@@ -29,9 +30,9 @@ class LoginErrorOccurredState extends LoginState {
   final Key key;
 
   LoginErrorOccurredState({
-    @required this.title,
-    @required this.msg,
-    @required this.key,
+    required this.title,
+    required this.msg,
+    required this.key,
   });
 
   @override

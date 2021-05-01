@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 abstract class BasketEvent extends Equatable {
   const BasketEvent();
@@ -16,16 +15,10 @@ class LoadingSummaryBasketEvent extends BasketEvent {
 }
 
 class LoadedBasketEvent extends BasketEvent {
-  final List<Map<String, dynamic>> basketProducts;
-
-  LoadedBasketEvent({
-    this.basketProducts,
-  });
+  LoadedBasketEvent();
 
   @override
-  List<Object> get props => [
-        basketProducts,
-      ];
+  List<Object> get props => [];
 }
 
 class ClearBasketEvent extends BasketEvent {
@@ -36,7 +29,7 @@ class ClearBasketEvent extends BasketEvent {
 class RemoveBasketProductEvent extends BasketEvent {
   final int index;
 
-  RemoveBasketProductEvent({@required this.index});
+  RemoveBasketProductEvent({required this.index});
 
   @override
   List<Object> get props => [
@@ -52,7 +45,7 @@ class PurchaseBasketProductsEvent extends BasketEvent {
 class AddOneToBasketEvent extends BasketEvent {
   final int productId;
 
-  AddOneToBasketEvent({@required this.productId});
+  AddOneToBasketEvent({required this.productId});
 
   @override
   List<Object> get props => [];
@@ -61,7 +54,8 @@ class AddOneToBasketEvent extends BasketEvent {
 class RemoveOneFromBasketEvent extends BasketEvent {
   final int productId;
 
-  RemoveOneFromBasketEvent({@required this.productId});
+  RemoveOneFromBasketEvent({required this.productId});
+
   @override
   List<Object> get props => [productId];
 }
@@ -69,7 +63,8 @@ class RemoveOneFromBasketEvent extends BasketEvent {
 class ShowBasketSnackBarEvent extends BasketEvent {
   final String message;
 
-  ShowBasketSnackBarEvent({this.message});
+  ShowBasketSnackBarEvent({required this.message});
+
   @override
   List<Object> get props => [message];
 }

@@ -10,7 +10,7 @@ class BasketHeader extends StatefulWidget {
 }
 
 class _BasketHeaderState extends State<BasketHeader> {
-  BasketBloc _basketBloc;
+  late BasketBloc _basketBloc;
 
   @override
   void initState() {
@@ -105,8 +105,8 @@ class _BasketHeaderState extends State<BasketHeader> {
   }
 
   Future<void> _showRemoveButtonDialog({
-    @required BasketEvent event,
-    @required String info,
+    required BasketEvent event,
+    required String info,
   }) {
     return showDialog<void>(
       context: context,
@@ -131,16 +131,14 @@ class _BasketHeaderState extends State<BasketHeader> {
             ),
             contentTextStyle: TextStyle(color: Colors.white70, fontSize: 16),
             actions: <Widget>[
-              FlatButton(
-                child: Text('Nie'),
-                textColor: complementaryThree,
+              TextButton(
+                child: Text('Nie', style: TextStyle(color: complementaryThree)),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
-              FlatButton(
-                child: Text('Tak'),
-                textColor: complementaryThree,
+              TextButton(
+                child: Text('Tak', style: TextStyle(color: complementaryThree)),
                 onPressed: () {
                   _basketBloc.add(event);
                   Navigator.of(context).pop();

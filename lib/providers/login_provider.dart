@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
 class LoginProvider {
-  HttpService _httpService;
+  late HttpService _httpService;
   final String _endPoint = "/auth";
 
   LoginProvider() {
@@ -10,8 +9,8 @@ class LoginProvider {
   }
 
   Future<Map<String, dynamic>> login({
-    @required String login,
-    @required String password,
+    required String login,
+    required String password,
   }) async {
     Map<String, dynamic> body = {
       "username": login,

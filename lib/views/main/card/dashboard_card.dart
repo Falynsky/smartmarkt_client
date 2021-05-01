@@ -9,9 +9,9 @@ class DashboardCard extends StatefulWidget {
   final IconData iconData;
 
   DashboardCard({
-    this.label,
-    this.iconData,
-    this.pageIdn,
+    required this.label,
+    required this.iconData,
+    required this.pageIdn,
   });
 
   @override
@@ -19,10 +19,10 @@ class DashboardCard extends StatefulWidget {
 }
 
 class _DashboardCardState extends State<DashboardCard> {
-  RouteBloc _routeBloc;
-  String _label;
-  String _pageIdn;
-  IconData _iconData;
+late RouteBloc _routeBloc;
+late String _label;
+late String _pageIdn;
+late IconData _iconData;
 
   @override
   void initState() {

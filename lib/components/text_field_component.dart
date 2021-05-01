@@ -8,16 +8,16 @@ class TextFieldComponent extends StatefulWidget {
   final String placeHolder;
   final IconData icon;
   final bool isRequired;
-  final bool obscureText;
-  final bool isMail;
-  final bool autoValidate;
+  final bool? obscureText;
+  final bool? isMail;
+  final bool? autoValidate;
 
   TextFieldComponent({
-    @required this.controller,
-    @required this.label,
-    @required this.placeHolder,
-    @required this.icon,
-    @required this.isRequired,
+    required this.controller,
+    required this.label,
+    required this.placeHolder,
+    required this.icon,
+    required this.isRequired,
     this.obscureText,
     this.isMail,
     this.autoValidate,
@@ -28,14 +28,14 @@ class TextFieldComponent extends StatefulWidget {
 }
 
 class _TextFieldComponentState extends State<TextFieldComponent> {
-  TextEditingController _controller;
-  String _label;
-  String _placeHolder;
-  IconData _icon;
-  bool _isRequired;
-  bool _obscureText;
-  bool _isMail;
-  bool _autoValidate;
+  late TextEditingController _controller;
+  late String _label;
+  late String _placeHolder;
+  late IconData _icon;
+  late bool _isRequired;
+  late bool _obscureText;
+  late bool _isMail;
+  late bool? _autoValidate;
 
   bool get _isAutoValidate => _autoValidate != null && _autoValidate == false;
 
@@ -46,9 +46,9 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
     _label = widget.label;
     _placeHolder = widget.placeHolder;
     _icon = widget.icon;
-    _isRequired = widget.isRequired ?? false;
+    _isRequired = widget.isRequired;
     _obscureText = widget.obscureText ?? false;
-    _isMail = widget.isMail;
+    _isMail = widget.isMail ?? false;
     _autoValidate = widget.autoValidate;
   }
 
@@ -68,8 +68,7 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
             alignment: Alignment.centerLeft,
             child: TextFormField(
               obscureText: _obscureText,
-              autovalidateMode:
-                  _isAutoValidate ? null : AutovalidateMode.onUserInteraction,
+              autovalidateMode: _isAutoValidate ? null : AutovalidateMode.onUserInteraction,
               validator: _validateField,
               textInputAction: TextInputAction.next,
               controller: _controller,
@@ -86,7 +85,10 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
     );
   }
 
-  String _validateField(String value) {
+  String? _validateField(String? value) {
+    if (value == null) {
+      return null;
+    }
     if (value.isEmpty && _isRequired) {
       return 'Proszę wprowadzić wartość.';
     }
@@ -97,7 +99,7 @@ class _TextFieldComponentState extends State<TextFieldComponent> {
     }
     RegExp regExpMail = new RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-    if (_isMail != null && _isMail && !regExpMail.hasMatch(value)) {
+    if (_isMail && !regExpMail.hasMatch(value)) {
       return 'Błędy format maila.';
     }
 

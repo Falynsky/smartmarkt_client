@@ -10,8 +10,8 @@ class ConfiguratorPage extends StatefulWidget {
 }
 
 class _ConfiguratorPageState extends State<ConfiguratorPage> {
-  RouteBloc _routeBloc;
-  ConfigureBloc _configureBloc;
+ late RouteBloc _routeBloc;
+ late ConfigureBloc _configureBloc;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _ConfiguratorPageState extends State<ConfiguratorPage> {
                     textColor: Colors.black54,
                   ),
                 );
-                Scaffold.of(context).showSnackBar(snackBar);
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
               setState(() {});
             },

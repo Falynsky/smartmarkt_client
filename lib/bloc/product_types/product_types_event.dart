@@ -5,14 +5,10 @@ abstract class ProductTypesEvent extends Equatable {
 }
 
 class InitialProductTypesEvent extends ProductTypesEvent {
-  final int productTypeId;
-
-  InitialProductTypesEvent({this.productTypeId});
+  InitialProductTypesEvent();
 
   @override
-  List<Object> get props => [
-        productTypeId,
-      ];
+  List<Object> get props => [];
 }
 
 class LoadedProductTypesEvent extends ProductTypesEvent {

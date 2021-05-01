@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 abstract class ScannerEvent extends Equatable {
   const ScannerEvent();
@@ -19,7 +18,7 @@ class AddProductToBasketEvent extends ScannerEvent {
   final int productId;
 
   AddProductToBasketEvent({
-    @required this.productId,
+    required this.productId,
   });
 
   @override

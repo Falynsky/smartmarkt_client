@@ -16,9 +16,9 @@ class BasketPage extends StatefulWidget {
 }
 
 class _BasketPageState extends State<BasketPage> {
-  RouteBloc _routeBloc;
-  BasketBloc _basketBloc;
-  bool _isLoaded;
+  late RouteBloc _routeBloc;
+  late BasketBloc _basketBloc;
+  late bool _isLoaded;
 
   List<BasketProduct> get basketProducts => _basketBloc.basketProducts;
 
@@ -60,7 +60,7 @@ class _BasketPageState extends State<BasketPage> {
                     textColor: Colors.black54,
                   ),
                 );
-                Scaffold.of(context).showSnackBar(snackBar);
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
               setState(() {});
             },
@@ -77,7 +77,7 @@ class _BasketPageState extends State<BasketPage> {
       return CircularIndicator();
     }
 
-    if (basketProducts == null || basketProducts.isEmpty) {
+    if (basketProducts.isEmpty) {
       return EmptyBasketPage();
     }
 
@@ -94,7 +94,7 @@ class _BasketPageState extends State<BasketPage> {
     return Expanded(
       child: ListView.builder(
         padding: EdgeInsets.only(bottom: 70),
-        itemCount: basketProducts != null ? basketProducts.length : 0,
+        itemCount: basketProducts.length,
         itemBuilder: (context, index) {
           return BasketPosition(index: index);
         },
@@ -103,7 +103,7 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget _generateCodeFAB() {
-    if (basketProducts == null || basketProducts.isEmpty || !_isLoaded) {
+    if (basketProducts.isEmpty || !_isLoaded) {
       return Container();
     }
     return FloatingActionButton.extended(
@@ -157,9 +157,8 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget _purchasedBasketButton(BuildContext context) {
-    return FlatButton(
-      child: Text("Zakupiono \nprodukty", textAlign: TextAlign.center),
-      textColor: complementaryThree,
+    return TextButton(
+      child: Text("Zakupiono \nprodukty", textAlign: TextAlign.center, style: TextStyle(color: complementaryThree)),
       onPressed: () {
         _emitPurchaseAllBasketProducts();
         Navigator.of(context).pop();
@@ -172,9 +171,8 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget _hideBarsCodeButton(BuildContext context) {
-    return FlatButton(
-      child: Text("Zamknij"),
-      textColor: complementaryThree,
+    return TextButton(
+      child: Text("Zamknij", style: TextStyle(color: complementaryThree)),
       onPressed: () {
         Navigator.of(context).pop();
       },

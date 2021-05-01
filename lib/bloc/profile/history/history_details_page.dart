@@ -8,9 +8,9 @@ class HistoryDetailsPage extends StatelessWidget {
   final String productSummary;
 
   HistoryDetailsPage({
-    @required this.productsList,
-    @required this.purchasedDate,
-    @required this.productSummary,
+    required this.productsList,
+    required this.purchasedDate,
+    required this.productSummary,
   });
 
   @override
@@ -69,7 +69,7 @@ class HistoryDetailsPage extends StatelessWidget {
         color: complementaryThree.withOpacity(0.7),
         child: ListView.builder(
           padding: EdgeInsets.only(bottom: 70),
-          itemCount: productsList != null ? productsList.length : 0,
+          itemCount: productsList.length,
           itemBuilder: (context, index) {
             return listCard(context, index);
           },

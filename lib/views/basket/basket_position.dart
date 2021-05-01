@@ -9,17 +9,17 @@ import 'package:smartmarktclient/utilities/colors.dart';
 class BasketPosition extends StatefulWidget {
   final int index;
 
-  const BasketPosition({this.index});
+  const BasketPosition({required this.index});
 
   @override
   _BasketPositionState createState() => _BasketPositionState();
 }
 
 class _BasketPositionState extends State<BasketPosition> {
-  BasketBloc _basketBloc;
-  int _index;
-  BasketProduct _basketProduct;
-  int _quantity;
+  late BasketBloc _basketBloc;
+  late int _index;
+  late BasketProduct _basketProduct;
+  late int _quantity;
 
   @override
   void initState() {
@@ -88,7 +88,7 @@ class _BasketPositionState extends State<BasketPosition> {
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
         ),
         Text('$_quantity x ${price}zł'),
-        discountPrice == null
+        discountPrice == 0
             ? Text('${summary}zł')
             : Row(
                 children: [
@@ -117,8 +117,7 @@ class _BasketPositionState extends State<BasketPosition> {
           splashFactory: InkRipple.splashFactory,
           child: Icon(Icons.arrow_drop_up_rounded, size: 35),
           onTap: () {
-            final addOneToBasketEvent =
-                AddOneToBasketEvent(productId: productId);
+            final addOneToBasketEvent = AddOneToBasketEvent(productId: productId);
             _basketBloc.add(addOneToBasketEvent);
           },
         ),
@@ -128,8 +127,7 @@ class _BasketPositionState extends State<BasketPosition> {
             splashFactory: InkRipple.splashFactory,
             child: Icon(Icons.arrow_drop_down_rounded, size: 35),
             onTap: () {
-              final addOneToBasketEvent =
-                  RemoveOneFromBasketEvent(productId: productId);
+              final addOneToBasketEvent = RemoveOneFromBasketEvent(productId: productId);
               _basketBloc.add(addOneToBasketEvent);
             },
           ),
@@ -151,8 +149,8 @@ class _BasketPositionState extends State<BasketPosition> {
   }
 
   Future<void> _showRemoveButtonDialog({
-    @required BasketEvent event,
-    @required String info,
+    required BasketEvent event,
+    required String info,
   }) {
     return showDialog<void>(
       context: context,
@@ -177,16 +175,14 @@ class _BasketPositionState extends State<BasketPosition> {
             ),
             contentTextStyle: TextStyle(color: Colors.white70, fontSize: 16),
             actions: <Widget>[
-              FlatButton(
-                child: Text('Nie'),
-                textColor: complementaryThree,
+              TextButton(
+                child: Text('Nie', style: TextStyle(color: complementaryThree)),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
-              FlatButton(
-                child: Text('Tak'),
-                textColor: complementaryThree,
+              TextButton(
+                child: Text('Tak', style: TextStyle(color: complementaryThree)),
                 onPressed: () {
                   _basketBloc.add(event);
                   Navigator.of(context).pop();

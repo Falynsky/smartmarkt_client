@@ -6,7 +6,7 @@ import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/repositories/sign_up_repository.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  SignUpRepository _signUpRepository;
+  late SignUpRepository _signUpRepository;
 
   SignUpBloc() : super(SignUpLoadingState()) {
     _signUpRepository = SignUpRepository();

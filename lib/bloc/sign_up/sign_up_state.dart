@@ -26,9 +26,9 @@ class RegisterErrorOccurredState extends SignUpState {
   final Key key;
 
   RegisterErrorOccurredState({
-    @required this.title,
-    @required this.msg,
-    @required this.key,
+    required this.title,
+    required this.msg,
+    required this.key,
   });
 
   @override

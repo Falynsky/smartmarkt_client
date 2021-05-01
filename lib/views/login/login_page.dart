@@ -15,12 +15,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  RouteBloc _routeBloc;
-  LoginBloc _loginBloc;
+  late RouteBloc _routeBloc;
+  late LoginBloc _loginBloc;
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading;
+  late bool _isLoading;
 
   @override
   void initState() {
@@ -158,9 +158,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             contentTextStyle: TextStyle(color: Colors.white70, fontSize: 16),
             actions: <Widget>[
-              FlatButton(
-                textColor: complementaryThree,
-                child: Text('OK'),
+              TextButton(
+                child: Text('OK', style: TextStyle(color: complementaryThree)),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],

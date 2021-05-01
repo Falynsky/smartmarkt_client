@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
 
 class ProductType {
   int id;
   String name;
 
   ProductType({
-    @required this.id,
-    @required this.name,
+    required this.id,
+    required this.name,
   });
 
   ProductType.fromJson(Map<String, dynamic> json)

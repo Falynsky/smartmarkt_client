@@ -23,10 +23,10 @@ class ShowBasketHistoryDialogState extends ProfileState {
   final String productSummary;
 
   ShowBasketHistoryDialogState({
-    @required this.key,
-    @required this.productsList,
-    @required this.purchasedDate,
-    @required this.productSummary,
+    required this.key,
+    required this.productsList,
+    required this.purchasedDate,
+    required this.productSummary,
   });
 
   @override

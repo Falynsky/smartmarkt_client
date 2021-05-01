@@ -9,17 +9,17 @@ import 'package:smartmarktclient/utilities/colors.dart';
 class HistoryPosition extends StatefulWidget {
   final int index;
 
-  const HistoryPosition({this.index});
+  const HistoryPosition({required this.index});
 
   @override
   _HistoryPositionState createState() => _HistoryPositionState();
 }
 
 class _HistoryPositionState extends State<HistoryPosition> {
-  ProfileBloc _profileBloc;
-  int _index;
-  String _purchasedDate;
-  String _productSummary;
+ late ProfileBloc _profileBloc;
+ late int _index;
+ late String _purchasedDate;
+ late String _productSummary;
 
   List<BasketHistory> get basketProducts => _profileBloc.basketHistory;
 

@@ -11,7 +11,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  RouteBloc _routeBloc;
+  late RouteBloc _routeBloc;
 
   @override
   void initState() {
@@ -99,10 +99,9 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  FlatButton _yesButton(BuildContext context) {
-    return FlatButton(
-      child: Text("Tak"),
-      textColor: complementaryThree,
+  TextButton _yesButton(BuildContext context) {
+    return TextButton(
+      child: Text("Tak", style: TextStyle(color: complementaryThree)),
       onPressed: () {
         HttpService.clearAuthHeader();
         _routeBloc.add(LoadLoginPageEvent());
@@ -111,10 +110,9 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  FlatButton _noButton(BuildContext context) {
-    return FlatButton(
-      child: Text("Nie"),
-      textColor: complementaryThree,
+  TextButton _noButton(BuildContext context) {
+    return TextButton(
+      child: Text("Nie", style: TextStyle(color: complementaryThree)),
       onPressed: () {
         Navigator.of(context).pop();
       },

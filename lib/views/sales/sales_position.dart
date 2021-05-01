@@ -7,14 +7,14 @@ import 'package:smartmarktclient/views/products_panel/products/large_image_dialo
 class SalesPosition extends StatefulWidget {
   final Sale sale;
 
-  SalesPosition({@required this.sale});
+  SalesPosition({required this.sale});
 
   @override
   _SalesPositionState createState() => _SalesPositionState();
 }
 
 class _SalesPositionState extends State<SalesPosition> {
-  Sale _sale;
+  late Sale _sale;
 
   @override
   void initState() {
@@ -50,8 +50,7 @@ class _SalesPositionState extends State<SalesPosition> {
   }
 
   InkWell _imageButton() {
-    String documentUrl =
-        '${HttpService.hostUrl}/files/download/${_sale.docName}.${_sale.docType}/db';
+    String documentUrl = '${HttpService.hostUrl}/files/download/${_sale.docName}.${_sale.docType}/db';
     return InkWell(
       child: Image.network(
         '$documentUrl/70/70',
@@ -72,7 +71,7 @@ class _SalesPositionState extends State<SalesPosition> {
           _saleTitle(),
           _saleDescription(),
           SizedBox(height: 10),
-          if (_sale.discount != null) _salePricesRow(),
+          if (_sale.discount != 0) _salePricesRow(),
         ],
       ),
     );

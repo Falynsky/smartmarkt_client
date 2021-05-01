@@ -7,12 +7,12 @@ import 'package:smartmarktclient/repositories/product_repository.dart';
 import '../bloc.dart';
 
 class BasketBloc extends Bloc<BasketEvent, BasketState> {
-  BasketRepository _basketRepository;
-  ProductRepository _productRepository;
-  double _basketSummary;
-  double _summaryAfterDiscount;
-  String _currentUserBasketId;
-  List<BasketProduct> _basketProducts;
+  late BasketRepository _basketRepository;
+  late ProductRepository _productRepository;
+  late double _basketSummary;
+  late double _summaryAfterDiscount;
+  late String _currentUserBasketId;
+  late List<BasketProduct> _basketProducts;
 
   List<BasketProduct> get basketProducts => _basketProducts;
 
@@ -32,9 +32,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     if (event is LoadingBasketEvent) {
       Key uniqueKey = UniqueKey();
       yield LoadingBasketState(uniqueKey);
-      if (_currentUserBasketId == null) {
-        _getBasketId();
-      }
+      _getBasketId();
       _loadBasketProducts();
     } else if (event is LoadingSummaryBasketEvent) {
       _loadBasketSummary();
@@ -63,8 +61,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   void _loadBasketProducts() {
-    Future<Map<String, dynamic>> basketProducts =
-        _basketRepository.loadBasketProducts();
+    Future<Map<String, dynamic>> basketProducts = _basketRepository.loadBasketProducts();
     basketProducts.then(
       (response) {
         if (response['success']) {
@@ -85,8 +82,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   void _loadBasketSummary() {
-    Future<Map<String, dynamic>> basketSummary =
-        _basketRepository.loadBasketSummary();
+    Future<Map<String, dynamic>> basketSummary = _basketRepository.loadBasketSummary();
     basketSummary.then(
       (response) => {
         if (response['success'])
@@ -101,8 +97,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
 
   void _removeObject(int index) {
     int productId = basketProducts[index].productId;
-    Future<Map<String, dynamic>> removeBasketProduct =
-        _basketRepository.removeBasketProduct(productId);
+    Future<Map<String, dynamic>> removeBasketProduct = _basketRepository.removeBasketProduct(productId);
     removeBasketProduct.then(
       (response) {
         if (response['success'] == true) {
@@ -113,8 +108,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   void _clearBasket() {
-    Future<Map<String, dynamic>> removeAllProducts =
-        _basketRepository.clearBasket();
+    Future<Map<String, dynamic>> removeAllProducts = _basketRepository.clearBasket();
     removeAllProducts.then(
       (response) {
         if (response['success'] == true) {
@@ -125,17 +119,14 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   Future _removeOneFromBasket(RemoveOneFromBasketEvent event) async {
-    Map<String, dynamic> response =
-        await _productRepository.removeProductFromBasket(
+    Map<String, dynamic> response = await _productRepository.removeProductFromBasket(
       productId: event.productId,
-      quantity: 1,
     );
     _emitRefreshAndShowSnackBar(response);
   }
 
   Future _addOneToBasket(AddOneToBasketEvent event) async {
-    Map<String, dynamic> response =
-        await _productRepository.addProductToBasket(productId: event.productId);
+    Map<String, dynamic> response = await _productRepository.addProductToBasket(productId: event.productId);
     _emitRefreshAndShowSnackBar(response);
   }
 
@@ -146,8 +137,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   void _purchaseAllBasketProducts() {
-    Future<Map<String, dynamic>> removeAllProducts =
-        _basketRepository.purchaseAllBasketProducts();
+    Future<Map<String, dynamic>> removeAllProducts = _basketRepository.purchaseAllBasketProducts();
     removeAllProducts.then(
       (response) => {
         if (response['success'] == true)

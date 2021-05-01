@@ -1,19 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:smartmarktclient/providers/product_provider.dart';
 
 class ProductRepository {
-  ProductProvider _productProvider;
+  late ProductProvider _productProvider;
 
   ProductRepository() {
     _productProvider = ProductProvider();
   }
 
   Future<Map<String, dynamic>> addProductToBasket({
-    @required int productId,
-    int quantity,
+    required int productId,
+    int quantity = 1,
   }) async {
-    Map<String, dynamic> productInfo =
-        await _productProvider.addProductToBasket(
+    Map<String, dynamic> productInfo = await _productProvider.addProductToBasket(
       productId: productId,
       quantity: quantity,
     );
@@ -22,23 +20,19 @@ class ProductRepository {
   }
 
   Future<Map<String, dynamic>> removeProductFromBasket({
-    @required int productId,
-    int quantity,
+    required int productId,
   }) async {
-    Map<String, dynamic> productInfo =
-        await _productProvider.removeProductFromBasket(
+    Map<String, dynamic> productInfo = await _productProvider.removeProductFromBasket(
       productId: productId,
-      quantity: quantity,
     );
 
     return productInfo;
   }
 
   Future<Map<String, dynamic>> getProducts({
-    int productTypeId,
+    required int productTypeId,
   }) async {
-    Map<String, dynamic> productInfo =
-        await _productProvider.getProducts(productTypeId: productTypeId);
+    Map<String, dynamic> productInfo = await _productProvider.getProducts(productTypeId: productTypeId);
 
     return productInfo;
   }

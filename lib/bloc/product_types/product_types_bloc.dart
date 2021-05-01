@@ -7,8 +7,8 @@ import 'package:smartmarktclient/repositories/product_type_repository.dart';
 import '../bloc.dart';
 
 class ProductTypesBloc extends Bloc<ProductTypesEvent, ProductTypesState> {
-  List<ProductType> _productTypes;
-  ProductTypeRepository _productTypeRepository;
+  late List<ProductType> _productTypes;
+  late ProductTypeRepository _productTypeRepository;
 
   ProductTypesBloc() : super(InitialProductTypesState()) {
     _productTypeRepository = ProductTypeRepository();

@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 
 class ProfileProvider {
-  HttpService _httpService;
-  final String _profileEndPoint = "/profile";
-  final String _historyEndPoint = "/history";
+  late HttpService _httpService;
+  late final String _profileEndPoint = "/profile";
+  late final String _historyEndPoint = "/history";
 
   ProfileProvider() {
     _httpService = HttpService();
@@ -17,15 +16,15 @@ class ProfileProvider {
   }
 
   Future<Map<String, dynamic>> loadBasketHistoryInfo(
-      {@required String userId}) async {
+      {required String userId}) async {
     String url = "$_historyEndPoint/user/$userId";
     Map<String, dynamic> response = await _httpService.get(url: url);
     return response;
   }
 
   Future<Map<String, dynamic>> loadSelectedBasketHistoryInfo({
-    @required String userId,
-    @required int basketHistoryId,
+    required String userId,
+    required int basketHistoryId,
   }) async {
     String url = "$_historyEndPoint/$userId/$basketHistoryId";
     Map<String, dynamic> response = await _httpService.get(url: url);

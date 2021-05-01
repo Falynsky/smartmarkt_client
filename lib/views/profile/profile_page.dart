@@ -17,8 +17,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  RouteBloc _routeBloc;
-  ProfileBloc _profileBloc;
+  late RouteBloc _routeBloc;
+  late ProfileBloc _profileBloc;
 
   @override
   void initState() {

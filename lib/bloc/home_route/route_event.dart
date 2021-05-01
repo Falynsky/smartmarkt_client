@@ -40,7 +40,7 @@ class LoadDashboardPageEvent extends RouteEvent {
   final String pageIdn;
 
   LoadDashboardPageEvent({
-    @required this.pageIdn,
+    required this.pageIdn,
   });
 
   @override

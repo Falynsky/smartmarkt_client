@@ -14,12 +14,12 @@ class SignUpButton extends StatefulWidget {
   final GlobalKey<FormState> formKey;
 
   const SignUpButton({
-    @required this.loginController,
-    @required this.passwordController,
-    @required this.firstNameController,
-    @required this.lastNameController,
-    @required this.mailController,
-    @required this.formKey,
+    required this.loginController,
+    required this.passwordController,
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.mailController,
+    required this.formKey,
   });
 
   @override
@@ -27,13 +27,13 @@ class SignUpButton extends StatefulWidget {
 }
 
 class _SignUpButtonState extends State<SignUpButton> {
-  TextEditingController _loginController;
-  TextEditingController _passwordController;
-  TextEditingController _firstNameController;
-  TextEditingController _lastNameController;
-  TextEditingController _mailController;
-  GlobalKey<FormState> _formKey;
-  SignUpBloc _signUpBloc;
+late TextEditingController _loginController;
+late TextEditingController _passwordController;
+late TextEditingController _firstNameController;
+late TextEditingController _lastNameController;
+late TextEditingController _mailController;
+late GlobalKey<FormState> _formKey;
+late SignUpBloc _signUpBloc;
 
   @override
   void initState() {
@@ -81,7 +81,7 @@ class _SignUpButtonState extends State<SignUpButton> {
   }
 
   void _signUpButton() async {
-    bool validate = _formKey.currentState.validate();
+    bool validate = _formKey.currentState?.validate() ?? false;
     if (validate) {
       String _mail = _mailController.text.toString();
       String _login = _loginController.text.toString();

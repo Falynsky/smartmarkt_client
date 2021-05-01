@@ -34,7 +34,7 @@ class LoadDashboardPageState extends RouteState {
   final String pageIdn;
 
   LoadDashboardPageState({
-    @required this.pageIdn,
+    required this.pageIdn,
   });
 
   @override
@@ -46,7 +46,7 @@ class LoadDashboardPageState extends RouteState {
 class ConfigurePageState extends RouteState {
   final Key key;
 
-  ConfigurePageState({this.key});
+  ConfigurePageState({key}) : key = UniqueKey();
 
   @override
   List<Object> get props => [

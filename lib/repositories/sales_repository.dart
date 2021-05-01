@@ -1,7 +1,7 @@
 import 'package:smartmarktclient/providers/sales_provider.dart';
 
 class SalesRepository {
-  SalesProvider _salesProvider;
+  late SalesProvider _salesProvider;
 
   SalesRepository() {
     _salesProvider = SalesProvider();
