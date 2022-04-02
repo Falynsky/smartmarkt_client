@@ -1,4 +1,4 @@
-// import 'package:barcode_scan/barcode_scan.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:smartmarktclient/providers/configuration_provider.dart';
 
 class ConfigurationRepository {
@@ -8,10 +8,10 @@ class ConfigurationRepository {
     _configurationProvider = ConfigurationProvider();
   }
 
-  // Future<String> getStoreAddress() async {
-  //   ScanResult scanResult = await _configurationProvider.scanBarsCode();
-  //   return scanResult.rawContent;
-  // }
+  Future<String> getStoreAddress() async {
+    ScanResult scanResult = await _configurationProvider.scanBarsCode();
+    return scanResult.rawContent;
+  }
 
   Future<bool> isServerAvailable({
     required String storeAddress,

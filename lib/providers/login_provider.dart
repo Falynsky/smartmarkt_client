@@ -12,7 +12,7 @@ class LoginProvider {
     required String login,
     required String password,
   }) async {
-    Map<String, dynamic> body = {
+    Map<String, String> body = <String, String>{
       "username": login,
       "password": password,
     };

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/models/sale.dart';
@@ -50,7 +49,7 @@ class _SalesPositionState extends State<SalesPosition> {
   }
 
   InkWell _imageButton() {
-    String documentUrl = '${HttpService.hostUrl}/files/download/${_sale.docName}.${_sale.docType}/db';
+    String documentUrl = 'http://${HttpService.hostUrl}/files/download/${_sale.docName}.${_sale.docType}/db';
     return InkWell(
       child: Image.network(
         '$documentUrl/70/70',

@@ -23,8 +23,9 @@ class HttpService {
     final encodedBody = jsonEncode(postBody ?? {});
     http.Response response;
     try {
+      var uri = Uri.http(hostUrl, url);
       response = await http.post(
-        Uri.http(hostUrl, url),
+        uri,
         headers: headers,
         body: encodedBody,
       );
@@ -34,9 +35,9 @@ class HttpService {
     String body = response.body;
     Map<String, Object> decodedBody = {};
 
-    if (body.isNotEmpty) {
+    if (body.isNotEmpty && body != '{}') {
       String decode = utf8.decode(response.bodyBytes);
-      decodedBody = json.decode(decode);
+      decodedBody = Map<String, Object>.from(json.decode(decode) ?? {});
     }
 
     int statusCode = response.statusCode;
@@ -96,7 +97,7 @@ class HttpService {
     Map<String, Object> decodedBody = {};
     if (data.isNotEmpty) {
       String decode = utf8.decode(response.bodyBytes);
-      decodedBody = json.decode(decode);
+      decodedBody = Map<String, Object>.from(json.decode(decode));
     } else {
       decodedBody = {};
     }

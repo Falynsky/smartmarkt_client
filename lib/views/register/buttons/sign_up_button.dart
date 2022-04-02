@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
-import 'package:smartmarktclient/bloc/sign_up/sign_up_event.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
 class SignUpButton extends StatefulWidget {
@@ -27,13 +25,13 @@ class SignUpButton extends StatefulWidget {
 }
 
 class _SignUpButtonState extends State<SignUpButton> {
-late TextEditingController _loginController;
-late TextEditingController _passwordController;
-late TextEditingController _firstNameController;
-late TextEditingController _lastNameController;
-late TextEditingController _mailController;
-late GlobalKey<FormState> _formKey;
-late SignUpBloc _signUpBloc;
+  late TextEditingController _loginController;
+  late TextEditingController _passwordController;
+  late TextEditingController _firstNameController;
+  late TextEditingController _lastNameController;
+  late TextEditingController _mailController;
+  late GlobalKey<FormState> _formKey;
+  late SignUpBloc _signUpBloc;
 
   @override
   void initState() {

@@ -25,6 +25,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   BasketBloc() : super(InitialBasketState()) {
     _basketRepository = BasketRepository();
     _productRepository = ProductRepository();
+    _basketProducts = <BasketProduct>[];
   }
 
   @override
@@ -61,7 +62,8 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   void _loadBasketProducts() {
-    Future<Map<String, dynamic>> basketProducts = _basketRepository.loadBasketProducts();
+    Future<Map<String, dynamic>> basketProducts =
+        _basketRepository.loadBasketProducts();
     basketProducts.then(
       (response) {
         if (response['success']) {
@@ -82,7 +84,8 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   void _loadBasketSummary() {
-    Future<Map<String, dynamic>> basketSummary = _basketRepository.loadBasketSummary();
+    Future<Map<String, dynamic>> basketSummary =
+        _basketRepository.loadBasketSummary();
     basketSummary.then(
       (response) => {
         if (response['success'])
@@ -97,7 +100,8 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
 
   void _removeObject(int index) {
     int productId = basketProducts[index].productId;
-    Future<Map<String, dynamic>> removeBasketProduct = _basketRepository.removeBasketProduct(productId);
+    Future<Map<String, dynamic>> removeBasketProduct =
+        _basketRepository.removeBasketProduct(productId);
     removeBasketProduct.then(
       (response) {
         if (response['success'] == true) {
@@ -108,7 +112,8 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   void _clearBasket() {
-    Future<Map<String, dynamic>> removeAllProducts = _basketRepository.clearBasket();
+    Future<Map<String, dynamic>> removeAllProducts =
+        _basketRepository.clearBasket();
     removeAllProducts.then(
       (response) {
         if (response['success'] == true) {
@@ -119,14 +124,16 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   Future _removeOneFromBasket(RemoveOneFromBasketEvent event) async {
-    Map<String, dynamic> response = await _productRepository.removeProductFromBasket(
+    Map<String, dynamic> response =
+        await _productRepository.removeProductFromBasket(
       productId: event.productId,
     );
     _emitRefreshAndShowSnackBar(response);
   }
 
   Future _addOneToBasket(AddOneToBasketEvent event) async {
-    Map<String, dynamic> response = await _productRepository.addProductToBasket(productId: event.productId);
+    Map<String, dynamic> response =
+        await _productRepository.addProductToBasket(productId: event.productId);
     _emitRefreshAndShowSnackBar(response);
   }
 
@@ -137,7 +144,8 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
   }
 
   void _purchaseAllBasketProducts() {
-    Future<Map<String, dynamic>> removeAllProducts = _basketRepository.purchaseAllBasketProducts();
+    Future<Map<String, dynamic>> removeAllProducts =
+        _basketRepository.purchaseAllBasketProducts();
     removeAllProducts.then(
       (response) => {
         if (response['success'] == true)

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
@@ -15,10 +14,10 @@ class SalesPage extends StatefulWidget {
 }
 
 class _SalesPageState extends State<SalesPage> {
-late RouteBloc _routeBloc;
-late SalesBloc _salesBloc;
-late bool _isLoaded;
-late List<Sale> _newSales;
+  late RouteBloc _routeBloc;
+  late SalesBloc _salesBloc;
+  late bool _isLoaded;
+  late List<Sale> _newSales;
 
   @override
   void initState() {

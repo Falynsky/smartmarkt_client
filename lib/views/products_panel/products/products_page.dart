@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,6 +34,7 @@ class _ProductsPageState extends State<ProductsPage> {
     _productsPanelBloc = BlocProvider.of<ProductsPanelBloc>(context);
     _productsBloc = ProductsBloc();
     _controller = TextEditingController();
+    _newProducts = <Product>[];
   }
 
   @override
@@ -60,8 +60,7 @@ class _ProductsPageState extends State<ProductsPage> {
         backgroundColor: analogThree,
       ),
       body: BlocProvider(
-        create: (_) => _productsBloc
-          ..add(InitialProductsEvent(productTypeId: widget.productType.id)),
+        create: (_) => _productsBloc..add(InitialProductsEvent(productTypeId: widget.productType.id)),
         child: BlocListener<ProductsBloc, ProductsState>(
           listener: (context, state) {
             if (state is LoadedProductsState) {
@@ -115,8 +114,7 @@ class _ProductsPageState extends State<ProductsPage> {
   onItemChanged(String value) {
     setState(() {
       _newProducts = _productsBloc.products
-          .where((productType) =>
-              productType.name.toLowerCase().contains(value.toLowerCase()))
+          .where((productType) => productType.name.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }
@@ -188,12 +186,12 @@ class _ProductsPageState extends State<ProductsPage> {
     String documentName = products.documentName;
     String documentType = products.documentType;
     String endpointUrl = '${HttpService.hostUrl}/files/download/';
-    String fileUrl = endpointUrl + '$documentName.$documentType/db';
+    String fileUrl = 'http://' + endpointUrl + '$documentName.$documentType/db';
     return InkWell(
       child: Image.network(
         '$fileUrl/70/70',
         headers: HttpService.headers,
-        errorBuilder: (_, __, ___) {
+        errorBuilder: (s, t, b) {
           return Icon(Icons.image_not_supported);
         },
       ),
@@ -326,8 +324,7 @@ class _ProductsPageState extends State<ProductsPage> {
           if (currentValue > 0) {
             setState(() {
               currentValue--;
-              _controller.text =
-                  (currentValue).toString(); // incrementing value
+              _controller.text = (currentValue).toString(); // incrementing value
             });
           }
         },

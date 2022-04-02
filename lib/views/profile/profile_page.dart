@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/bloc/profile/history/history_details_page.dart';
-import 'package:smartmarktclient/bloc/profile/profile_bloc.dart';
 import 'package:smartmarktclient/components/pages_app_bar.dart';
 import 'package:smartmarktclient/models/product_history.dart';
 import 'package:smartmarktclient/utilities/colors.dart';

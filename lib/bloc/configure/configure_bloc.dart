@@ -17,7 +17,7 @@ class ConfigureBloc extends Bloc<ConfigureEvent, ConfigureState> {
     if (event is LoadConfigurePageEvent) {
       yield LoadConfigureMenuState();
     } else if (event is ScanShopCodeEvent) {
-      String storeAddress = "192.168.2.2:8080"/*await _configurationRepository.getStoreAddress()*/;
+      String storeAddress = '192.168.56.1:8080';
       if (storeAddress.isNotEmpty) {
         final checkShopCodeEvent =
             CheckShopCodeEvent(storeAddress: storeAddress);

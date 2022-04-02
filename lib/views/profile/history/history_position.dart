@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
-import 'package:smartmarktclient/bloc/profile/profile_bloc.dart';
 import 'package:smartmarktclient/models/basket_history.dart';
 import 'package:smartmarktclient/utilities/colors.dart';
 
@@ -16,10 +14,10 @@ class HistoryPosition extends StatefulWidget {
 }
 
 class _HistoryPositionState extends State<HistoryPosition> {
- late ProfileBloc _profileBloc;
- late int _index;
- late String _purchasedDate;
- late String _productSummary;
+  late ProfileBloc _profileBloc;
+  late int _index;
+  late String _purchasedDate;
+  late String _productSummary;
 
   List<BasketHistory> get basketProducts => _profileBloc.basketHistory;
 

@@ -1,4 +1,3 @@
-
 class BasketProduct {
   final int id;
   final int productId;
@@ -31,7 +30,7 @@ class BasketProduct {
         quantity = json['quantity'],
         price = json['price'],
         summary = json['summary'],
-        discountPrice = json['discountPrice'],
+        discountPrice = json['discountPrice'] ?? 0,
         documentId = json['documentId'],
         documentName = json['documentName'],
         documentType = json['documentType'];

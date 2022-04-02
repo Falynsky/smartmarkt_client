@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smartmarktclient/bloc/basket/basket_bloc.dart';
 import 'package:smartmarktclient/bloc/bloc.dart';
 import 'package:smartmarktclient/http/http_service.dart';
 import 'package:smartmarktclient/models/basket_product.dart';
@@ -65,7 +64,7 @@ class _BasketPositionState extends State<BasketPosition> {
 
   Image _basketProductImage() {
     String documentUrl =
-        '${HttpService.hostUrl}/files/download/${_basketProduct.documentName}.${_basketProduct.documentType}/db';
+        'http://${HttpService.hostUrl}/files/download/${_basketProduct.documentName}.${_basketProduct.documentType}/db';
     return Image.network(
       '$documentUrl/.2',
       headers: HttpService.headers,
@@ -117,7 +116,8 @@ class _BasketPositionState extends State<BasketPosition> {
           splashFactory: InkRipple.splashFactory,
           child: Icon(Icons.arrow_drop_up_rounded, size: 35),
           onTap: () {
-            final addOneToBasketEvent = AddOneToBasketEvent(productId: productId);
+            final addOneToBasketEvent =
+                AddOneToBasketEvent(productId: productId);
             _basketBloc.add(addOneToBasketEvent);
           },
         ),
@@ -127,7 +127,8 @@ class _BasketPositionState extends State<BasketPosition> {
             splashFactory: InkRipple.splashFactory,
             child: Icon(Icons.arrow_drop_down_rounded, size: 35),
             onTap: () {
-              final addOneToBasketEvent = RemoveOneFromBasketEvent(productId: productId);
+              final addOneToBasketEvent =
+                  RemoveOneFromBasketEvent(productId: productId);
               _basketBloc.add(addOneToBasketEvent);
             },
           ),

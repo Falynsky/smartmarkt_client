@@ -20,6 +20,7 @@ class _ProductTypesPageState extends State<ProductTypesPage> {
     super.initState();
     _productsPanelBloc = BlocProvider.of<ProductsPanelBloc>(context);
     _productTypesBloc = ProductTypesBloc();
+    newProductTypes = <ProductType>[];
   }
 
   @override

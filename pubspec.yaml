@@ -1,6 +1,8 @@
 name: smartmarktclient
 description: Engineer's Thesis - Client
 
+#flutter-version: 2.10.4
+
 version: 1.0.2+2
 
 environment:
@@ -9,12 +11,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^7.0.0
-  flutter_bloc: ^7.0.0
-  equatable: ^2.0.0
-  http: ^0.13.2
-  convert: ^3.0.0
-#  barcode_scan: 3.0.1
+  bloc: 7.0.0
+  flutter_bloc: 7.0.0
+  equatable: 2.0.0
+  http: 0.13.2
+  convert: 3.0.0
+  #  barcode_scan: 3.0.1
+  barcode_scan2: 4.2.0
   barcode_widget: ^2.0.1
 dev_dependencies:
   flutter_test:
